@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="WebApi\.vs\ProjectSettings.json" />
+    <Content Include="WebApi\.vs\VSWorkspaceState.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="WebApi\.vs\config\applicationhost.config" />
+    <None Include="WebApi\.vs\slnx.sqlite" />
+    <None Include="WebApi\.vs\WebApi\DesignTimeBuild\.dtbcache" />
+    <None Include="WebApi\.vs\WebApi\v15\Server\sqlite3\db.lock" />
+    <None Include="WebApi\.vs\WebApi\v15\Server\sqlite3\storage.ide" />
+    <None Include="WebApi\.vs\WebApi\v15\Server\sqlite3\storage.ide-shm" />
+    <None Include="WebApi\.vs\WebApi\v15\Server\sqlite3\storage.ide-wal" />
+    <None Include="WebApi\.vs\WebApi\v15\suoBF56.tmp" />
+    <None Include="WebApi\ClassLibrary1\ClassLibrary1.csproj" />
+    <None Include="WebApi\WebApi.sln" />
+    <None Include="WebApi\WebApi\Properties\PublishProfiles\myWeb3.pubxml.user" />
+    <None Include="WebApi\WebApi\Properties\PublishProfiles\NewWebApi.pubxml.user" />
+    <None Include="WebApi\WebApi\Properties\PublishProfiles\WebApi.pubxml.user" />
+    <None Include="WebApi\WebApi\WebApi.csproj" />
+    <None Include="WebApi\WebApi\WebApi.csproj.user" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="WebApi\.vs\WebApi\v14\" />
+    <Folder Include="WebApi\.vs\WebApi\v16\" />
+    <Folder Include="WebApi\.vs\WebApi\v17\" />
+    <Folder Include="WebApi\WebApi\Connected Services\" />
+    <Folder Include="WebApi\WebApi\obj\Debug\TempPE\" />
+    <Folder Include="WebApi\WebApi\obj\Release\ProfileTransformWebConfig\transformed\Areas\HelpPagexx\Views\" />
+    <Folder Include="WebApi\WebApi\obj\Release\ProfileTransformWebConfig\transformed\Views\" />
+    <Folder Include="WebApi\WebApi\obj\Release\TempPE\" />
+    <Folder Include="WebApi\WebApi\obj\Release\TransformWebConfig\transformed\Areas\HelpPagexx\Views\" />
+    <Folder Include="WebApi\WebApi\obj\Release\TransformWebConfig\transformed\Views\" />
+    <Folder Include="WebApi\WebApi\Views\Migs\" />
+  </ItemGroup>
+</Project>
