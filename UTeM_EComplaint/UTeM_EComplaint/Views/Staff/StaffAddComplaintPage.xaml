@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.StaffAddComplaintPage"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             BackgroundColor="#efefef"
+             Title="{Binding Title}">
+    <ContentPage.BindingContext>
+        <vm:StaffAddComplaintViewModel/>
+    </ContentPage.BindingContext>
+<ContentPage.Content>
+        <AbsoluteLayout VerticalOptions="Fill">
+            <ScrollView AbsoluteLayout.LayoutFlags="All" 
+                 AbsoluteLayout.LayoutBounds="0,0,1,1" >
+                <StackLayout>
+                    <StackLayout Spacing="20" Padding="20">
+                        <!--Compaint Date-->
+                        <Label Text="Date" TextColor="#0FC5BA" FontSize="Medium"/>
+                        <Frame>
+                            <Label Text="{Binding DateTimeString}"  TextColor="Black" FontSize="Small"/>
+                        </Frame>
+
+                        <!--Division-->
+                        <Label Text="Division" TextColor="#0FC5BA" FontSize="Medium"/>
+                        <Frame>
+                            <Picker x:Name="bahagian" Title="-- Select Division --" 
+                            ItemsSource="{Binding divisionList}" SelectedItem="{Binding SelectedDivision}"
+                            ItemDisplayBinding="{Binding DivisionName}" 
+                            TextColor="Black" />
+                        </Frame>
+
+                        <!--Damage Type-->
+                        <Label Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium"/>
+                        <Frame>
+                            <Picker Title="-- Select Damage Type --" ItemsSource="{Binding damageTypeList}" 
+                                SelectedItem="{Binding SelectedDamageType}" ItemDisplayBinding="{Binding DamageTypeName}" TextColor="Black"/>
+                        </Frame>
+
+                        <!--Category-->
+                        <Label Text="Category" TextColor="#0FC5BA" FontSize="Medium"/>
+                        <Frame>
+                            <Picker Title="-- Select Category --" SelectedItem="{Binding SelectedCategory}"
+                            ItemsSource="{Binding categoryList}" ItemDisplayBinding="{Binding CategoryName}"
+                            TextColor="Black" />
+                        </Frame>
+
+                        <!--Damage-->
+                        <Label Text="Problem Description" TextColor="#0FC5BA" FontSize="Medium"/>
+                        <Frame Margin="0,-10,0,0" Padding="5,10">
+                            <Editor Text="{Binding Complaint.Damage}" AutoSize="TextChanges" FontSize="Small"/>
+                        </Frame>
+
+                        <!--Location-->
+                        <Label Text="Location" TextColor="#0FC5BA" FontSize="Medium" />
+                        <Frame>
+                            <Entry Text="{Binding Complaint.Location}" x:Name="location" FontSize="Small"/>
+                        </Frame>
+
+                        <!--Contact Number-->
+                        <Label Text="Contact number" TextColor="#0FC5BA" FontSize="Medium"/>
+                        <Frame>
+                            <Entry Text="{Binding Complaint.ContactPhoneNumber}" x:Name="contact" FontSize="Small"/>
+                        </Frame>
+                        <Button Text="Save" CharacterSpacing="3" BackgroundColor="#0FC5BA" CornerRadius="20"
+                            Command="{Binding SaveCommand}" FontSize="20" FontAttributes="Bold" HeightRequest="50"
+                            WidthRequest="200" HorizontalOptions="Center" VerticalOptions="EndAndExpand" Margin="3,14"/>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+            <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsLoading, Mode=OneWay}"/>
+            <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsLoading}" 
+                               IsRunning="{Binding IsLoading, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

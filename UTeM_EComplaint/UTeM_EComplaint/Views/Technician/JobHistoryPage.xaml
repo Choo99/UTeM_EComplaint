@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.JobHistoryPage"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:model="clr-namespace:UTeM_EComplaint.Model" 
+             Title="{Binding Title}">
+    <ContentPage.BindingContext>
+        <vm:JobHistoryViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.ToolbarItems x:DataType="local">
+        <ToolbarItem IconImageSource="search.png"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Accent">#96d1ff</Color>
+            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <Frame HasShadow="False" HeightRequest="35" >
+                <SearchBar Placeholder="Search Task . ." TextColor="Black" CancelButtonColor="Purple" ></SearchBar>
+            </Frame>
+            <ListView BackgroundColor="Transparent" SeparatorVisibility="None" HasUnevenRows="True" 
+                      SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}" 
+                      IsPullToRefreshEnabled="True" ItemsSource="{Binding ComplaintList}"
+                   IsRefreshing="{Binding IsBusy, Mode=OneWay}" RefreshCommand="{Binding RefreshCommand}">
+                <ListView.Behaviors>
+                    <xct:EventToCommandBehavior EventName="ItemSelected" EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}" Command="{Binding ItemSelectedCommand}"/>
+                </ListView.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Complaint">
+                        <ViewCell>
+                            <Grid Padding="10" RowSpacing="10">
+                                <Frame CornerRadius="10" HasShadow="True">
+                                    <StackLayout>
+                                        <Label x:Name="lblstaff" Grid.Row="0" Grid.Column="0" Text="{Binding Staff.Name}" VerticalOptions="StartAndExpand"
+                                           HorizontalOptions="StartAndExpand"
+                                           TextColor="Black"></Label>
+                                        <Label x:Name="lblProblem" Grid.Row="1" Grid.Column="0" Text="{Binding Damage}" VerticalOptions="EndAndExpand"
+                                           HorizontalOptions="StartAndExpand"
+                                           TextColor="Black"></Label>
+                                        <Label x:Name="lblDate" Grid.Row="2" Grid.Column="0" Text="{Binding ComplaintDate}" VerticalOptions="EndAndExpand"
+                                           HorizontalOptions="StartAndExpand"
+                                           TextColor="Black"></Label>
+                                        <Label Margin="0,-70,7,30" Text="{Binding ComplaintStatus}" VerticalOptions="EndAndExpand"
+                                           HorizontalOptions="EndAndExpand"
+                                           TextColor="Green" FontSize="15"></Label>
+                                        <Label Margin="0,0,7,10" Text="{Binding TotalDays}" VerticalOptions="EndAndExpand"
+                                           HorizontalOptions="EndAndExpand"
+                                           TextColor="Brown"></Label>
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

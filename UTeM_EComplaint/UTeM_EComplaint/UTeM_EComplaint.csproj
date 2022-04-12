@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,44 +11,127 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="WebApi\.vs\ProjectSettings.json" />
-    <Content Include="WebApi\.vs\VSWorkspaceState.json" />
+    <Compile Remove="WebApi\**" />
+    <EmbeddedResource Remove="WebApi\**" />
+    <None Remove="WebApi\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="WebApi\.vs\config\applicationhost.config" />
-    <None Include="WebApi\.vs\slnx.sqlite" />
-    <None Include="WebApi\.vs\WebApi\DesignTimeBuild\.dtbcache" />
-    <None Include="WebApi\.vs\WebApi\v15\Server\sqlite3\db.lock" />
-    <None Include="WebApi\.vs\WebApi\v15\Server\sqlite3\storage.ide" />
-    <None Include="WebApi\.vs\WebApi\v15\Server\sqlite3\storage.ide-shm" />
-    <None Include="WebApi\.vs\WebApi\v15\Server\sqlite3\storage.ide-wal" />
-    <None Include="WebApi\.vs\WebApi\v15\suoBF56.tmp" />
-    <None Include="WebApi\ClassLibrary1\ClassLibrary1.csproj" />
-    <None Include="WebApi\WebApi.sln" />
-    <None Include="WebApi\WebApi\Properties\PublishProfiles\myWeb3.pubxml.user" />
-    <None Include="WebApi\WebApi\Properties\PublishProfiles\NewWebApi.pubxml.user" />
-    <None Include="WebApi\WebApi\Properties\PublishProfiles\WebApi.pubxml.user" />
-    <None Include="WebApi\WebApi\WebApi.csproj" />
-    <None Include="WebApi\WebApi\WebApi.csproj.user" />
+    <PackageReference Include="Microcharts" Version="0.9.5.9" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="20.1.0.58" />
+    <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="20.1.0.58" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.2" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2401" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
+    <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.759" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <Compile Update="Views\Staff\StaffViewAllComplaintPage.xaml.cs">
+      <DependentUpon>StaffViewAllComplaintPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Technician\JobCompletedDetailPage.xaml.cs">
+      <DependentUpon>JobCompletedDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Technician\JobDetailPage.xaml.cs">
+      <DependentUpon>JobDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Technician\JobInProgressDetailPage.xaml.cs">
+      <DependentUpon>JobInProgressDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Technician\JobProgressPage.xaml.cs">
+      <DependentUpon>JobProgressPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Technician\JobToDoDetailPage.xaml.cs">
+      <DependentUpon>JobToDoDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Staff\StaffComplaintHistoryPage.xaml.cs">
+      <DependentUpon>StaffComplaintHistoryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Staff\StaffComplaintPendingPage.xaml.cs">
+      <DependentUpon>StaffComplaintPendingPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="WebApi\.vs\WebApi\v14\" />
-    <Folder Include="WebApi\.vs\WebApi\v16\" />
-    <Folder Include="WebApi\.vs\WebApi\v17\" />
-    <Folder Include="WebApi\WebApi\Connected Services\" />
-    <Folder Include="WebApi\WebApi\obj\Debug\TempPE\" />
-    <Folder Include="WebApi\WebApi\obj\Release\ProfileTransformWebConfig\transformed\Areas\HelpPagexx\Views\" />
-    <Folder Include="WebApi\WebApi\obj\Release\ProfileTransformWebConfig\transformed\Views\" />
-    <Folder Include="WebApi\WebApi\obj\Release\TempPE\" />
-    <Folder Include="WebApi\WebApi\obj\Release\TransformWebConfig\transformed\Areas\HelpPagexx\Views\" />
-    <Folder Include="WebApi\WebApi\obj\Release\TransformWebConfig\transformed\Views\" />
-    <Folder Include="WebApi\WebApi\Views\Migs\" />
+    <EmbeddedResource Update="AppShell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffEditComplaintPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffViewAllComplaintPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\AboutPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\JobCompletedDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\JobDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\JobHistoryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\JobInProgressDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\JobProgressPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\JobToDoDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\JobTodoPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffAddComplaintPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffAddRatingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffCompaintTabbedPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffComplaintAssignedPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffComplaintDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffComplaintHistoryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffComplaintInProgressPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffComplaintPendingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffHomePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffNotificationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\TechnicianNotificationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\TechnicianRatingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
 </Project>

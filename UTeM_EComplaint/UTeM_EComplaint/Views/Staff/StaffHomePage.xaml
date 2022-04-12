@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:UTeM_EComplaint.Models"
+             x:Class="UTeM_EComplaint.Views.StaffHomePage"
+             BackgroundColor="WhiteSmoke" 
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.PresentationMode="Animated"
+             Shell.NavBarIsVisible="False">
+    <ContentPage.BindingContext>
+        <vm:StaffHomeViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Accent">#CCB7E5</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <AbsoluteLayout VerticalOptions="Fill">
+        <RefreshView Command="{Binding RefreshCommand}" 
+                     AbsoluteLayout.LayoutFlags="All" 
+                     AbsoluteLayout.LayoutBounds="0,0,1,1" 
+                     HorizontalOptions="Center" 
+                     VerticalOptions="CenterAndExpand" IsRefreshing="{Binding IsBusy, Mode=OneWay}">
+        <ScrollView>
+            <StackLayout>
+                <StackLayout Margin="3">
+                    <Button x:Name="Logout" Text="LOGOUT" CornerRadius="18" FontAttributes="Bold" BackgroundColor="White" 
+                            TextColor="Black" Margin="0,30,10,-40" HorizontalOptions="End" Command="{Binding LogoutCommand}"></Button>
+                    <Label FontSize="17" VerticalOptions="EndAndExpand" 
+                           Text="{Binding DateTimeString}" HorizontalOptions="StartAndExpand" Margin="10,0,0,10" 
+                           FontAttributes="Bold" FontFamily="arial" TextColor="Black" />
+                    <StackLayout HeightRequest="80">
+                        <Label Text="Welcome" TextColor="Black" FontSize="25" Margin="10,30,0,0" CharacterSpacing="3"></Label>
+                        <StackLayout HorizontalOptions="StartAndExpand" >
+                            <Label x:Name="labelnama" CharacterSpacing="3" Text="Choo" Margin="14,0,0,40" FontAttributes="Bold"  FontSize="14" HorizontalTextAlignment="Center" TextColor="Black" ></Label>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+                <Grid ColumnDefinitions="*,*">
+                    <Frame Grid.Row="0" Grid.Column="0" Margin="5,5" BackgroundColor="#5BB7C9" CornerRadius="10">
+                    <StackLayout>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToPendingCommand}"/>
+                        </StackLayout.GestureRecognizers>
+                        <Image Source="totalTask" HeightRequest="30" HorizontalOptions="Center"></Image>
+                        <Label Text="{Binding PendingComplaint}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
+                        <Label Text="Pending" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" FontSize="20"></Label>
+                    </StackLayout>
+                    </Frame>
+                    <Frame Grid.Row="0" Grid.Column="1" Margin="5,5" BackgroundColor="CadetBlue" CornerRadius="10">
+                        <StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ToAssignedCommand}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Image Source="totalTask" HorizontalOptions="Center"></Image>
+                            <Label Text="{Binding AssignedComplaint}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
+                            <Label Text="Assigned" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" FontSize="20"></Label>
+                        </StackLayout>
+                    </Frame>
+                    <Frame Grid.Row="1" Grid.Column="0" Margin="5,5" BackgroundColor="YellowGreen" CornerRadius="10">
+                            <StackLayout>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToInProgressCommand}"/>
+                                </StackLayout.GestureRecognizers>
+                                <Image Source="clock" HorizontalOptions="Center"></Image>
+                                <Label Text="{Binding InProgressComplaint}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
+                                <Label Text="In Progress" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
+                            </StackLayout>
+                        </Frame>
+                    <Frame Grid.Row="1" Grid.Column="1" Margin="5,5" BackgroundColor="LightCoral" CornerRadius="10">
+                            <StackLayout>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToCompletedCommand}"/>
+                                </StackLayout.GestureRecognizers>
+                                <Image Source="clock" HorizontalOptions="Center"></Image>
+                                <Label Text="{Binding ComplatedComplaint}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
+                                <Label Text="Completed" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5" BackgroundColor="#5BB7C9" CornerRadius="10">
+                        <StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer/>
+                            </StackLayout.GestureRecognizers>
+                            <Image Source="totalTask" HorizontalOptions="Center" Margin="105,-7,110,0"></Image>
+                            <Label Text="{Binding TotalComplaint}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
+                            <Label Text="Total Complaints" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" FontSize="20"></Label>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+    </RefreshView>
+        <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsLoading, Mode=OneWay}"/>
+        <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsLoading}" 
+                               IsRunning="{Binding IsLoading, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+    </AbsoluteLayout>
+</ContentPage>

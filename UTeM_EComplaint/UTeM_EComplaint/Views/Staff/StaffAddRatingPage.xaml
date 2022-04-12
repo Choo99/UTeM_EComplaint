@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.StaffAddRatingPage"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             Title="{Binding Title}"
+             BackgroundColor="#efefef"
+             xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="submit" Command="{Binding SubmitCommand}" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.BindingContext>
+        <vm:StaffAddRatingViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout>
+            <Frame>
+                <StackLayout>
+                    <!--Information Technician information-->
+                    <Label Text="Share your experience of the service" HorizontalTextAlignment="Center" HorizontalOptions="Center" Margin="0,20,0,30" TextColor="Black" FontSize="Large" />
+
+                    <Label Text="Technician ID" TextColor="Black" FontSize="Medium"/>
+                    <Frame>
+                        <Label Text="{Binding Complaint.Technician.TechnicianID}" FontSize="Small" TextColor="Black"/>
+                    </Frame>
+
+                    <Label Text="Name" TextColor="#Black" FontSize="Medium"/>
+                    <Frame>
+                        <Label Text="{Binding Complaint.Technician.TechnicianID}" FontSize="Small" TextColor="Black"/>
+                    </Frame>
+                    <Label Text="Your rating will help us to improve our performance" TextColor="Black" HorizontalTextAlignment="Center" FontSize="Large"/>
+                    <BoxView Margin="0,30"  Color="Gray" WidthRequest="200" HeightRequest="1"/>
+                    <rating:SfRating Value="{Binding RatingValue, Mode=TwoWay}" Precision="Standard" ItemSpacing="10" ItemSize="50" HorizontalOptions="Center">
+                        <rating:SfRating.RatingSettings>
+                            <rating:SfRatingSettings RatedStroke="Black" UnRatedFill="Gray"/>
+                        </rating:SfRating.RatingSettings>
+                    </rating:SfRating>
+                    <Label Text="Thank you" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

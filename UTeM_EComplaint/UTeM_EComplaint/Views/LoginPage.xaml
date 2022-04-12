@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:UTeM_EComplaint.ViewModels"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.NavBarIsVisible="False"
+             x:Class="UTeM_EComplaint.Views.LoginPage">
+    <ContentPage.BindingContext>
+        <viewmodels:LoginViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <AbsoluteLayout VerticalOptions="Fill">
+            <StackLayout Padding="40" VerticalOptions="Center" 
+                         AbsoluteLayout.LayoutFlags="All" 
+                         AbsoluteLayout.LayoutBounds="0,0,1,1" 
+                         HorizontalOptions="FillAndExpand">
+
+                <Image Source="pppk.png" WidthRequest="180" HeightRequest="180"></Image>
+                <Entry x:Name="txtUsername" Placeholder="Username" TextColor="Black" PlaceholderColor="Gray" Text="{Binding Username}"></Entry>
+                <Entry x:Name="txtPassword" IsPassword="{Binding IsPassword}" Placeholder="Password"  TextColor="Black" PlaceholderColor="Gray" Text="{Binding Password}"></Entry>
+                <CheckBox x:Name="passcheck" IsChecked="{Binding IsShow}"/>
+                <Label Margin="40,-30,5,20" Text="Show Password" TextColor="Black"></Label>
+                <Button
+                VerticalOptions="Center"
+                Text="Login"
+                TextColor="White"
+                BackgroundColor="#7c5295"
+                BorderColor="#6D0D7C"
+                BorderWidth="1.5"
+                CornerRadius="50"
+                Command="{Binding loginCommand}"
+                ></Button>
+            </StackLayout>
+            <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsBusy, Mode=OneWay}"/>
+            <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsBusy}" 
+                               IsRunning="{Binding IsBusy, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

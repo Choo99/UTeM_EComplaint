@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             x:Class="UTeM_EComplaint.Views.JobInProgressDetailPage"
+             Title="{Binding Title}"
+             x:Name="JobProgressDetail">
+    <ContentPage.BindingContext>
+        <vm:JobInProgressDetailViewModel/>
+    </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <StackLayout Grid.Row="0" Grid.Column="0" Spacing="20" Padding="20">
+                    <!--Staff information Title-->
+                    <Label Text="Applicant Information" HorizontalOptions="Center" TextColor="#0FC5BA" FontSize="Large" />
+
+                    <!--Staff ID-->
+                    <Label Text="StaffID" TextColor="#0FC5BA" FontSize="Medium" />
+                    <Frame>
+                        <Label Text="{Binding Complaint.Staff.StaffID}" TextColor="Black" FontSize="Small"/>
+                    </Frame>
+
+                    <!--Staff Name-->
+                    <Label Text="Name" TextColor="#0FC5BA" FontSize="Medium" />
+                    <Frame>
+                        <Label Text="{Binding Complaint.Staff.Name}" TextColor="Black" FontSize="Small"/>
+                    </Frame>
+
+                    <!--Responsibility Centre-->
+                    <Label Text="Responsibility Centre" TextColor="#0FC5BA" FontSize="Medium" />
+                    <Frame>
+                        <Label Text="{Binding Complaint.Staff.ResponsibilityCentre}" TextColor="Black" FontSize="Small"/>
+                    </Frame>
+
+                    <!--Phone Number-->
+                    <Label Text="Phone Number" TextColor="#0FC5BA" FontSize="Medium" />
+                    <Frame>
+                        <Label Text="{Binding Complaint.Staff.PhoneNumber}" FontSize="Small" />
+                    </Frame>
+
+                    <!--Information Report Title-->
+                    <Label Text="Information Report" HorizontalOptions="Center" Margin="0,20,0,0" TextColor="#0FC5BA" FontSize="Large" />
+
+                    <!--Complaint Date-->
+                    <Label Text="Complaint Date" TextColor="#0FC5BA" FontSize="Medium" />
+                    <Frame>
+                        <Label Text="{Binding Complaint.ComplaintDate}" TextColor="Black" FontSize="Small"/>
+                    </Frame>
+
+                    <!--Division-->
+                    <Label Text="Division" TextColor="#0FC5BA" FontSize="Medium" />
+                    <Frame>
+                        <Label Text="{Binding Complaint.Division.DivisionName}" TextColor="Black" FontSize="Small"/>
+                    </Frame>
+
+                    <!--Damage Type-->
+                    <Label Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium" />
+                    <Frame>
+                        <Label Text="{Binding Complaint.DamageType.DamageTypeName}" TextColor="Black" FontSize="Small"/>
+                    </Frame>
+
+                    <!--Category-->
+                    <Label Text="Category" TextColor="#0FC5BA" FontSize="Medium" />
+                    <Frame>
+                        <Label Text="{Binding Complaint.Category.CategoryName}" TextColor="Black" FontSize="Small"/>
+                    </Frame>
+
+                    <!--Description-->
+                    <Label Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
+                    <Frame>
+                        <Label HeightRequest="100" Text="{Binding Complaint.Damage}" FontSize="Medium" />
+                    </Frame>
+
+                    <!--Location-->
+                    <Label Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
+                    <Frame>
+                        <Label Text="{Binding Complaint.Location}" HeightRequest="50" FontSize="Small" TextColor="Black"/>
+                    </Frame>
+
+                    <!--<Label Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
+                    <Frame>
+                        <Label Text="{Binding Complaint.Damage}"  FontSize="Small" TextColor="Black"/>
+                    </Frame>-->
+                    <!--Action Taken Title-->
+                    <Label Text="Action Taken" HorizontalOptions="Center" TextColor="#0FC5BA" FontSize="Medium"/>
+
+                    <!--Start Date-->
+                    <Label Text="Start Date" TextColor="#0FC5BA" FontSize="Medium"/>
+                    <Frame>
+                        <Label Text="{Binding Complaint.Action.StartDate}" FontSize="Small" TextColor="Black"/>
+                    </Frame>
+
+                    <!--End Date-->
+                    <Label Text="End Date" TextColor="#0FC5BA" FontSize="Medium"/>
+                    <Frame>
+                        <Label Text="{Binding Complaint.Action.EndDate}" FontSize="Small" TextColor="Black"/>
+                    </Frame>
+                    <!--Action Taken Title-->
+                    <Label Text="Action Taken" TextColor="#0FC5BA" FontSize="Medium"/>
+                    <!--Action when pending-->
+                    <Editor Text="{Binding Source={x:Reference JobProgressDetail},Path=BindingContext.ActionTaken.ActionDescription}" Placeholder="Enter your action taken here" HeightRequest="80" Background="white" FontSize="Small" TextColor="Black"/>
+                    <!--Spare Replacement-->
+                    <Label Text="Spare Replacement" TextColor="#0FC5BA" FontSize="Medium"/>
+                    <!--Replacement when pending-->
+                    <Frame>
+                        <Entry Text="{Binding Source={x:Reference JobProgressDetail},Path=BindingContext.ActionTaken.SpareReplace}" Placeholder="Replacement" FontSize="Small" TextColor="Black"></Entry>
+                    </Frame>
+
+                    <!--Additional Note-->
+                    <Label Text="Additional note" TextColor="#0FC5BA" FontSize="Medium"/>
+                    <!--Note Display when pending-->
+                    <Frame>
+                        <Entry Text="{Binding Source={x:Reference JobProgressDetail},Path=BindingContext.ActionTaken.AdditionalNote}" Placeholder="Note" FontSize="Small" TextColor="Black"></Entry>
+                    </Frame>
+
+                    <!--Complaint Status-->
+                    <Label Text="Complaint Status" TextColor="#0FC5BA" FontSize="Medium"/>
+                    <Frame>
+                        <Label Text="{Binding Complaint.ComplaintStatus}" FontSize="Small" TextColor="Black"></Label>
+                    </Frame>
+                    <StackLayout Grid.Row="2" Grid.Column="0">
+                        <Button Text="Finish" 
+                            Command="{Binding FinishJobCommand}"
+                            CharacterSpacing="3"
+                            BackgroundColor="#0FC5BA"
+                            CornerRadius="20"
+                            FontSize="20"
+                            FontAttributes="Bold"
+                            HeightRequest="50"
+                            WidthRequest="200"
+                            HorizontalOptions="Center"
+                            VerticalOptions="EndAndExpand"
+                            Margin="3,14"/>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

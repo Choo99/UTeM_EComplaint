@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.StaffEditComplaintPage"
+             BackgroundColor="#efefef"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Title="{Binding Title}"
+             xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms">
+    <ContentPage.BindingContext>
+        <vm:StaffEditComplaintViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout VerticalOptions="Fill">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" >
+                <ScrollView>
+                    <StackLayout>
+                        <Grid>
+                            <StackLayout Grid.Row="0" Grid.Column="0" Spacing="20" Padding="20">
+                                <!--Information Report Title-->
+                                <Label Text="Information Report" HorizontalOptions="Center" Margin="0,20,0,0" TextColor="#0FC5BA" FontSize="Large" />
+
+                                <!--Complaint ID-->
+                                <Label Text="Complaint ID" TextColor="#0FC5BA" FontSize="Medium" />
+                                <Frame>
+                                    <Label Text="{Binding Complaint.ComplaintID}" TextColor="Black" FontSize="Small"/>
+                                </Frame>
+
+                                <!--Complaint Date-->
+                                <Label Text="Complaint Date" TextColor="#0FC5BA" FontSize="Medium" />
+                                <Frame>
+                                    <Label Text="{Binding Complaint.ComplaintDate}" TextColor="Black" FontSize="Small"/>
+                                </Frame>
+
+                                    <!--Division-->
+                                    <Label Text="Division" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Frame>
+                                        <Picker x:Name="bahagian" Title="-- Select Division --" 
+                                                ItemsSource="{Binding divisionList}" 
+                                                ItemDisplayBinding="{Binding DivisionName}" 
+                                                SelectedItem="{Binding SelectedDivision}"
+                                                SelectedIndex="{Binding SelectedDivisionIndex}"
+                                                TextColor="Black" />
+                                    </Frame>    
+
+                                    <!--Damage Type-->
+                                    <Label Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Frame>
+                                        <Picker Title="-- Select Damage Type --" ItemsSource="{Binding damageTypeList}" 
+                                                ItemDisplayBinding="{Binding DamageTypeName}" TextColor="Black" 
+                                                SelectedItem="{Binding SelectedDamageType}"
+                                                SelectedIndex="{Binding SelectedDamageTypeIndex}"
+                                                />
+                                    </Frame>
+
+                                    <!--Category-->
+                                    <Label Text="Category" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Frame>
+                                        <Picker Title="-- Select Category --" SelectedItem="{Binding SelectedCategory}"
+                                                ItemsSource="{Binding categoryList}" 
+                                                ItemDisplayBinding="{Binding CategoryName}"
+                                                SelectedIndex="{Binding SelectedCategoryIndex}"
+                                                TextColor="Black" />
+                                    </Frame>
+
+                                <!--Description-->
+                                <Label Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
+                                <Frame>
+                                    <Entry HeightRequest="100" Text="{Binding Complaint.Damage}" FontSize="Medium" />
+                                </Frame>
+
+                                <!--Location-->
+                                <Label Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
+                                <Frame>
+                                    <Entry Text="{Binding Complaint.Location}" HeightRequest="50" FontSize="Small" TextColor="Black"/>
+                                </Frame>
+                                
+                                <!--Complaint Status-->
+                                <Label Text="Status" TextColor="#0FC5BA" FontSize="Medium"/>
+                                <Frame>
+                                    <Label Text="{Binding Complaint.ComplaintStatus}" FontSize="Small" TextColor="Black"></Label>
+                                </Frame>
+                                
+                                <StackLayout Orientation="Horizontal">
+                                    <Button Text="Save" BackgroundColor="LightGreen" Grid.Column="1" Command="{Binding SaveCommand}" FontSize="20"
+                                            FontAttributes="Bold" HeightRequest="50" HorizontalOptions="FillAndExpand" 
+                                            VerticalOptions="FillAndExpand" Margin="3,14"/>
+                                    <Button Text="Clear" BackgroundColor="IndianRed" Grid.Column="1" Command="{Binding ClearCommand}" FontSize="20"
+                                            FontAttributes="Bold" HeightRequest="50" HorizontalOptions="FillAndExpand" 
+                                            VerticalOptions="FillAndExpand" Margin="3,14"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </Grid>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+            <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsBusy, Mode=OneWay}"/>
+            <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsBusy}" 
+                               IsRunning="{Binding IsBusy, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

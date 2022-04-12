@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using Syncfusion.SfRating.XForms.iOS;
 using UIKit;
 
 namespace UTeM_EComplaint.iOS
@@ -24,6 +25,7 @@ namespace UTeM_EComplaint.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
+            SfRatingRenderer.Init();
 
             return base.FinishedLaunching(app, options);
         }
