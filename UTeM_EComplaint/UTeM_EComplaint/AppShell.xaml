@@ -60,21 +60,26 @@
         <ShellContent ContentTemplate="{DataTemplate view:LoginPage}"/>
     </ShellItem>
 
+    <!--Technician TabBar-->
     <TabBar Title="Home" Icon="home.png" Route="Technician">
         <ShellContent Icon="home.png" Title="Home" Route="AboutPage" ContentTemplate="{DataTemplate view:AboutPage}" />
-        <ShellContent Icon="taskList.png" Title="In Progress" ContentTemplate="{DataTemplate view:JobProgressPage}"  />
-        <ShellContent Icon="history.png" Title="Statistic" ContentTemplate="{DataTemplate view:TechnicianRatingPage}"  />
-        <ShellContent Icon="star.png" Title="Rating" ContentTemplate="{DataTemplate view:TechnicianRatingPage}"  />
+        <ShellContent Icon="taskList.png" Title="Job" ContentTemplate="{DataTemplate view:TechnicianTabbedPage}"  />
+        <ShellContent Icon="starsolid.png" Title="Rating" ContentTemplate="{DataTemplate view:TechnicianRatingPage}"  />
     </TabBar>
 
+    <!--Staff TabBar-->
     <TabBar Title="Home" Icon="home.png">
         <ShellContent x:Name="StaffHome"  Icon="home.png" Title="Home" Route="StaffHomePage" ContentTemplate="{DataTemplate view:StaffHomePage}" />
-        <ShellContent Icon="taskList.png" Title="Add Complaint" ContentTemplate="{DataTemplate view:StaffAddComplaintPage}"  />
-        <ShellContent Icon="history.png" Title="Your complaint" ContentTemplate="{DataTemplate view:StaffCompaintTabbedPage}"  />
-        <ShellContent Icon="history.png" Title="Notification" ContentTemplate="{DataTemplate view:StaffViewAllComplaintPage}"  />
+        <ShellContent Icon="fileCircle.png" Title="Add Complaint" ContentTemplate="{DataTemplate view:StaffAddComplaintPage}"  />
+        <ShellContent Icon="historyClock.png" Title="Your complaint" ContentTemplate="{DataTemplate view:StaffCompaintTabbedPage}"  />
+        <ShellContent Icon="all.png" Title="All Complaints" ContentTemplate="{DataTemplate view:StaffViewAllComplaintPage}"  />
     </TabBar>
 
-
-
-
+    <!--Admin TabBar-->
+    <TabBar Title="Home" Icon="home.png">
+        <ShellContent x:Name="AdminHome"  Icon="home.png" Title="Home" Route="AdminHomePage" ContentTemplate="{DataTemplate view:AdminHomePage}" />
+        <ShellContent Icon="business.png" Title="Assign Complaint" ContentTemplate="{DataTemplate view:AdminAssignComplaintPage}"  />
+        <ShellContent Icon="pdf.png" Title="Report" ContentTemplate="{DataTemplate view:StaffCompaintTabbedPage}"  />
+    </TabBar>
+    
 </Shell>

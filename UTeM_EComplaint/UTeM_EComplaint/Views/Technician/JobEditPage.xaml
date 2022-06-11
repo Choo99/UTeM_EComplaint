@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             x:Class="UTeM_EComplaint.Views.JobEditPage">
+    <ContentPage.BindingContext>
+        <vm:JobEditViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <AbsoluteLayout VerticalOptions="Fill">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ScrollView>
+                    <StackLayout>
+                        <Grid>
+                            <StackLayout Grid.Row="0" Grid.Column="0" Spacing="20" Padding="20">
+                                <Frame Style="{StaticResource Card}">
+                                    <StackLayout>
+                                        <!--Action Taken Title-->
+                                        <Label Text="Action Taken" Style="{StaticResource DetailTitle}"/>
+                                        <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
+                                        <Grid RowSpacing="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                                            <!--Start Date-->
+                                            <Label Grid.Row="0" Grid.Column="0" Text="Start Date" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding ActionTaken.StartDate}" Style="{StaticResource CardLabel}"/>
+
+                                            <!--End Date-->
+                                            <Label Grid.Row="1" Grid.Column="0" Text="End Date" TextColor="#0FC5BA" FontSize="Medium" IsVisible="{Binding IsInProgress}"/>
+                                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding ActionTaken.EndDate}" Style="{StaticResource CardLabel}"/>
+
+                                            <!--Action Taken Title-->
+                                            <Label Grid.Row="2" Grid.Column="0" Text="Action Taken" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <!--Action when pending-->
+                                            <Editor Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ActionTaken.ActionDescription}" Placeholder="Enter your action taken here" HeightRequest="80" Background="white" FontSize="Medium" TextColor="Black"/>
+
+                                            <!--Spare Replacement-->
+                                            <Label Grid.Row="4" Grid.Column="0" Text="Spare Replacement" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <!--Replacement when pending-->
+                                            <Entry Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Placeholder="Replacement" Text="{Binding ActionTaken.SpareReplace}" FontSize="Medium" TextColor="Black"></Entry>
+
+                                            <!--Additional Note-->
+                                            <Label Grid.Row="6" Grid.Column="0" Text="Additional note" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <!--Note Display when pending-->
+                                            <Entry Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Placeholder="Note" Text="{Binding ActionTaken.AdditionalNote}" FontSize="Medium" TextColor="Black"></Entry>
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
+                                <StackLayout Orientation="Horizontal">
+                                    <Button Text="Save" BackgroundColor="{StaticResource SaveButtonColor}" Command="{Binding SaveCommand}" Style="{StaticResource Button}" Margin="3,14"/>
+                                    <Button Text="Clear" BackgroundColor="{StaticResource ClearButtonColor}" Command="{Binding ClearCommand}" Style="{StaticResource Button}" Margin="3,14"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </Grid>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+            <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsBusy, Mode=OneWay}"/>
+            <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsBusy}" 
+                               IsRunning="{Binding IsBusy, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

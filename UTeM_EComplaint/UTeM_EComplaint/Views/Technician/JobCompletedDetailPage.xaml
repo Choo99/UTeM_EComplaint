@@ -84,10 +84,6 @@
                             <Label Text="{Binding Complaint.Location}" HeightRequest="50" FontSize="Small" TextColor="Black"/>
                         </Frame>
 
-                        <!--<Label Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
-                    <Frame>
-                        <Label Text="{Binding Complaint.Damage}"  FontSize="Small" TextColor="Black"/>
-                    </Frame>-->
                         <StackLayout Grid.Row="1" Grid.Column="0">
                             <!--Action Taken Title-->
                             <Label Text="Action Taken" HorizontalOptions="Center" TextColor="#0FC5BA" FontSize="Medium"/>
@@ -123,7 +119,7 @@
                             </Frame>
 
                             <!--Complaint Status-->
-                            <Label Text="Additional note" TextColor="#0FC5BA" FontSize="Medium"/>
+                            <Label Text="Status" TextColor="#0FC5BA" FontSize="Medium"/>
                             <Frame>
                                 <Label Text="{Binding Complaint.ComplaintStatus}" FontSize="Small" TextColor="Black"></Label>
                             </Frame>

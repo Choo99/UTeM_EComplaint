@@ -65,7 +65,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
                 }
             }
             catch (Exception)
@@ -129,7 +132,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
                 }
             }
             catch (Exception)
@@ -360,6 +366,101 @@ namespace UTeM_EComplaint.Services
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
                     string result = JsonConvert.DeserializeObject<string>(resultString);
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<List<Complaint>> SearchComplaints(int userID, string searchText)
+        {
+            try
+            {
+                string url = string.Format("{0}/searchComplaints?userID={1}&searchText={2}", Global.apiUrl, userID, searchText);
+                var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(5000);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    List<Complaint> result = JsonConvert.DeserializeObject<List<Complaint>>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<List<KeyValuePair<string, int>>> GetAllComplaintStatistic()
+        {
+            try
+            {
+                string url = string.Format("{0}/getAllComplaintStatistic", Global.apiUrl);
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    List<KeyValuePair<string, int>> result = JsonConvert.DeserializeObject<List<KeyValuePair<string, int>>>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<List<Complaint>> GetAllPendingComplaints()
+        {
+            try
+            {
+                string url = string.Format("{0}/getAllPendingComplaints", Global.apiUrl);
+                var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(5000);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    List<Complaint> result = JsonConvert.DeserializeObject<List<Complaint>>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
                     throw new Exception(result);
                 }
             }

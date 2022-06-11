@@ -23,6 +23,7 @@ namespace UTeM_EComplaint.ViewModels
         bool isRating;
         bool isNotRating;
         bool isEdit;
+        bool isOnlyCompleted;
         Complaint complaint;
 
         string pathToAddRating = $"{nameof(StaffAddRatingPage)}?complaintID=";
@@ -37,6 +38,7 @@ namespace UTeM_EComplaint.ViewModels
         public bool IsCompleted { get => isCompleted; set => SetProperty(ref isCompleted, value) ; }
         public bool IsNotRating { get => isNotRating; set => SetProperty(ref isNotRating, value);   }
         public bool IsRating { get => isRating; set { SetProperty(ref isRating, value); IsNotRating = !value; } }
+        public bool IsOnlyCompleted { get => isOnlyCompleted; set { SetProperty(ref isOnlyCompleted, value); } }
 
         public AsyncCommand DoneCommand { get; }
         public AsyncCommand RateCommand { get; }
@@ -115,6 +117,7 @@ namespace UTeM_EComplaint.ViewModels
                     IsAssigned = true;
                     IsInProgress = true;
                     IsCompleted = true;
+                    IsOnlyCompleted = true;
                     if(Complaint.Rating != null)
                     {
                         IsRating = true;

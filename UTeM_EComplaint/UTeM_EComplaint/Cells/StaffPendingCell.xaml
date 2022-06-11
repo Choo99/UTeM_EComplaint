@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      xmlns:model="clr-namespace:UTeM_EComplaint.Model"
+      xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+      x:DataType="model:Complaint"
+      x:Class="UTeM_EComplaint.Cells.StaffPendingCell"
+      Style="{StaticResource ListViewCell}">
+    <Frame Style="{StaticResource Card}">
+        <StackLayout>
+            <StackLayout>
+                <StackLayout Orientation="Horizontal" Margin="0,10,0,10">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="ID " Style="{StaticResource CardTitle}"/>
+                        <Label Text="{Binding ComplaintID}" Style="{StaticResource CardTitle}"/>
+                    </StackLayout>
+                    <Label Text="{Binding ComplaintStatus}" HorizontalOptions="EndAndExpand" FontSize="Large" FontAttributes="Bold,Italic" TextColor="{StaticResource PendingColor}"/>
+                </StackLayout>
+                <Line Style="{StaticResource HorizontalLine}"/>
+            </StackLayout>
+            <StackLayout>
+                <Label Text="{Binding Damage}" HorizontalOptions="StartAndExpand" Style="{StaticResource CardLabel}"></Label>
+                <Label Text="{Binding Category.CategoryName}" Style="{StaticResource CardLabel}"></Label>
+                <Label Text="{Binding DamageType.DamageTypeName}" Style="{StaticResource CardLabel}"></Label>
+                <Line Style="{StaticResource HorizontalLine}"/>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Created At" Style="{StaticResource CardLabel}" FontAttributes="Italic" HorizontalOptions="EndAndExpand"/>
+                    <Label Text="{Binding ComplaintDate}" HorizontalOptions="End" Margin="0,0,0,30" FontAttributes="Italic" Style="{StaticResource CardLabel}"></Label>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</Grid>

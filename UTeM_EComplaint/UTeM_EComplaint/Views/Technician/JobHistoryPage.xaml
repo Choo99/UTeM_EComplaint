@@ -5,59 +5,40 @@
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:model="clr-namespace:UTeM_EComplaint.Model" 
+             xmlns:cell="clr-namespace:UTeM_EComplaint.Cells"
+             BackgroundColor="{StaticResource BackgroundColor}"
              Title="{Binding Title}">
     <ContentPage.BindingContext>
         <vm:JobHistoryViewModel/>
     </ContentPage.BindingContext>
-    <ContentPage.ToolbarItems x:DataType="local">
-        <ToolbarItem IconImageSource="search.png"/>
-    </ContentPage.ToolbarItems>
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Color x:Key="Accent">#96d1ff</Color>
-            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <Frame HasShadow="False" HeightRequest="35" >
-                <SearchBar Placeholder="Search Task . ." TextColor="Black" CancelButtonColor="Purple" ></SearchBar>
-            </Frame>
-            <ListView BackgroundColor="Transparent" SeparatorVisibility="None" HasUnevenRows="True" 
-                      SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}" 
-                      IsPullToRefreshEnabled="True" ItemsSource="{Binding ComplaintList}"
-                   IsRefreshing="{Binding IsBusy, Mode=OneWay}" RefreshCommand="{Binding RefreshCommand}">
-                <ListView.Behaviors>
-                    <xct:EventToCommandBehavior EventName="ItemSelected" EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}" Command="{Binding ItemSelectedCommand}"/>
-                </ListView.Behaviors>
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Complaint">
-                        <ViewCell>
-                            <Grid Padding="10" RowSpacing="10">
-                                <Frame CornerRadius="10" HasShadow="True">
-                                    <StackLayout>
-                                        <Label x:Name="lblstaff" Grid.Row="0" Grid.Column="0" Text="{Binding Staff.Name}" VerticalOptions="StartAndExpand"
-                                           HorizontalOptions="StartAndExpand"
-                                           TextColor="Black"></Label>
-                                        <Label x:Name="lblProblem" Grid.Row="1" Grid.Column="0" Text="{Binding Damage}" VerticalOptions="EndAndExpand"
-                                           HorizontalOptions="StartAndExpand"
-                                           TextColor="Black"></Label>
-                                        <Label x:Name="lblDate" Grid.Row="2" Grid.Column="0" Text="{Binding ComplaintDate}" VerticalOptions="EndAndExpand"
-                                           HorizontalOptions="StartAndExpand"
-                                           TextColor="Black"></Label>
-                                        <Label Margin="0,-70,7,30" Text="{Binding ComplaintStatus}" VerticalOptions="EndAndExpand"
-                                           HorizontalOptions="EndAndExpand"
-                                           TextColor="Green" FontSize="15"></Label>
-                                        <Label Margin="0,0,7,10" Text="{Binding TotalDays}" VerticalOptions="EndAndExpand"
-                                           HorizontalOptions="EndAndExpand"
-                                           TextColor="Brown"></Label>
-                                    </StackLayout>
-                                </Frame>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         Command="{Binding RefreshCommand}">
+                <CollectionView x:Name="listTask" BackgroundColor="Transparent" 
+                                     SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
+                                     SelectionMode="Single"
+                                     RemainingItemsThreshold="1"
+                                     RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                                     SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                                     SelectionChangedCommandParameter="{Binding SelectedComplaint}"
+                                     ItemsSource="{Binding ComplaintList}">
+                    <CollectionView.Header>
+                        <StackLayout>
+                            <Label Text="Job History" FontSize="25" Margin="0,20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold"/>
+                        </StackLayout>
+                    </CollectionView.Header>
+                    <CollectionView.EmptyView>
+                        <StackLayout>
+                            <Label Text="There is no Completed Job" Style="{StaticResource DetailNoItem}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Complaint">
+                            <cell:TechnicianCompletedCell/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

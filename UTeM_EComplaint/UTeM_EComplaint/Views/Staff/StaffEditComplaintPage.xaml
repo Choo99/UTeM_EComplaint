@@ -10,95 +10,64 @@
     <ContentPage.BindingContext>
         <vm:StaffEditComplaintViewModel/>
     </ContentPage.BindingContext>
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout VerticalOptions="Fill">
-            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" >
-                <ScrollView>
-                    <StackLayout>
-                        <Grid>
-                            <StackLayout Grid.Row="0" Grid.Column="0" Spacing="20" Padding="20">
-                                <!--Information Report Title-->
-                                <Label Text="Information Report" HorizontalOptions="Center" Margin="0,20,0,0" TextColor="#0FC5BA" FontSize="Large" />
-
-                                <!--Complaint ID-->
-                                <Label Text="Complaint ID" TextColor="#0FC5BA" FontSize="Medium" />
-                                <Frame>
-                                    <Label Text="{Binding Complaint.ComplaintID}" TextColor="Black" FontSize="Small"/>
-                                </Frame>
-
-                                <!--Complaint Date-->
-                                <Label Text="Complaint Date" TextColor="#0FC5BA" FontSize="Medium" />
-                                <Frame>
-                                    <Label Text="{Binding Complaint.ComplaintDate}" TextColor="Black" FontSize="Small"/>
-                                </Frame>
+            <ScrollView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" >
+                <StackLayout>
+                    <StackLayout Grid.Row="0" Grid.Column="0" Spacing="20" Padding="20">
+                        <Frame Style="{StaticResource Card}">
+                            <StackLayout>
+                                <Label Text="Compaint" Style="{StaticResource DetailTitle}"/>
+                                <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black"/>
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="30">
+                                    <!--Compaint Date-->
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Date" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.ComplaintDate}"  TextColor="Black" FontSize="Small"/>
 
                                     <!--Division-->
-                                    <Label Text="Division" TextColor="#0FC5BA" FontSize="Medium"/>
-                                    <Frame>
-                                        <Picker x:Name="bahagian" Title="-- Select Division --" 
+                                    <Label Grid.Row="1" Grid.Column="0" Text="Division" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="bahagian" Title="-- Select Division --" 
                                                 ItemsSource="{Binding divisionList}" 
                                                 ItemDisplayBinding="{Binding DivisionName}" 
                                                 SelectedItem="{Binding SelectedDivision}"
                                                 SelectedIndex="{Binding SelectedDivisionIndex}"
                                                 TextColor="Black" />
-                                    </Frame>    
 
                                     <!--Damage Type-->
-                                    <Label Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium"/>
-                                    <Frame>
-                                        <Picker Title="-- Select Damage Type --" ItemsSource="{Binding damageTypeList}" 
+                                    <Label Grid.Row="3" Grid.Column="0" Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Picker Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Damage Type --" ItemsSource="{Binding damageTypeList}" 
                                                 ItemDisplayBinding="{Binding DamageTypeName}" TextColor="Black" 
                                                 SelectedItem="{Binding SelectedDamageType}"
-                                                SelectedIndex="{Binding SelectedDamageTypeIndex}"
-                                                />
-                                    </Frame>
+                                                SelectedIndex="{Binding SelectedDamageTypeIndex}"/>
 
                                     <!--Category-->
-                                    <Label Text="Category" TextColor="#0FC5BA" FontSize="Medium"/>
-                                    <Frame>
-                                        <Picker Title="-- Select Category --" SelectedItem="{Binding SelectedCategory}"
+                                    <Label Grid.Row="5" Grid.Column="0" Text="Category" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Picker Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Category --" SelectedItem="{Binding SelectedCategory}"
                                                 ItemsSource="{Binding categoryList}" 
                                                 ItemDisplayBinding="{Binding CategoryName}"
                                                 SelectedIndex="{Binding SelectedCategoryIndex}"
                                                 TextColor="Black" />
-                                    </Frame>
 
-                                <!--Description-->
-                                <Label Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
-                                <Frame>
-                                    <Entry HeightRequest="100" Text="{Binding Complaint.Damage}" FontSize="Medium" />
-                                </Frame>
+                                    <!--Description-->
+                                    <Label Grid.Row="7" Grid.Column="0" Text="Problem Description" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Entry Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="100" Text="{Binding Complaint.Damage}" FontSize="Medium" />
 
-                                <!--Location-->
-                                <Label Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
-                                <Frame>
-                                    <Entry Text="{Binding Complaint.Location}" HeightRequest="50" FontSize="Small" TextColor="Black"/>
-                                </Frame>
-                                
-                                <!--Complaint Status-->
-                                <Label Text="Status" TextColor="#0FC5BA" FontSize="Medium"/>
-                                <Frame>
-                                    <Label Text="{Binding Complaint.ComplaintStatus}" FontSize="Small" TextColor="Black"></Label>
-                                </Frame>
-                                
-                                <StackLayout Orientation="Horizontal">
-                                    <Button Text="Save" BackgroundColor="LightGreen" Grid.Column="1" Command="{Binding SaveCommand}" FontSize="20"
-                                            FontAttributes="Bold" HeightRequest="50" HorizontalOptions="FillAndExpand" 
-                                            VerticalOptions="FillAndExpand" Margin="3,14"/>
-                                    <Button Text="Clear" BackgroundColor="IndianRed" Grid.Column="1" Command="{Binding ClearCommand}" FontSize="20"
-                                            FontAttributes="Bold" HeightRequest="50" HorizontalOptions="FillAndExpand" 
-                                            VerticalOptions="FillAndExpand" Margin="3,14"/>
-                                </StackLayout>
+                                    <!--Location-->
+                                    <Label Grid.Row="9" Grid.Column="0" Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Entry Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Complaint.Location}" HeightRequest="50" FontSize="Small" TextColor="Black"/>
+
+                                    <!--Complaint Status-->
+                                    <Label Grid.Row="11" Grid.Column="0" Text="Status" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Label Grid.Row="11" Grid.Column="1" Text="{Binding Complaint.ComplaintStatus}" Style="{StaticResource CardLabel}"></Label>
+
+                                    <Button Grid.Row="12" Grid.Column="0" Text="Save" BackgroundColor="{StaticResource SaveButtonColor}" Command="{Binding SaveCommand}" Style="{StaticResource Button}" Margin="3,14"/>
+                                    <Button Grid.Row="12" Grid.Column="1" Text="Clear" BackgroundColor="{StaticResource ClearButtonColor}" Command="{Binding ClearCommand}" Style="{StaticResource Button}" Margin="3,14"/>
+                                </Grid>
                             </StackLayout>
-                        </Grid>
+                        </Frame>
                     </StackLayout>
-                </ScrollView>
-            </StackLayout>
+                </StackLayout>
+            </ScrollView>
             <BoxView AbsoluteLayout.LayoutFlags="All" 
              AbsoluteLayout.LayoutBounds="0,0,1,1" 
              BackgroundColor="Transparent" 

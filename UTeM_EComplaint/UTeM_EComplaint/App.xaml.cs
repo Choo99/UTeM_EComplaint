@@ -9,8 +9,8 @@ namespace UTeM_EComplaint
         public App()
         {
             InitializeComponent();
-
-            MainPage = new MainPage();
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjUyMDU2QDMyMzAyZTMxMmUzMFJaOXV3ZTJXdy9BVmFPbEJSQWdkMG5HKy94MVUvSU91MjhwV3JERnkzN0U9");
+            MainPage = new AppShell();
         }
 
         protected override void OnStart()

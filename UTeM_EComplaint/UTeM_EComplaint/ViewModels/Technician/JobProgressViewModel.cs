@@ -14,23 +14,51 @@ namespace UTeM_EComplaint.ViewModels
 {
     internal class JobProgressViewModel : ViewModelBase
     {
+        readonly int LOAD_SIZE = 5;
+
         int userID;
+
+        List<Complaint> complaints;
+
         Complaint selectedComplaint;
         public ObservableRangeCollection<Complaint> ComplaintList { get; set; }
-        public AsyncCommand RefreshCommand { get; }
-        public AsyncCommand<object> ItemSelectedCommand { get; }
-        public AsyncCommand<object> StartJobCommand { get; }
 
-        string pathToJobDetail = $"{nameof(JobInProgressDetailPage)}?complaintID=";
+        public AsyncCommand RefreshCommand { get; }
+        public AsyncCommand LoadMoreCommand { get; }
+        public AsyncCommand<object> ItemSelectedCommand { get; }
+
+
+
+        string pathToJobDetail = $"{nameof(JobDetailPage)}?complaintID=";
         public JobProgressViewModel()
         {
-            ComplaintList = new ObservableRangeCollection<Complaint>();
-            userID = Preferences.Get("userID", 0);
-            getData();
+            Title = "In Progress task";
 
             RefreshCommand = new AsyncCommand(Refresh);
+            LoadMoreCommand = new AsyncCommand(LoadMore);
             ItemSelectedCommand = new AsyncCommand<object>(ItemSelected);
-            Title = "In Progress task";
+
+            ComplaintList = new ObservableRangeCollection<Complaint>();
+            complaints = new List<Complaint>();
+
+            userID = Preferences.Get("userID", 0);
+            getData();
+        }
+
+        private async Task LoadMore()
+        {
+            if (complaints.Count == ComplaintList.Count)
+                return;
+            int lastItemIndexed = ComplaintList.Count;
+            int nextItemIndexed = lastItemIndexed + LOAD_SIZE;
+
+            if (nextItemIndexed > complaints.Count)
+                nextItemIndexed = complaints.Count;
+
+            for (int i = lastItemIndexed; i < nextItemIndexed; i++)
+            {
+                ComplaintList.Add(complaints[i]);
+            }
         }
 
         private async Task ItemSelected(object arg)
@@ -55,11 +83,23 @@ namespace UTeM_EComplaint.ViewModels
         {
             try
             {
+                int size = LOAD_SIZE;
+                IsBusy = true;
+
                 List<Complaint> complaints = await ComplaintServices.GetComplaintsByStatus(userID, "In Progress");
-                ComplaintList.ReplaceRange(complaints);
-            }catch (Exception ex)
+
+                if (complaints.Count < LOAD_SIZE)
+                    size = complaints.Count;
+
+                ComplaintList.ReplaceRange(complaints.GetRange(0, size));
+            }
+            catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -67,8 +107,6 @@ namespace UTeM_EComplaint.ViewModels
         {
             IsBusy = true;
             getData();
-            await Task.Delay(1000);
-            IsBusy = false;
         }
 
         public Complaint SelectedComplaint

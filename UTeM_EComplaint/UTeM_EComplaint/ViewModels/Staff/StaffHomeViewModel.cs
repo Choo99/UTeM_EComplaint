@@ -15,20 +15,40 @@ namespace UTeM_EComplaint.ViewModels
     internal class StaffHomeViewModel : ViewModelBase
     {
         string dateTimeString;
+        string toggleText;
+        string pieChartTitle;
+
         int totalComplaint;
         int pendingComplaint;
         int assignedComplaint;
         int inProgressComplaint;
         int completedComplaint;
         int staffID;
+
         bool isLoading;
         bool isRefresh;
+        bool isPieChart;
+
+        public ObservableRangeCollection<Statistic> Statistics { get; set; }
 
         string pathToPending = $"home/StaffComplaintPendingPage";
         string pathToAssigned = $"home/{nameof(StaffComplaintAssignedPage)}";
         string pathToInProgress = $"home/{nameof(StaffComplaintInProgressPage)}";
         string pathToCompleted = $"home/{nameof(StaffComplaintHistoryPage)}";
 
+        public bool IsPieChart
+        {
+            get => isPieChart;
+            set
+            {
+                SetProperty(ref isPieChart, value);
+                if (value)
+                    ToggleText = "Pie Chart";
+                else
+                    ToggleText = "Classic";
+                Preferences.Set("isPieChart", value);
+            }
+        }
         public bool IsLoading { get => isLoading; set => SetProperty(ref isLoading, value); }
         public int TotalComplaint { get => totalComplaint; set => SetProperty(ref totalComplaint, value); }
         public int PendingComplaint { get => pendingComplaint; set => SetProperty(ref pendingComplaint, value); }
@@ -36,6 +56,8 @@ namespace UTeM_EComplaint.ViewModels
         public int InProgressComplaint { get => inProgressComplaint; set => SetProperty(ref inProgressComplaint, value); }
         public int ComplatedComplaint { get => completedComplaint; set => SetProperty(ref completedComplaint, value); }
         public string DateTimeString { get => dateTimeString; set => SetProperty(ref dateTimeString, value); }
+        public string ToggleText { get => toggleText; set => SetProperty(ref toggleText, value); }
+        public string PieChartTitle { get => pieChartTitle; set => SetProperty(ref pieChartTitle, value); }
 
         public ObservableRangeCollection<Complaint> complaintList { get; }
         public AsyncCommand LogoutCommand { get; }
@@ -55,9 +77,11 @@ namespace UTeM_EComplaint.ViewModels
             ToInProgressCommand = new AsyncCommand(ToInProgress);
             ToCompletedCommand = new AsyncCommand(ToCompleted);
 
+            IsPieChart = Preferences.Get("isPieChart",false);
 
             Title = "Home";
             complaintList = new ObservableRangeCollection<Complaint>();
+            Statistics = new ObservableRangeCollection<Statistic>();
             staffID = Preferences.Get("userID", 0);
             getStaffComplaint();
             getStatistic();
@@ -96,8 +120,7 @@ namespace UTeM_EComplaint.ViewModels
             var answer = await Application.Current.MainPage.DisplayAlert("Logout", "Are you sure you want to logout?", "YES", "NO");
             if (answer)
             {
-                Preferences.Remove("userID");
-                Preferences.Remove("role");
+                Preferences.Clear();
                 Application.Current.MainPage = new AppShell();
             }
         }
@@ -122,12 +145,15 @@ namespace UTeM_EComplaint.ViewModels
             }
             try
             {
+                //TODO: Revise this API
                 List<KeyValuePair<string, int>> keyValues = await ComplaintServices.GetStaffComplaintStatistic(staffID);
                 foreach (KeyValuePair<string, int> item in keyValues)
                 {
+                    Statistic statistic = null;
                     if (item.Key == "TotalComplaint")
                     {
                         TotalComplaint = item.Value;
+                        PieChartTitle = "Total " + TotalComplaint + " complaints";
                     }
                     else if (item.Key == "PendingComplaint")
                     {
@@ -144,6 +170,52 @@ namespace UTeM_EComplaint.ViewModels
                     else if (item.Key == "CompletedComplaint")
                     {
                         ComplatedComplaint = item.Value;
+                    }
+                    if(statistic != null)
+                    {
+                        Statistics.Add(statistic);
+                    }
+                }
+
+                if (!isRefresh)
+                {
+                    foreach (KeyValuePair<string, int> item in keyValues)
+                    {
+                        Statistic statistic = null;
+                        if (item.Key == "PendingComplaint")
+                        {
+                            statistic = new Statistic();
+                            statistic.Name = "Pending";
+                            statistic.Value = PendingComplaint;
+                        }
+                        else if (item.Key == "PendingComplaint")
+                        {
+                            statistic = new Statistic();
+                            statistic.Name = "Pending";
+                            statistic.Value = PendingComplaint;
+                        }
+                        else if (item.Key == "AssignedComplaint")
+                        {
+                            statistic = new Statistic();
+                            statistic.Name = "Assigned";
+                            statistic.Value = AssignedComplaint;
+                        }
+                        else if (item.Key == "InProgressComplaint")
+                        {
+                            statistic = new Statistic();
+                            statistic.Name = "In Progress";
+                            statistic.Value = InProgressComplaint;
+                        }
+                        else if (item.Key == "CompletedComplaint")
+                        {
+                            statistic = new Statistic();
+                            statistic.Name = "Completed";
+                            statistic.Value = ComplatedComplaint;
+                        }
+                        if (statistic != null)
+                        {
+                            Statistics.Add(statistic);
+                        }
                     }
                 }
                 if (!isRefresh)

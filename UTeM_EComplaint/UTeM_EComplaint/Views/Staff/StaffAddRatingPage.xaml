@@ -4,7 +4,7 @@
              x:Class="UTeM_EComplaint.Views.StaffAddRatingPage"
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
              Title="{Binding Title}"
-             BackgroundColor="#efefef"
+             BackgroundColor="{StaticResource BackgroundColor}"
              xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="submit" Command="{Binding SubmitCommand}" />

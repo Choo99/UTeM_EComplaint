@@ -7,13 +7,15 @@
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
              Shell.FlyoutBehavior="Disabled"
              Shell.PresentationMode="Animated"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              Shell.NavBarIsVisible="False">
     <ContentPage.BindingContext>
         <vm:StaffHomeViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Color x:Key="Accent">#CCB7E5</Color>
+            <xct:InvertedBoolConverter x:Key="boolConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <AbsoluteLayout VerticalOptions="Fill">
@@ -23,21 +25,19 @@
                      HorizontalOptions="Center" 
                      VerticalOptions="CenterAndExpand" IsRefreshing="{Binding IsBusy, Mode=OneWay}">
         <ScrollView>
-            <StackLayout>
-                <StackLayout Margin="3">
+                <StackLayout HeightRequest="700">
+                    <StackLayout Margin="3">
                     <Button x:Name="Logout" Text="LOGOUT" CornerRadius="18" FontAttributes="Bold" BackgroundColor="White" 
                             TextColor="Black" Margin="0,30,10,-40" HorizontalOptions="End" Command="{Binding LogoutCommand}"></Button>
                     <Label FontSize="17" VerticalOptions="EndAndExpand" 
                            Text="{Binding DateTimeString}" HorizontalOptions="StartAndExpand" Margin="10,0,0,10" 
                            FontAttributes="Bold" FontFamily="arial" TextColor="Black" />
-                    <StackLayout HeightRequest="80">
-                        <Label Text="Welcome" TextColor="Black" FontSize="25" Margin="10,30,0,0" CharacterSpacing="3"></Label>
-                        <StackLayout HorizontalOptions="StartAndExpand" >
-                            <Label x:Name="labelnama" CharacterSpacing="3" Text="Choo" Margin="14,0,0,40" FontAttributes="Bold"  FontSize="14" HorizontalTextAlignment="Center" TextColor="Black" ></Label>
+                        <StackLayout Orientation="Horizontal" Margin="0,20">
+                            <Label Text="{Binding ToggleText}" HorizontalOptions="EndAndExpand" TextColor="Black" FontSize="Large"/>
+                            <Switch IsToggled="{Binding IsPieChart, Mode=TwoWay}" HorizontalOptions="End" Margin="10,0"/>
                         </StackLayout>
-                    </StackLayout>
                 </StackLayout>
-                <Grid ColumnDefinitions="*,*">
+                    <Grid ColumnDefinitions="*,*" IsVisible="{Binding IsPieChart, Converter={StaticResource boolConverter}}" >
                     <Frame Grid.Row="0" Grid.Column="0" Margin="5,5" BackgroundColor="#5BB7C9" CornerRadius="10">
                     <StackLayout>
                         <StackLayout.GestureRecognizers>
@@ -89,7 +89,38 @@
                         </StackLayout>
                     </Frame>
                 </Grid>
-            </StackLayout>
+                    <StackLayout IsVisible="{Binding IsPieChart}">
+                        <chart:SfChart BackgroundColor="Transparent">
+                            <chart:SfChart.Title IsVisible="{Binding IsPieChart}">
+                                <chart:ChartTitle BackgroundColor="Transparent" Text="{Binding PieChartTitle}" TextColor="Black" Margin="0,0,0,0"/>
+                            </chart:SfChart.Title>
+                            <chart:SfChart.Legend>
+                                <chart:ChartLegend DockPosition="Bottom" StrokeColor="Black" CornerRadius="5" StrokeWidth="2"
+                                    BackgroundColor="#f5f5f0" Margin="5">
+                                </chart:ChartLegend>
+                            </chart:SfChart.Legend>
+                            <chart:PieSeries CircularCoefficient="0.9" EnableAnimation="True" IsVisible="{Binding IsPieChart}" Label="Name" ItemsSource="{Binding Statistics}" XBindingPath="Name" YBindingPath="Value" EnableTooltip="True">
+                                <chart:PieSeries.DataMarker>
+                                    <chart:ChartDataMarker LabelContent="Percentage">
+                                        <chart:ChartDataMarker.LabelStyle>
+                                            <chart:DataMarkerLabelStyle Font="Bold,14" LabelPosition="Auto"/>
+                                        </chart:ChartDataMarker.LabelStyle>
+                                    </chart:ChartDataMarker>
+                                </chart:PieSeries.DataMarker>
+                                <chart:PieSeries.ColorModel>
+                                    <chart:ChartColorModel Palette="Custom">
+                                        <chart:ChartColorModel.CustomBrushes>
+                                            <Color>LightCoral</Color>
+                                            <Color>YellowGreen</Color>
+                                            <Color>CadetBlue</Color>
+                                            <Color>#5BB7C9</Color>
+                                        </chart:ChartColorModel.CustomBrushes>
+                                    </chart:ChartColorModel>
+                                </chart:PieSeries.ColorModel>
+                            </chart:PieSeries>
+                        </chart:SfChart>
+                    </StackLayout>
+                </StackLayout>
         </ScrollView>
     </RefreshView>
         <BoxView AbsoluteLayout.LayoutFlags="All" 

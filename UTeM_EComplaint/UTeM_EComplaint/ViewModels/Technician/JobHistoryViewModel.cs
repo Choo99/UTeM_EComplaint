@@ -14,48 +14,50 @@ namespace UTeM_EComplaint.ViewModels
 {
     internal class JobHistoryViewModel : ViewModelBase
     {
+        readonly int LOAD_SIZE = 5;
+
+        string pathToJobDetail = $"{nameof(JobDetailPage)}?complaintID=";
+
         int userID;
+
         Complaint selectedComplaint;
+        List<Complaint> complaints;
+
         public ObservableRangeCollection<Complaint> ComplaintList { get; set; }
+
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand<object> ItemSelectedCommand { get; }
-        public AsyncCommand<object> StartJobCommand { get; }
+        public AsyncCommand LoadMoreCommand { get; }
 
-        string pathToJobDetail = $"{nameof(JobCompletedDetailPage)}?complaintID=";
+        
         public JobHistoryViewModel()
         {
-            ComplaintList = new ObservableRangeCollection<Complaint>();
-            userID = Preferences.Get("userID", 0);
-            getData();
+            Title = "Job History";
 
             RefreshCommand = new AsyncCommand(Refresh);
             ItemSelectedCommand = new AsyncCommand<object>(ItemSelected);
-            StartJobCommand = new AsyncCommand<object>(StartJob);
+            LoadMoreCommand = new AsyncCommand(LoadMore);
 
-            Title = "Job History";
+            ComplaintList = new ObservableRangeCollection<Complaint>();
+            complaints = new List<Complaint>();
 
+            userID = Preferences.Get("userID", 0);
+            getData();
         }
 
-        private async Task StartJob(object arg)
+        private async Task LoadMore()
         {
-            try
+            if (complaints.Count == ComplaintList.Count)
+                return;
+            int lastItemIndexed = ComplaintList.Count;
+            int nextItemIndexed = lastItemIndexed + LOAD_SIZE;
+
+            if (nextItemIndexed > complaints.Count)
+                nextItemIndexed = complaints.Count;
+
+            for (int i = lastItemIndexed; i < nextItemIndexed; i++)
             {
-                var complaint = arg as Complaint;
-                var answer = await Application.Current.MainPage.DisplayAlert("Start", "Are you sure you want to start the job?", "YES", "NO");
-                if (answer)
-                {
-                    int result = await ActionServices.StartActionAndSendMessage(complaint.ComplaintID);
-                    if (result != 0)
-                    {
-                        string path = pathToJobDetail + complaint.ComplaintID;
-                        await Shell.Current.GoToAsync(path);
-                        await Application.Current.MainPage.DisplayAlert("Success", "Started the job successfully", "OK");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("Success", ex.Message, "OK", "NO");
+                ComplaintList.Add(complaints[i]);
             }
         }
 
@@ -79,15 +81,32 @@ namespace UTeM_EComplaint.ViewModels
 
         private async void getData()
         {
-            List<Complaint> complaints = await ComplaintServices.GetComplaintsByStatus(userID, "Completed");
-            ComplaintList.ReplaceRange(complaints);
+            try
+            {
+                int size = LOAD_SIZE;
+                IsBusy = true;
+                
+                complaints = await ComplaintServices.GetComplaintsByStatus(userID, "Completed");
+
+                if (complaints.Count < LOAD_SIZE)
+                    size = complaints.Count;
+
+                ComplaintList.ReplaceRange(complaints.GetRange(0, size));
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+           
         }
         async Task Refresh()
         {
             IsBusy = true;
             getData();
-            await Task.Delay(1000);
-            IsBusy = false;
         }
 
         public Complaint SelectedComplaint

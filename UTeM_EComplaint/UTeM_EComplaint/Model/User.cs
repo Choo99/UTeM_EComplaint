@@ -11,6 +11,7 @@ namespace UTeM_EComplaint.Model
         public string Username { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
+        public string NotificationToken { get; set; }
         public Staff Staff { get; set; }
         public Technician Technician { get; set; }
     }

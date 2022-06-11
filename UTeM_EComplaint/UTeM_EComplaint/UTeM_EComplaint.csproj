@@ -20,6 +20,8 @@
     <PackageReference Include="Microcharts" Version="0.9.5.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+    <PackageReference Include="Syncfusion.Xamarin.Pdf" Version="20.1.0.59" />
+    <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="20.1.0.59" />
     <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="20.1.0.58" />
     <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="20.1.0.58" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
@@ -30,6 +32,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Cells\TechnicianAssignedCell.xaml.cs">
+      <DependentUpon>TechnicianAssignedCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Admin\AdminAssignComplaintPage.xaml.cs">
+      <DependentUpon>AdminAssignComplaintPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Admin\AdminAssignDetailPage.xaml.cs">
+      <DependentUpon>AdminAssignDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Staff\StaffViewAllComplaintPage.xaml.cs">
       <DependentUpon>StaffViewAllComplaintPage.xaml</DependentUpon>
     </Compile>
@@ -60,7 +71,43 @@
     <EmbeddedResource Update="AppShell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Cells\StaffAssignedPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Cells\StaffCompletedCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Cells\StaffInProgressCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Cells\StaffPendingCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Cells\TechnicianAssignedCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Cells\TechnicianCompletedCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Cells\TechnicianInProgressCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Admin\AdminAssignComplaintPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Admin\AdminAssignTechnicianPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Admin\AdminAssignDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Admin\AdminHomePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\Staff\StaffEditComplaintPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Staff\StaffSearchComplaintPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Staff\StaffViewAllComplaintPage.xaml">
@@ -75,6 +122,9 @@
     <EmbeddedResource Update="Views\Technician\JobDetailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\JobEditPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\Technician\JobHistoryPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -82,6 +132,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Technician\JobProgressPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Technician\JobSearchingPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Technician\JobToDoDetailPage.xaml">
@@ -129,9 +182,8 @@
     <EmbeddedResource Update="Views\Technician\TechnicianRatingPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\" />
+    <EmbeddedResource Update="Views\Technician\TechnicianTabbedPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

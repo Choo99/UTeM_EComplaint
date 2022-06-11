@@ -74,7 +74,7 @@ namespace UTeM_EComplaint.ViewModels
             {
                 int size = LOAD_SIZE;
                 IsBusy = true;
-                complaints = await ComplaintServices.GetStaffComplaintByStatus(staffID,"Assigned");
+                complaints = await ComplaintServices.GetComplaintsByStatus(staffID,"Assigned");
                 if (complaints.Count < LOAD_SIZE)
                     size = complaints.Count;
                 ComplaintList.ReplaceRange(complaints.GetRange(0, size));

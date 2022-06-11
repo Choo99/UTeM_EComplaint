@@ -14,10 +14,13 @@ namespace UTeM_EComplaint.ViewModels
 {
     internal class TechnicianRatingViewModel : ViewModelBase
     {
+        string totalReviews;
+        public string TotalReviews { get => totalReviews; set => SetProperty(ref totalReviews, value); }
+
         public ObservableRangeCollection<Complaint> RatingList { get; set; }
         public double SumRating { get => sumRating; set => SetProperty(ref sumRating, value); }
         public double TotalRating { get => totalRating; set => SetProperty(ref totalRating, value); }
-        public double AverageRating { get => averageRating; set => SetProperty(ref averageRating, value); }
+        public string AverageRating { get => averageRating; set => SetProperty(ref averageRating, value); }
         public AsyncCommand<object> ItemSelectedCommand { get; }
         public AsyncCommand RefreshCommand { get; }
         public Complaint SelectedComplaint { get => selectedComplaint; set => SetProperty(ref selectedComplaint, value); }
@@ -26,7 +29,7 @@ namespace UTeM_EComplaint.ViewModels
 
         double sumRating;
         double totalRating;
-        double averageRating;
+        string averageRating;
         int userID;
         string pathToDetail = $"{nameof(JobDetailPage)}?complaintID=";
         public TechnicianRatingViewModel()
@@ -34,8 +37,7 @@ namespace UTeM_EComplaint.ViewModels
             Title = "Rating";
             userID = Preferences.Get("userID", 0);
             RatingList = new ObservableRangeCollection<Complaint>();
-            getTotalRating();
-            getRating();
+            getData();
             ItemSelectedCommand = new AsyncCommand<object>(ItemSelected);
             RefreshCommand = new AsyncCommand(Refresh);
         }
@@ -43,8 +45,7 @@ namespace UTeM_EComplaint.ViewModels
         async Task Refresh()
         {
             IsBusy = true;
-            getRating();
-            getTotalRating();
+            getData();
             IsBusy = false;
         }
 
@@ -58,7 +59,7 @@ namespace UTeM_EComplaint.ViewModels
             await Shell.Current.GoToAsync(path);
         }
 
-        async void getRating()
+        async void getData()
         {
             try
             {
@@ -73,29 +74,17 @@ namespace UTeM_EComplaint.ViewModels
                     {
                         TotalRating = item.Value;
                     }
-                    else if (item.Key == "AverageRating")
-                    {
-                        AverageRating = item.Value;
-                    }
                 }
+                double averageRating = SumRating / totalRating;
+                AverageRating = string.Format("{0:0.0}", averageRating);
+
+                TotalReviews = "(" + TotalRating + " Reviews)";
+                List<Complaint> ratings = await RatingServices.GetTechnicianRatings(userID);
+                RatingList.ReplaceRange(ratings);
             }
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Jobs", ex.Message, "OK");
-            }
-        }
-
-        async void getTotalRating()
-        {
-            try
-            {
-                List<Complaint> ratings = await RatingServices.GetTechnicianRatings(userID);
-                RatingList.AddRange(ratings);
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
-                Console.WriteLine(ex.StackTrace);
             }
         }
     }

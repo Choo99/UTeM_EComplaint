@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             Style="{StaticResource ListViewCell}"
+             x:Class="UTeM_EComplaint.Cells.StaffCompletedCell">
+    <Frame Style="{StaticResource Card}">
+        <StackLayout>
+            <StackLayout>
+                <StackLayout Orientation="Horizontal" Margin="0,10,0,10">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="ID " Style="{StaticResource CardTitle}" FontAttributes="Bold"/>
+                        <Label Text="{Binding ComplaintID}" Style="{StaticResource CardTitle}"/>
+                    </StackLayout>
+                    <Label Text="{Binding ComplaintStatus}" HorizontalOptions="EndAndExpand" FontSize="Large" FontAttributes="Bold,Italic" TextColor="{StaticResource CompletedColor}"/>
+                    
+                </StackLayout>
+                <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
+            </StackLayout>
+            <StackLayout>
+                <Label Text="{Binding Damage}" HorizontalOptions="StartAndExpand" Style="{StaticResource CardLabel}"></Label>
+                <Label Text="{Binding Category.CategoryName}" Style="{StaticResource CardLabel}"></Label>
+                <Label Text="{Binding DamageType.DamageTypeName}" Style="{StaticResource CardLabel}"></Label>
+                <Line X1="0" Y1="0" X2="360" Margin="0,20" Y2="0" HorizontalOptions="CenterAndExpand" Stroke="#9B9A99" />
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Technician ID " Style="{StaticResource CardLabel}"/>
+                    <Label Text="{Binding Technician.TechnicianID}" Style="{StaticResource CardLabel}"/>
+                </StackLayout>
+                <Line X1="0" Y1="0" X2="360" Margin="0,20,0,0" Y2="0" HorizontalOptions="CenterAndExpand" Stroke="#9B9A99" />
+                <StackLayout Orientation="Horizontal" Margin="0,0,0,30">
+                    <Label Text="{Binding Action.StartDate}" HorizontalOptions="Start"  Style="{StaticResource CardLabel}"></Label>
+                    <Label Text="-" Style="{StaticResource CardLabel}"/>
+                    <Label Text="{Binding Action.EndDate}" HorizontalOptions="Start"  Style="{StaticResource CardLabel}"></Label>
+                    <Label Text="{Binding TotalDays}" Style="{StaticResource CardLabel}" HorizontalOptions="EndAndExpand"/>
+                    <Label Text="days" Style="{StaticResource CardLabel}" HorizontalOptions="End"/>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</Grid>

@@ -3,43 +3,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:model="clr-namespace:UTeM_EComplaint.Model" 
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels" 
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             xmlns:cell="clr-namespace:UTeM_EComplaint.Cells"
              x:Class="UTeM_EComplaint.Views.JobProgressPage"
              Title="{Binding Title}">
     <ContentPage.BindingContext>
         <vm:JobProgressViewModel/>
     </ContentPage.BindingContext>
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="My Tasks" CharacterSpacing="3" Margin="10,40,3,5" FontSize="25" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" TextColor="Black" FontAttributes="Bold"/>
-            <ListView x:Name="listTask" BackgroundColor="Transparent" SeparatorVisibility="None" HasUnevenRows="True" ItemsSource="{Binding ComplaintList}"
-                  SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}" IsPullToRefreshEnabled="True" 
-                  IsRefreshing="{Binding IsBusy, Mode=OneWay}" RefreshCommand="{Binding RefreshCommand}">
-                <ListView.Behaviors>
-                    <xct:EventToCommandBehavior EventName="ItemSelected" Command="{Binding ItemSelectedCommand}" EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
-                </ListView.Behaviors>
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Complaint">
-                        <ViewCell>
-                            <Grid Padding="10" RowSpacing="10" ColumnSpacing="10">
-                                <Frame CornerRadius="10" HasShadow="True">
-                                    <StackLayout VerticalOptions="Center">
-                                        <Label VerticalOptions="Center" FontSize="Medium" Text="{Binding ComplaintID}"  TextColor="Black"></Label>
-                                        <Label VerticalOptions="Center" FontSize="Medium" Text="{Binding Damage}"  TextColor="Black"></Label>
-                                        <Label VerticalOptions="Center" FontSize="Small" Text="Start From" TextColor="Black"></Label>
-                                        <Label VerticalOptions="Center" FontSize="Small" Text="{Binding ComplaintDate}" TextColor="Black"></Label>
-                                    </StackLayout>
-                                </Frame>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         Command="{Binding RefreshCommand}">
+                <CollectionView x:Name="listTask" BackgroundColor="Transparent" 
+                                     SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
+                                     SelectionMode="Single"
+                                     RemainingItemsThreshold="1"
+                                     RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                                     SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                                     SelectionChangedCommandParameter="{Binding SelectedComplaint}"
+                                     ItemsSource="{Binding ComplaintList}">
+                    <CollectionView.Header>
+                        <StackLayout>
+                            <Label Text="In Progress Tasks" FontSize="25" Margin="0,20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold"/>
+                        </StackLayout>
+                    </CollectionView.Header>
+                    <CollectionView.EmptyView>
+                        <StackLayout>
+                            <Label Text="There is no In Progress tak" Style="{StaticResource DetailNoItem}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Complaint">
+                            <cell:TechnicianInProgressCell/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

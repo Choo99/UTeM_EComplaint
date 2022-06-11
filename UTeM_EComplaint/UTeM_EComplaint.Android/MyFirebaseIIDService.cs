@@ -3,24 +3,39 @@ using Android.App;
 using Firebase.Iid;
 using Android.Util;
 using UTeM_EComplaint.Services;
+using Xamarin.Essentials;
+using UTeM_EComplaint.Model;
 
 namespace UTeM_EComplaint.Droid
 {
     [Service(Exported = true)]
     [IntentFilter(new[] { "com.google.firebase.INSTANCE_ID_EVENT" })]
+    [Obsolete]
     public class MyFirebaseIIDService : FirebaseInstanceIdService
     {
         const string TAG = "MyFirebaseIIDService";
+
+        [Obsolete]
         public override void OnTokenRefresh()
         {
             var refreshedToken = FirebaseInstanceId.Instance.Token;
             Log.Debug(TAG, "Refreshed token: " + refreshedToken);
             SendRegistrationToServer(refreshedToken);
         }
-        void SendRegistrationToServer(string token)
+        async void SendRegistrationToServer(string token)
         {
-            // Add custom implementation, as needed.
-            //ComplaintServices
+            int userID = Preferences.Get("userID", 0);
+            User user = new User
+            {
+                UserID = userID,
+                NotificationToken = token,
+            };
+
+            int result = await UserServices.UpdateNotificationToken(user);
+            if(result == 0)
+            {
+                Log.Debug(TAG, "Refresh Token fail");
+            }
         }
     }
 }

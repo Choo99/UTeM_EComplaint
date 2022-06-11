@@ -7,6 +7,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:model="clr-namespace:UTeM_EComplaint.Model"
              NavigationPage.HasNavigationBar="false"
+             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              BackgroundColor="WhiteSmoke" 
              x:Class="UTeM_EComplaint.Views.AboutPage"
              x:DataType="vm:AboutViewModel">
@@ -18,104 +19,118 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Resources>
         <ResourceDictionary>
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
             <Color x:Key="Accent">#CCB7E5</Color>
             <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <AbsoluteLayout VerticalOptions="Fill">
-        <RefreshView x:Name="refreshpage" IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
-                     AbsoluteLayout.LayoutFlags="All" 
-                     AbsoluteLayout.LayoutBounds="0,0,1,1"  Command="{Binding RefreshCommand}">
+        <RefreshView x:Name="refreshpage" IsRefreshing="{Binding IsBusy, Mode=OneWay}" Command="{Binding RefreshCommand}" AbsoluteLayout.LayoutFlags="All" 
+                     AbsoluteLayout.LayoutBounds="0,0,1,1">
             <ScrollView>
                 <StackLayout>
-                    <StackLayout Margin="3">
+                    <StackLayout VerticalOptions="StartAndExpand" Margin="3">
                         <!--https://icon-library.com/images/technician-icon/technician-icon-13.jpg-->
                         <Button x:Name="Logout" Text="LOGOUT" CornerRadius="18" FontAttributes="Bold" BackgroundColor="White" TextColor="Black" Margin="0,30,10,-40" HorizontalOptions="End" Command="{Binding LogoutCommand}"></Button>
                         <Label x:Name="dateNow" FontSize="17" VerticalOptions="EndAndExpand" Text="{Binding DateTimeString}" HorizontalOptions="StartAndExpand" Margin="10,3,0,10" FontAttributes="Bold" FontFamily="arial" TextColor="Black" />
                         <StackLayout HeightRequest="80">
-                            <Label Text="Welcome" TextColor="Black" FontSize="25" 
-                                             Margin="10,30,0,0" CharacterSpacing="4"></Label>
-                            <StackLayout HorizontalOptions="StartAndExpand">
-                                <Label x:Name="labelnama" CharacterSpacing="6" 
-                                   Text="Azieyati" Margin="14,0,0,40" FontAttributes="Bold"  
-                                   FontSize="14" HorizontalTextAlignment="Center" 
-                                   TextColor="Black" ></Label>
+                            <StackLayout Orientation="Horizontal" Margin="0,20">
+                                <Button Text="Save"/>
+                                <Label Text="{Binding ToggleText}" HorizontalOptions="EndAndExpand" TextColor="Black" FontSize="Large"/>
+                                <Switch IsToggled="{Binding IsPieChart, Mode=TwoWay}" HorizontalOptions="End" Margin="10,0"/>
                             </StackLayout>
                         </StackLayout>
                     </StackLayout>
-                    <Frame Margin="17,4,215,3" HeightRequest="90" BackgroundColor="#5BB7C9" CornerRadius="10">
-                        <StackLayout>
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding TotalTabbedCommand}"/>
-                            </StackLayout.GestureRecognizers>
-                            <Image Source="totalTask" HeightRequest="30" Margin="3,-7,110,-18"></Image>
-                            <Label x:Name="lbltotalall" Text="{Binding TotalTask}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
-                            <Label Text="Total Tasks" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" FontSize="20"></Label>
+                    <Grid VerticalOptions="StartAndExpand" RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto" Margin="5,10,0,0" RowSpacing="20" IsVisible="{Binding IsPieChart, Converter={StaticResource InvertedBoolConverter}}">
+                        <Frame Grid.Row="0" Grid.Column="0" HeightRequest="90" BackgroundColor="#5BB7C9" CornerRadius="10">
+                            <StackLayout WidthRequest="150">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding TotalTabbedCommand}"/>
+                                </StackLayout.GestureRecognizers>
+                                <Image Source="totalTask" HeightRequest="30" Margin="3,-7,110,-18"></Image>
+                                <Label x:Name="lbltotalall" Text="{Binding TotalTask}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
+                                <Label Text="Total Tasks" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" FontSize="20"></Label>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Grid.Row="0" Grid.Column="1" HeightRequest="90" BackgroundColor="LightCoral" CornerRadius="10">
+                            <StackLayout WidthRequest="150">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding PendingTabbedCommand}"/>
+                                </StackLayout.GestureRecognizers>
+                                <Image Source="clock" HeightRequest="30" Margin="3,-7,120,-18"></Image>
+                                <Label x:Name="lbltotalTodo" Text="{Binding PendingTask}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
+                                <Label Text="To Do" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Grid.Row="1" Grid.Column="0" HeightRequest="90" BackgroundColor="#ACAAEB" CornerRadius="10">
+                            <StackLayout WidthRequest="150">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding InProgressTabbedCommand}"/>
+                                </StackLayout.GestureRecognizers>
+                                <Image Source="taskList" HeightRequest="30" Margin="3,-7,110,-18"></Image>
+                                <Label x:Name="lbltotalInprogress" Text="{Binding InProgressTask}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
+                                <Label  Text="In Progress" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Grid.Row="1" Grid.Column="1" HeightRequest="90" BackgroundColor="#50DCBA" CornerRadius="10">
+                            <StackLayout WidthRequest="150">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CompletedTabbedCommand}"/>
+                                </StackLayout.GestureRecognizers>
+                                <Image Source="history" HeightRequest="30" Margin="3,-7,120,-18"></Image>
+                                <Label x:Name="lbltotalcomplete" Text="{Binding CompleteTask}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
+                                <Label Text="Completed" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
 
-                        </StackLayout>
-                    </Frame>
-                    <Frame Margin="208,-140,10,20" HeightRequest="90" BackgroundColor="LightCoral" CornerRadius="10">
-                        <StackLayout>
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding PendingTabbedCommand}"/>
-                            </StackLayout.GestureRecognizers>
-                            <Image Source="clock" HeightRequest="30" Margin="3,-7,120,-18"></Image>
-                            <Label x:Name="lbltotalTodo" Text="{Binding PendingTask}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
-                            <Label Text="To Do" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
-                        </StackLayout>
-                    </Frame>
-                    <Frame Margin="208,0,10,45" HeightRequest="90" BackgroundColor="#50DCBA" CornerRadius="10">
-                        <StackLayout>
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding CompletedTabbedCommand}"/>
-                            </StackLayout.GestureRecognizers>
-                            <Image Source="history" HeightRequest="30" Margin="3,-7,120,-18"></Image>
-                            <Label x:Name="lbltotalcomplete" Text="{Binding CompleteTask}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
-                            <Label Text="Completed" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
-
-                        </StackLayout>
-                    </Frame>
-                    <Frame Margin="18,-181.5,215,30" HeightRequest="90" BackgroundColor="#ACAAEB" CornerRadius="10">
-                        <StackLayout>
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding InProgressTabbedCommand}"/>
-                            </StackLayout.GestureRecognizers>
-                            <Image Source="taskList" HeightRequest="30" Margin="3,-7,110,-18"></Image>
-                            <Label x:Name="lbltotalInprogress" Text="{Binding InProgressTask}" HorizontalOptions="Center" FontSize="24" TextColor="White" FontAttributes="Bold"></Label>
-                            <Label  Text="In Progress" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
-                        </StackLayout>
-                    </Frame>
-
+                            </StackLayout>
+                        </Frame>
+                    </Grid>
+                    <StackLayout VerticalOptions="StartAndExpand" IsVisible="{Binding IsPieChart}">
+                        <chart:SfChart BackgroundColor="Transparent">
+                            <chart:SfChart.Title IsVisible="{Binding IsPieChart}">
+                                <chart:ChartTitle BackgroundColor="Transparent" Text="{Binding PieChartTitle}" TextColor="Black" Margin="0,0,0,0"/>
+                            </chart:SfChart.Title>
+                            <chart:SfChart.Legend>
+                                <chart:ChartLegend DockPosition="Bottom" StrokeColor="Black" CornerRadius="5" StrokeWidth="2"
+                                    BackgroundColor="#f5f5f0" Margin="5">
+                                </chart:ChartLegend>
+                            </chart:SfChart.Legend>
+                            <chart:PieSeries CircularCoefficient="0.9" EnableAnimation="True" IsVisible="{Binding IsPieChart}" Label="Name" ItemsSource="{Binding Statistics}" XBindingPath="Name" YBindingPath="Value" EnableTooltip="True">
+                                <chart:PieSeries.DataMarker>
+                                    <chart:ChartDataMarker LabelContent="Percentage">
+                                        <chart:ChartDataMarker.LabelStyle>
+                                            <chart:DataMarkerLabelStyle Font="Bold,14" LabelPosition="Auto"/>
+                                        </chart:ChartDataMarker.LabelStyle>
+                                    </chart:ChartDataMarker>
+                                </chart:PieSeries.DataMarker>
+                                <chart:PieSeries.ColorModel>
+                                    <chart:ChartColorModel Palette="Custom">
+                                        <chart:ChartColorModel.CustomBrushes>
+                                            <Color>LightCoral</Color>
+                                            <Color>YellowGreen</Color>
+                                            <Color>CadetBlue</Color>
+                                            <Color>#5BB7C9</Color>
+                                        </chart:ChartColorModel.CustomBrushes>
+                                    </chart:ChartColorModel>
+                                </chart:PieSeries.ColorModel>
+                            </chart:PieSeries>
+                        </chart:SfChart>
+                    </StackLayout>
                     <Label Text="Activity" CharacterSpacing="5" Margin="10,5,3,5" FontSize="25" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" TextColor="Black" FontAttributes="Bold"/>
-                    <StackLayout Margin="3,3,4,-300">
-                        <ListView x:Name="listTask" BackgroundColor="Transparent" SeparatorVisibility="None" ItemsSource="{Binding ComplaintList}" HasUnevenRows="True"
-                              SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
-                              RefreshCommand="{Binding RefreshCommand}">
-                            <ListView.Behaviors>
-                                <xct:EventToCommandBehavior
-                                EventName="ItemSelected"
-                                EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"
-                                Command="{Binding ItemSelectedCommand}"/>
-                            </ListView.Behaviors>
-                            <ListView.ItemTemplate>
-                                <DataTemplate x:DataType="model:Complaint">
-                                    <ViewCell>
-                                        <Grid Padding="6" RowSpacing="10" ColumnSpacing="10">
-                                            <Frame CornerRadius="10"  HasShadow="True" >
-                                                <StackLayout Orientation="Horizontal">
-                                                    <StackLayout VerticalOptions="Center">
-                                                        <Label x:Name="lblid" Text="{Binding ComplaintID}" IsVisible="false" />
-                                                        <Label x:Name="lblprob" VerticalOptions="Center" FontSize="Medium" Text="{Binding Damage}"  TextColor="Black"></Label>
-                                                        <Label x:Name="lbldate" VerticalOptions="Center" FontSize="Small" Text="{Binding ComplaintDate}" TextColor="Black"></Label>
-                                                        <Label x:Name="lblStatus" VerticalOptions="Center" FontSize="Small" Text="{Binding ComplaintStatus}" TextColor="Black"></Label>
-                                                    </StackLayout>
-                                                </StackLayout>
-                                            </Frame>
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                    <StackLayout >
+                        <CollectionView x:Name="listTask" BackgroundColor="Transparent" ItemsSource="{Binding ComplaintList}"
+                                        SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
+                                        SelectionMode="Single"
+                                        RemainingItemsThreshold="1"
+                                        RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                                        SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                                        SelectionChangedCommandParameter="{Binding SelectedComplaint}"
+                                        ItemTemplate="{StaticResource TechnicianJobDataTemplateSelector}">
+                            <CollectionView.EmptyView>
+                                <StackLayout>
+                                    <Label Text="No Activity" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
                     </StackLayout>
                 </StackLayout>
             </ScrollView>

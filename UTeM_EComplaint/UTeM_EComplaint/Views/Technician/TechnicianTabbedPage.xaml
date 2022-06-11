@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="UTeM_EComplaint.Views.TechnicianTabbedPage"
+            xmlns:local="clr-namespace:UTeM_EComplaint.Views"
+            xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+            SelectedTabColor="Black"
+            BackgroundColor="Transparent"
+            Title="My Job">
+    <TabbedPage.BindingContext>
+        <vm:TechnicianTabbedViewModel/>
+    </TabbedPage.BindingContext>
+    <TabbedPage.ToolbarItems>
+        <ToolbarItem Text="Example Item"
+                     IconImageSource="search.png" 
+                     Command="{Binding SearchCommand}"/>
+    </TabbedPage.ToolbarItems>
+    <local:JobTodoPage Title="To Do"/>
+    <local:JobProgressPage Title="In Progress"/>
+    <local:JobHistoryPage Title="Completed"/>
+</TabbedPage>

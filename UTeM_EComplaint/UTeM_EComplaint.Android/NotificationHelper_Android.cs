@@ -10,6 +10,7 @@ using UTeM_EComplaint.Droid;
 using System.Collections.Generic;
 using AndroidX.Core.App;
 using Firebase.Messaging;
+using Android.Media;
 
 [assembly: Dependency(typeof(NotificationHelper_Android))]
 namespace UTeM_EComplaint.Droid
@@ -40,6 +41,7 @@ namespace UTeM_EComplaint.Droid
                                         .SetSmallIcon(Resource.Drawable.pppk)
                                         .SetContentText(messageBody)
                                         .SetAutoCancel(true)
+                                        .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone))
                                         .SetContentIntent(pendingIntent);
             var notificationManager = NotificationManagerCompat.From(mContext);
             notificationManager.Notify(MainActivity.NOTIFICATION_ID, notificationBuilder.Build());

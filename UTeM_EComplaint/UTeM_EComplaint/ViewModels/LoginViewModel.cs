@@ -47,9 +47,13 @@ namespace UTeM_EComplaint.ViewModels
                 {
                     Shell.Current.GoToAsync($"//{nameof(StaffHomePage)}");
                 }
-                if (role == "technician")
+                else if (role == "technician")
                 {
                     Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+                }
+                else if (role == "admin")
+                {
+                    Shell.Current.GoToAsync($"//{nameof(AdminHomePage)}");
                 }
             }
         }
@@ -66,7 +70,7 @@ namespace UTeM_EComplaint.ViewModels
                     Password = password,
                 };
                 IsBusy = true;
-                user = await LoginServices.Login(user);
+                user = await UserServices.Login(user);
                 
                 Preferences.Set("role",user.Role);
                 Preferences.Set("userID", user.UserID);
@@ -78,6 +82,10 @@ namespace UTeM_EComplaint.ViewModels
                 else if(user.Role == "staff")
                 {
                     await Shell.Current.GoToAsync($"//{nameof(StaffHomePage)}");
+                }
+                else if(user.Role == "admin")
+                {
+                    await Shell.Current.GoToAsync($"//{nameof(AdminHomePage)}");
                 }
 
                 IsBusy = false;

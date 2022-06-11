@@ -61,7 +61,7 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task LoadMore()
         {
-            if (ComplaintHistory.Count == ComplaintHistory.Count)
+            if (complaints.Count == ComplaintHistory.Count)
                 return;
             int lastItemIndexed = ComplaintHistory.Count;
             int nextItemIndexed = lastItemIndexed + LOAD_SIZE;
@@ -87,17 +87,21 @@ namespace UTeM_EComplaint.ViewModels
             {
                 int size = LOAD_SIZE;
                 IsBusy = true;
-                complaints = await ComplaintServices.GetStaffComplaintByStatus(staffID, "Completed");
+                complaints = await ComplaintServices.GetComplaintsByStatus(staffID, "Completed");
                 if (complaints.Count < LOAD_SIZE)
                 {
                     size = complaints.Count;
                 }
                 ComplaintHistory.ReplaceRange(complaints.GetRange(0, size));
-                IsBusy = false;
+                
             }
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
             
         }
@@ -113,7 +117,6 @@ namespace UTeM_EComplaint.ViewModels
         {
             IsBusy = true;
             getData();
-            IsBusy = false;
         }
     }
 }

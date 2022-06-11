@@ -32,7 +32,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
                 }
             }
             catch (Exception)

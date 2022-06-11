@@ -4,6 +4,7 @@
              x:Class="UTeM_EComplaint.Views.StaffViewAllComplaintPage"
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             BackgroundColor="{StaticResource BackgroundColor}"
              Title="{Binding Title}">
     <ContentPage.BindingContext>
         <vm:StaffViewAllComplaintViewModel/>
@@ -21,8 +22,9 @@
                                 SelectionChangedCommand="{Binding ItemSelectedCommand}"
                                 SelectionChangedCommandParameter="{Binding SelectedComplaint}"
                                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-                                SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}">
-                        <CollectionView.ItemTemplate>
+                                SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
+                                ItemTemplate="{StaticResource StaffJobDataTemplateSelector}">
+                        <!--<CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="vm:AdditionalComplaint">
                                 <Grid Padding="6" RowSpacing="10" ColumnSpacing="10">
                                     <Frame CornerRadius="10"  HasShadow="True" BackgroundColor="{Binding BackgroundColor}">
@@ -35,7 +37,7 @@
                                     </Frame>
                                 </Grid>
                             </DataTemplate>
-                        </CollectionView.ItemTemplate>
+                        </CollectionView.ItemTemplate>-->
                     </CollectionView>
                 </RefreshView>
             </StackLayout>

@@ -2,11 +2,17 @@
 <TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             x:Class="UTeM_EComplaint.Views.StaffCompaintTabbedPage"
-            Shell.FlyoutBehavior="Disabled"
-            NavigationPage.HasNavigationBar="false"
-            Shell.NavBarIsVisible="False"
-            
+            xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+            Title="{Binding Title}"
             xmlns:local="clr-namespace:UTeM_EComplaint.Views">
+    <TabbedPage.BindingContext>
+        <vm:StaffComplaintTabbedViewModel/>
+    </TabbedPage.BindingContext>
+    <TabbedPage.ToolbarItems>
+        <ToolbarItem Text="Example Item"
+                     IconImageSource="search.png" 
+                    Command="{Binding SearchCommand}"/>
+    </TabbedPage.ToolbarItems>
     <local:StaffComplaintPendingPage Title="Pending"/>
     <local:StaffComplaintAssignedPage Title="Assigned"/>
     <local:StaffComplaintInProgressPage Title="In Progress"/>

@@ -2,54 +2,44 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:model="clr-namespace:UTeM_EComplaint.Model" 
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="UTeM_EComplaint.Views.JobTodoPage"
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             xmlns:cell="clr-namespace:UTeM_EComplaint.Cells"
              Title="{Binding Title}"
+             BackgroundColor="#efefef"
              x:Name="JobToDoPage">
     <ContentPage.BindingContext>
         <vm:JobToDoViewModel/>
     </ContentPage.BindingContext>
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="TO DO Tasks" CharacterSpacing="3" Margin="10,40,3,5" FontSize="25" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" TextColor="Black" FontAttributes="Bold"/>
-            <ListView x:Name="listTask" BackgroundColor="Transparent" SeparatorVisibility="None" HasUnevenRows="True"
-                      SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
-                      IsPullToRefreshEnabled="True" 
-                      ItemsSource="{Binding ComplaintList}"
-                      IsRefreshing="{Binding IsBusy, Mode=OneWay}" RefreshCommand="{Binding RefreshCommand}">
-                <ListView.Behaviors>
-                    <xct:EventToCommandBehavior EventName="ItemSelected" Command="{Binding ItemSelectedCommand}" EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
-                </ListView.Behaviors>
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Complaint">
-                        <ViewCell>
-                            <Grid Padding="10" RowSpacing="10" ColumnSpacing="10">
-                                <Frame CornerRadius="10" HasShadow="True">
-                                    <StackLayout Orientation="Horizontal">
-                                        <StackLayout VerticalOptions="Center">
-                                            <Label x:Name="lblid" Text="{Binding ComplaintID}"/>
-                                            <Label x:Name="lblnostaff" Text="{Binding Staff.StaffID}" IsVisible="false" />
-                                            <Label x:Name="lblprob" VerticalOptions="Center" FontSize="Medium" Text="{Binding Damage}"  TextColor="Black"></Label>
-                                            <Label x:Name="lbldate" VerticalOptions="Center" FontSize="Small" Text="{Binding ComplaintDate}" TextColor="Black"></Label>
-                                        </StackLayout>
-                                        <Button CornerRadius="15" HorizontalOptions="EndAndExpand" Text="Start" IsEnabled="True" BackgroundColor="#0FC5BA" 
-                                                Command="{Binding Source={x:Reference JobToDoPage},Path=BindingContext.StartJobCommand}" CommandParameter="{Binding .}" ></Button>
-                                    </StackLayout>
-
-                                </Frame>
-
-                            </Grid>
-
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         Command="{Binding RefreshCommand}">
+                <CollectionView x:Name="listTask" BackgroundColor="Transparent" 
+                                     SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
+                                     SelectionMode="Single"
+                                     RemainingItemsThreshold="1"
+                                     RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                                     SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                                     SelectionChangedCommandParameter="{Binding SelectedComplaint}"
+                                     ItemsSource="{Binding ComplaintList}">
+                    <CollectionView.Header>
+                        <StackLayout>
+                            <Label Text="TO DO Tasks" FontSize="25" Margin="0,20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold"/>
+                        </StackLayout>
+                    </CollectionView.Header>
+                    <CollectionView.EmptyView>
+                        <StackLayout>
+                            <Label Text="There is no TO DO Job" Style="{StaticResource DetailNoItem}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Complaint">
+                            <cell:TechnicianAssignedCell/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -14,56 +14,49 @@
                  AbsoluteLayout.LayoutBounds="0,0,1,1" >
                 <StackLayout>
                     <StackLayout Spacing="20" Padding="20">
-                        <!--Compaint Date-->
-                        <Label Text="Date" TextColor="#0FC5BA" FontSize="Medium"/>
-                        <Frame>
-                            <Label Text="{Binding DateTimeString}"  TextColor="Black" FontSize="Small"/>
-                        </Frame>
+                        <Frame Style="{StaticResource Card}">
+                            <StackLayout>
+                                <Label Text="Complaint" Style="{StaticResource DetailTitle}"/>
+                                <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black"/>
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="30">
+                                    <!--Compaint Date-->
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Date" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Label Grid.Row="0" Grid.Column="1" Text="{Binding DateTimeString}"  TextColor="Black" FontSize="Small"/>
 
-                        <!--Division-->
-                        <Label Text="Division" TextColor="#0FC5BA" FontSize="Medium"/>
-                        <Frame>
-                            <Picker x:Name="bahagian" Title="-- Select Division --" 
-                            ItemsSource="{Binding divisionList}" SelectedItem="{Binding SelectedDivision}"
-                            ItemDisplayBinding="{Binding DivisionName}" 
-                            TextColor="Black" />
-                        </Frame>
+                                        <!--Division-->
+                                    <Label Grid.Row="1" Grid.Column="0" Text="Division" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="bahagian" Title="-- Select Division --" 
+                                                ItemsSource="{Binding divisionList}" SelectedItem="{Binding SelectedDivision}"
+                                                ItemDisplayBinding="{Binding DivisionName}" 
+                                                TextColor="Black" />        
+                                    <!--Damage Type-->
+                                    <Label Grid.Row="3" Grid.Column="0" Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Picker Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Damage Type --" ItemsSource="{Binding damageTypeList}" 
+                                                SelectedItem="{Binding SelectedDamageType}" ItemDisplayBinding="{Binding DamageTypeName}" TextColor="Black"/>
 
-                        <!--Damage Type-->
-                        <Label Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium"/>
-                        <Frame>
-                            <Picker Title="-- Select Damage Type --" ItemsSource="{Binding damageTypeList}" 
-                                SelectedItem="{Binding SelectedDamageType}" ItemDisplayBinding="{Binding DamageTypeName}" TextColor="Black"/>
-                        </Frame>
+                                    <!--Category-->
+                                    <Label Grid.Row="5" Grid.Column="0" Text="Category" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Picker Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Category --" SelectedItem="{Binding SelectedCategory}"
+                                                ItemsSource="{Binding categoryList}" ItemDisplayBinding="{Binding CategoryName}"
+                                                TextColor="Black" />        
+                                    <!--Damage-->
+                                    <Label Grid.Row="7" Grid.Column="0" Text="Problem Description" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Editor Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Complaint.Damage}" AutoSize="TextChanges" FontSize="Small"/>
 
-                        <!--Category-->
-                        <Label Text="Category" TextColor="#0FC5BA" FontSize="Medium"/>
-                        <Frame>
-                            <Picker Title="-- Select Category --" SelectedItem="{Binding SelectedCategory}"
-                            ItemsSource="{Binding categoryList}" ItemDisplayBinding="{Binding CategoryName}"
-                            TextColor="Black" />
-                        </Frame>
+                                    <!--Location-->
+                                    <Label Grid.Row="9" Grid.Column="0" Text="Location" TextColor="#0FC5BA" FontSize="Medium" />
+                                    <Entry Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Complaint.Location}" x:Name="location" FontSize="Small"/>
 
-                        <!--Damage-->
-                        <Label Text="Problem Description" TextColor="#0FC5BA" FontSize="Medium"/>
-                        <Frame Margin="0,-10,0,0" Padding="5,10">
-                            <Editor Text="{Binding Complaint.Damage}" AutoSize="TextChanges" FontSize="Small"/>
-                        </Frame>
+                                    <!--Contact Number-->
+                                    <Label Grid.Row="11" Grid.Column="0" Text="Contact number" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Entry Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Complaint.ContactPhoneNumber}" x:Name="contact" FontSize="Small"/>
 
-                        <!--Location-->
-                        <Label Text="Location" TextColor="#0FC5BA" FontSize="Medium" />
-                        <Frame>
-                            <Entry Text="{Binding Complaint.Location}" x:Name="location" FontSize="Small"/>
-                        </Frame>
-
-                        <!--Contact Number-->
-                        <Label Text="Contact number" TextColor="#0FC5BA" FontSize="Medium"/>
-                        <Frame>
-                            <Entry Text="{Binding Complaint.ContactPhoneNumber}" x:Name="contact" FontSize="Small"/>
-                        </Frame>
-                        <Button Text="Save" CharacterSpacing="3" BackgroundColor="#0FC5BA" CornerRadius="20"
+                                    <Button Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" Text="Save" CharacterSpacing="3" BackgroundColor="#0FC5BA" CornerRadius="20"
                             Command="{Binding SaveCommand}" FontSize="20" FontAttributes="Bold" HeightRequest="50"
                             WidthRequest="200" HorizontalOptions="Center" VerticalOptions="EndAndExpand" Margin="3,14"/>
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
                     </StackLayout>
                 </StackLayout>
             </ScrollView>

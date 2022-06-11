@@ -3,202 +3,185 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UTeM_EComplaint.Views.JobDetailPage"
              xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms" 
-             BackgroundColor="#efefef"
+             BackgroundColor="{StaticResource BackgroundColor}"
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels" xmlns:PanCake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              Title="{Binding Title}"
              x:Name="JobDetail">
     <ContentPage.BindingContext>
-        <vm:JobCompletedDetailViewModel/>
+        <vm:JobDetailViewModel/>
     </ContentPage.BindingContext>
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}"/>
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
-        <ScrollView>
-            <StackLayout>
-                <Grid>
-                <StackLayout Grid.Row="0" Grid.Column="0" Spacing="20" Padding="20">
-                    <!--Staff information Title-->
-                    <Label Text="Applicant Information" HorizontalOptions="Center" TextColor="#0FC5BA" FontSize="Large" />
-                    
-                    <!--Staff ID-->
-                    <Label Text="StaffID" TextColor="#0FC5BA" FontSize="Medium" />
-                    <Frame>
-                        <Label Text="{Binding Complaint.Staff.StaffID}" TextColor="Black" FontSize="Small"/>
-                    </Frame>
-                    
-                    <!--Staff Name-->
-                    <Label Text="Name" TextColor="#0FC5BA" FontSize="Medium" />
-                    <Frame>
-                        <Label Text="{Binding Complaint.Staff.Name}" TextColor="Black" FontSize="Small"/>
-                    </Frame>
-                    
-                    <!--Responsibility Centre-->
-                    <Label Text="Responsibility Centre" TextColor="#0FC5BA" FontSize="Medium" />
-                    <Frame>
-                        <Label Text="{Binding Complaint.Staff.ResponsibilityCentre}" TextColor="Black" FontSize="Small"/>
-                    </Frame>
-                    
-                    <!--Phone Number-->
-                    <Label Text="Phone Number" TextColor="#0FC5BA" FontSize="Medium" />
-                    <Frame>
-                        <Label Text="{Binding Complaint.Staff.PhoneNumber}" FontSize="Small" />
-                    </Frame>
-                    
-                    <!--Information Report Title-->
-                    <Label Text="Information Report" HorizontalOptions="Center" Margin="0,20,0,0" TextColor="#0FC5BA" FontSize="Large" />
-                    
-                    <!--Complaint Date-->
-                    <Label Text="Complaint Date" TextColor="#0FC5BA" FontSize="Medium" />
-                    <Frame>
-                        <Label Text="{Binding Complaint.ComplaintDate}" TextColor="Black" FontSize="Small"/>
-                    </Frame>
-                    
-                    <!--Division-->
-                    <Label Text="Division" TextColor="#0FC5BA" FontSize="Medium" />
-                    <Frame>
-                        <Label Text="{Binding Complaint.Division.DivisionName}" TextColor="Black" FontSize="Small"/>
-                    </Frame>
-                    
-                    <!--Damage Type-->
-                    <Label Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium" />
-                    <Frame>
-                        <Label Text="{Binding Complaint.DamageType.DamageTypeName}" TextColor="Black" FontSize="Small"/>
-                    </Frame>
-                    
-                    <!--Category-->
-                    <Label Text="Category" TextColor="#0FC5BA" FontSize="Medium" />
-                    <Frame>
-                        <Label Text="{Binding Complaint.Category.CategoryName}" TextColor="Black" FontSize="Small"/>
-                    </Frame>
-                    
-                    <!--Description-->
-                    <Label Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
-                    <Frame>
-                        <Label HeightRequest="100" Text="{Binding Complaint.Damage}" FontSize="Medium" />
-                    </Frame>
-                    
-                    <!--Location-->
-                    <Label Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
-                    <Frame>
-                        <Label Text="{Binding Complaint.Location}" HeightRequest="50" FontSize="Small" TextColor="Black"/>
-                    </Frame>
-                              
-                    <!--<Label Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
-                    <Frame>
-                        <Label Text="{Binding Complaint.Damage}"  FontSize="Small" TextColor="Black"/>
-                    </Frame>-->
-                    <StackLayout Grid.Row="1" Grid.Column="0" IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsNotAssigned}">
-                            <!--Action Taken Title-->
-                            <Label Text="Action Taken" HorizontalOptions="Center" TextColor="#0FC5BA" FontSize="Medium"/>
+        <AbsoluteLayout>
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" HorizontalOptions="Center" >
+                <ScrollView>
+                    <StackLayout>
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                            <StackLayout Grid.Row="0" Grid.Column="0" Spacing="20" Padding="20">
+                                <Frame Style="{StaticResource Card}">
+                                    <StackLayout>
+                                        <!--Staff information Title-->
+                                        <Label Text="Applicant Information" Style="{StaticResource DetailTitle}"/>
+                                        <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
+                                        <Grid RowSpacing="20">
+                                            <!--Staff ID-->
+                                            <Label Grid.Row="0" Grid.Column="0" Text="StaffID : " TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.Staff.StaffID}" Style="{StaticResource CardLabel}" />
+                                            <!--Staff Name-->
+                                            <Label Grid.Row="1" Grid.Column="0" Text="Name :" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Complaint.Staff.Name}" Style="{StaticResource CardLabel}"/>
+                                            <!--Responsibility Centre-->
+                                            <Label Grid.Row="2" Grid.Column="0" Text="Responsibility Centre" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Complaint.Staff.ResponsibilityCentre}" Style="{StaticResource CardLabel}"/>
+                                            <!--Phone Number-->
+                                            <Label Grid.Row="3" Grid.Column="0" Text="Phone Number" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Complaint.Staff.PhoneNumber}" Style="{StaticResource CardLabel}" />
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Style="{StaticResource Card}">
+                                    <StackLayout>
+                                        <!--Information Report Title-->
+                                        <Label Text="Information Report" Style="{StaticResource DetailTitle}" />
+                                        <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
+                                        <Grid RowSpacing="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                                            <!--Complaint Date-->
+                                            <Label Grid.Row="0" Grid.Column="0"  Text="Complaint Date" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.ComplaintDate}" Style="{StaticResource CardLabel}"/>
 
-                            <!--Start Date-->
-                            <Label Text="Start Date" TextColor="#0FC5BA" FontSize="Medium"/>
-                            <Frame>
-                                <Label Text="{Binding Complaint.Action.StartDate}" FontSize="Small" TextColor="Black"/>
-                            </Frame>
+                                            <!--Division-->
+                                            <Label Grid.Row="1" Grid.Column="0" Text="Division" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Complaint.Division.DivisionName}" Style="{StaticResource CardLabel}"/>
 
-                            <!--End Date-->
-                            <Label Text="End Date" TextColor="#0FC5BA" FontSize="Medium"/>
-                            <Frame>
-                                <Label Text="{Binding Complaint.Action.EndDate}" FontSize="Small" TextColor="Black"/>
-                            </Frame>
-                            <!--Action Taken Title-->
-                            <Label Text="Action Taken" TextColor="#0FC5BA" FontSize="Medium"/>
-                            <!--Action when pending-->
-                            <Editor IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsInProgress}" Placeholder="Enter your action taken here" HeightRequest="80" Background="white" FontSize="Small" TextColor="Black"/>
-                            <!--Action when Completed-->
-                            <Frame IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsCompleted}">
-                                <Label Text="{Binding Complaint.Action.ActionDescription}" HeightRequest="80" FontSize="Small" TextColor="Black"/>
-                            </Frame>
+                                            <!--Damage Type-->
+                                            <Label Grid.Row="2" Grid.Column="0" Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Complaint.DamageType.DamageTypeName}" Style="{StaticResource CardLabel}"/>
 
-                            <!--Spare Replacement-->
-                            <Label Text="Spare Replacement" TextColor="#0FC5BA" FontSize="Medium"/>
-                            <!--Replacement when pending-->
-                            <Frame IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsInProgress}">
-                                <Entry Placeholder="Replacement" FontSize="Small" TextColor="Black"></Entry>
-                            </Frame>
-                            <!--Replacement when completed-->
-                            <Frame IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsCompleted}">
-                                <Label Text="{Binding Complaint.Action.SpareReplace}" FontSize="Small" TextColor="Black"></Label>
-                            </Frame>
+                                            <!--Category-->
+                                            <Label Grid.Row="3" Grid.Column="0" Text="Category" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Complaint.Category.CategoryName}" Style="{StaticResource CardLabel}"/>
 
-                            <!--Additional Note-->
-                            <Label Text="Additional note" TextColor="#0FC5BA" FontSize="Medium"/>
-                            <!--Note Display when pending-->
-                            <Frame IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsInProgress}">
-                                <Entry Placeholder="Note" FontSize="Small" TextColor="Black"></Entry>
-                            </Frame>
-                            <!--Note Display when completed-->
-                            <Frame IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsCompleted}">
-                                <Label Text="{Binding Complaint.Action.AdditionalNote}" FontSize="Small" TextColor="Black"></Label>
-                            </Frame>
+                                            <!--Description-->
+                                            <Label Grid.Row="4" Grid.Column="0" Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Label Grid.Row="4" Grid.Column="1" HeightRequest="100" Text="{Binding Complaint.Damage}" Style="{StaticResource CardLabel}" />
 
-                            <!--Complaint Status-->
-                            <Label Text="Additional note" TextColor="#0FC5BA" FontSize="Medium"/>
-                            <Frame IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsCompleted}">
-                                <Label Text="{Binding Complaint.ComplaintStatus}" FontSize="Small" TextColor="Black"></Label>
-                            </Frame>
+                                            <!--Location-->
+                                            <Label Grid.Row="5" Grid.Column="0" Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Label Grid.Row="5" Grid.Column="1" Text="{Binding Complaint.Location}" HeightRequest="50" Style="{StaticResource CardLabel}"/>
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
 
-                            <!--Rating-->
-                            <Label Text="Rating" IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsCompleted}" TextColor="#0FC5BA" FontSize="Medium"/>
-                            <Frame IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsNotRated}">
-                                <Label FontSize="Small" Text="There is no rating yet" TextColor="Black"></Label>
-                            </Frame>
+                                <Frame Style="{StaticResource Card}" IsVisible="{Binding IsInProgress}">
+                                    <StackLayout>
+                                        <!--Action Taken Title-->
+                                        <Label Text="In Progress"  IsVisible="{Binding IsInProgress}" Style="{StaticResource DetailTitle}"/>
+                                        <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
+                                        <Grid RowSpacing="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                                            <!--Start Date-->
+                                            <Label Grid.Row="0" Grid.Column="0" Text="Start Date"  IsVisible="{Binding IsInProgress}" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.Action.StartDate}" IsVisible="{Binding IsInProgress}" Style="{StaticResource CardLabel}"/>
 
-                            <Frame>
-                                <rating:SfRating IsEnabled="False" IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsRated}" Value="{Binding Complaint.Rating.RatingValue}" ItemSpacing="20" >
-                                    <rating:SfRating.RatingSettings>
-                                        <rating:SfRatingSettings UnRatedFill="Gray" RatedStroke="Black" />
-                                    </rating:SfRating.RatingSettings>
-                                </rating:SfRating>
-                            </Frame>
-                        </StackLayout>
-                        <StackLayout Grid.Row="2" Grid.Column="0">
-                        <Button Text="Start"
-                            IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsAssigned}"
-                            CharacterSpacing="3"
-                            BackgroundColor="#0FC5BA"
-                            CornerRadius="20"
-                            FontSize="20"
-                            FontAttributes="Bold"
-                            Command="{Binding StartJobCommand}"
-                            HeightRequest="50"
-                            WidthRequest="200"
-                            HorizontalOptions="Center"
-                            VerticalOptions="EndAndExpand"
-                            Margin="3,14"/>  
-                    <Button Text="Finish" 
-                            IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsInProgress}"
-                            Command="{Binding FinishJobCommand}"
-                            CharacterSpacing="3"
-                            BackgroundColor="#0FC5BA"
-                            CornerRadius="20"
-                            FontSize="20"
-                            FontAttributes="Bold"
-                            HeightRequest="50"
-                            WidthRequest="200"
-                            HorizontalOptions="Center"
-                            VerticalOptions="EndAndExpand"
-                            Margin="3,14"/>
-                        <Button Text="DONE" 
-                            IsVisible="{Binding Source={x:Reference JobDetail},Path=BindingContext.IsCompleted}"
-                            CharacterSpacing="3"
-                            BackgroundColor="#0FC5BA"
-                            Command="{Binding DoneCommand}"
-                            CornerRadius="20"
-                            FontSize="20"
-                            FontAttributes="Bold"
-                            HeightRequest="50"
-                            WidthRequest="200"
-                            HorizontalOptions="Center"
-                            VerticalOptions="EndAndExpand"
-                            Margin="3,14"/>
-                        </StackLayout>
+                                            <!--End Date-->
+                                            <Label Grid.Row="1" Grid.Column="0" Text="End Date" TextColor="#0FC5BA" FontSize="Medium" IsVisible="{Binding IsInProgress}"/>
+                                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Complaint.Action.EndDate}"  Style="{StaticResource CardLabel}" IsVisible="{Binding IsInProgress}"/>
+
+                                            <!--Action Taken Title-->
+                                            <Label Grid.Row="2" Grid.Column="0" Text="Action Taken" IsVisible="{Binding IsInProgress}" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <!--Action when pending-->
+                                            <Editor Grid.Row="3" Grid.Column="0" Text="{Binding Complaint.Action.ActionDescription}" Grid.ColumnSpan="2" Placeholder="Enter your action taken here" IsVisible="{Binding IsInProgress}" HeightRequest="80" Background="white" FontSize="Medium" TextColor="Black"/>
+
+                                            <!--Spare Replacement-->
+                                            <Label Grid.Row="4" Grid.Column="0" Text="Spare Replacement" TextColor="#0FC5BA" IsVisible="{Binding IsInProgress}" FontSize="Medium"/>
+                                            <!--Replacement when pending-->
+                                            <Entry Grid.Row="5" Grid.Column="0" Text="{Binding Complaint.Action.SpareReplace}" Grid.ColumnSpan="2" Placeholder="Replacement" IsVisible="{Binding IsInProgress}" FontSize="Medium" TextColor="Black"></Entry>
+
+                                            <!--Additional Note-->
+                                            <Label Grid.Row="6" Grid.Column="0" Text="Additional note" IsVisible="{Binding IsInProgress}" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <!--Note Display when pending-->
+                                            <Entry Grid.Row="7" Grid.Column="0" Text="{Binding Complaint.Action.AdditionalNote}" Grid.ColumnSpan="2" Placeholder="Note" FontSize="Small" TextColor="Black" IsVisible="{Binding IsInProgress}"></Entry>
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame Style="{StaticResource Card}" IsVisible="{Binding IsCompleted}">
+                                    <StackLayout>
+                                        <!--Action Taken Title-->
+                                        <Label Text="Action Taken" IsVisible="{Binding IsCompleted}" Style="{StaticResource DetailTitle}"/>
+                                        <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
+                                        <Grid RowSpacing="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                                            <!--Start Date-->
+                                            <Label Grid.Row="0" Grid.Column="0" Text="Start Date" TextColor="#0FC5BA" FontSize="Medium" IsVisible="{Binding IsCompleted}"/>
+                                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.Action.StartDate}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"/>
+
+                                            <!--End Date-->
+                                            <Label Grid.Row="1" Grid.Column="0" Text="End Date" TextColor="#0FC5BA" IsVisible="{Binding IsCompleted}" FontSize="Medium"/>
+                                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Complaint.Action.EndDate}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"/>
+
+                                            <!--Action Taken Title-->
+                                            <Label Grid.Row="2" Grid.Column="0" Text="Action Taken" TextColor="#0FC5BA" FontSize="Medium" IsVisible="{Binding IsCompleted}"/>
+                                            <!--Action when Completed-->
+                                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Complaint.Action.ActionDescription}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"/>
+
+                                            <!--Spare Replacement-->
+                                            <Label Grid.Row="3" Grid.Column="0" Text="Spare Replacement" TextColor="#0FC5BA" FontSize="Medium" IsVisible="{Binding IsCompleted}"/>
+                                            <!--Replacement when completed-->
+                                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Complaint.Action.SpareReplace}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"></Label>
+
+                                            <!--Additional Note-->
+                                            <Label Grid.Row="4" Grid.Column="0" Text="Additional note" TextColor="#0FC5BA" FontSize="Medium" IsVisible="{Binding IsCompleted}"/>
+                                            <!--Note Display when completed-->
+                                            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Complaint.Action.AdditionalNote}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"></Label>
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Style="{StaticResource Card}">
+                                    <StackLayout>
+                                        <!--Complaint Status-->
+                                        <Label Text="Status" Style="{StaticResource DetailTitle}"/>
+                                        <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
+                                        <Label Text="{Binding Complaint.ComplaintStatus}" Style="{StaticResource ComplaintStatus}" HorizontalOptions="Center"/>
+                                    </StackLayout>
+                                </Frame>
+
+                                <!--Rating-->
+                                <Frame Style="{StaticResource Card}" IsVisible="{Binding IsRating}">
+                                    <StackLayout>
+                                        <Label Text="Rating" Style="{StaticResource DetailTitle}" IsVisible="{Binding IsCompleted}"/>
+                                        <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
+                                        <Label Text="There is no rating yet"  IsVisible="{Binding Complaint.IsRated}" Style="{StaticResource DetailNoItem}"></Label>
+                                            <rating:SfRating IsEnabled="False" Value="{Binding Complaint.Rating.RatingValue}" IsVisible="{Binding IsRating}" ItemSpacing="20" >
+                                            <rating:SfRating.RatingSettings>
+                                                <rating:SfRatingSettings UnRatedFill="Gray" RatedStroke="Black" />
+                                            </rating:SfRating.RatingSettings>
+                                        </rating:SfRating>
+                                    </StackLayout>
+                                </Frame>
+                                <StackLayout Orientation="Horizontal">
+                                    <Button Text="Start" IsVisible="{Binding IsAssigned}" Style="{StaticResource Button}"
+                                            Command="{Binding StartCommand}" Margin="3,14"/>
+                                    <Button Text="Finish" Command="{Binding FinishCommand}" IsVisible="{Binding IsInProgress}" Style="{StaticResource Button}"
+                                                Margin="3,14"/>
+                                    <Button Text="Edit" Command="{Binding EditCommand}" Style="{StaticResource Button}" IsVisible="{Binding IsCompleted}" Margin="3,14"/>
+                                    <Button Text="DONE" Command="{Binding DoneCommand}" Style="{StaticResource Button}" Margin="3,14"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </Grid>
                     </StackLayout>
-                </Grid>
-                    </StackLayout>
-                    
-        </ScrollView>
+                </ScrollView>
+        </StackLayout>
+            <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsBusy, Mode=OneWay}"/>
+            <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsBusy}" 
+                               IsRunning="{Binding IsBusy, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

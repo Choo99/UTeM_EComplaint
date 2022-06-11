@@ -10,7 +10,7 @@ using System.Net;
 
 namespace UTeM_EComplaint.Services
 {
-    public class LoginServices
+    public class UserServices
     {
 
         public static async Task<User> Login(User user)
@@ -41,6 +41,40 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     throw new Exception(response.ReasonPhrase);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<int> UpdateNotificationToken(User user)
+        {
+            try
+            {
+                string url = string.Format("{0}/updateNotificationToken", Global.apiUrl);
+                var client = new HttpClient();
+
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                form.Add(new StringContent(user.UserID.ToString()), "userID");
+                form.Add(new StringContent(user.NotificationToken), "notificationToken");
+                HttpResponseMessage response = await client.PostAsync(url, form);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    int result = JsonConvert.DeserializeObject<int>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
                 }
             }
             catch (Exception)

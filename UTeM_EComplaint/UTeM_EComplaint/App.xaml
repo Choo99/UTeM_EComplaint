@@ -1,8 +1,139 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:cell="clr-namespace:UTeM_EComplaint.Cells"
              x:Class="UTeM_EComplaint.App">
     <Application.Resources>
+
+        <Color x:Key="AssignedColor">#F56648</Color>
+        <Color x:Key="PendingColor">#F5BD48</Color>
+        <Color x:Key="InProgressColor">#7F7C00</Color>
+        <Color x:Key="CompletedColor">#196E0B</Color>
+
+        <Color x:Key="SaveButtonColor">LightGreen</Color>
+
+        <Color x:Key="ClearButtonColor">IndianRed</Color>
+        
+        <Color x:Key="BackgroundColor">#efefef</Color>
+
+        <Color x:Key="DetailColor">#2785FC</Color>
+
+        <Color x:Key="NoItemColor">#5F5E4D</Color>
+        
+        <Color x:Key="ButtonColor">#0FC5BA</Color>
+
+        <DataTemplate x:Key="StaffPending">
+            <cell:StaffPendingCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="StaffAssigned">
+            <cell:StaffAssignedPage/>
+        </DataTemplate>
+        <DataTemplate x:Key="StaffInProgress">
+            <cell:StaffInProgressCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="StaffCompleted">
+            <cell:StaffCompletedCell/>
+        </DataTemplate>
+
+        <cell:StaffComplaintDataTemplateSelector x:Key="StaffJobDataTemplateSelector"
+                                                 Pending="{StaticResource StaffPending}"
+                                                 Assigned="{StaticResource StaffAssigned}"
+                                                 InProgress="{StaticResource StaffInProgress}"
+                                                 Completed="{StaticResource StaffCompleted}"/>
+
+        <DataTemplate x:Key="Assigned">
+            <cell:TechnicianAssignedCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="InProgress">
+            <cell:TechnicianInProgressCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="Completed">
+            <cell:TechnicianCompletedCell/>
+        </DataTemplate>
+        
+        <cell:TechnicianJobDataTemplateSelector x:Key="TechnicianJobDataTemplateSelector"
+                                                Assigned="{StaticResource Assigned}"
+                                                InProgress="{StaticResource InProgress}"
+                                                Completed="{StaticResource Completed}"/>
+
+        <Style x:Key="Button" TargetType="Button">
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource ButtonColor}"/>
+            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="CharacterSpacing" Value="3"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+
+        <Style x:Key="Card" TargetType="Frame">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="HasShadow" Value="True"/>
+        </Style>
+
+        <Style x:Key="CardLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontSize" Value="Medium"/>
+        </Style>
+
+        <Style x:Key="CardTitle" TargetType="Label" BasedOn="{StaticResource CardLabel}">
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="Large"/>
+        </Style>
+
+        <Style x:Key="DetailTitle" TargetType="Label" BasedOn="{StaticResource CardTitle}">
+            <Setter Property="FontAttributes" Value="Italic"/>
+            <Setter Property="TextColor" Value="{StaticResource DetailColor}"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+
+        <Style x:Key="DetailNoItem" TargetType="Label" BasedOn="{StaticResource CardLabel}">
+            <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+            <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+            <Setter Property="TextColor" Value="{StaticResource NoItemColor}"/>
+        </Style>
+
+        <Style x:Key="ListViewCell" TargetType="Grid">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="RowSpacing" Value="10"/>
+            <Setter Property="ColumnSpacing" Value="10"/>
+        </Style>
+        <Style x:Key="HorizontalLine" TargetType="Line">
+            <Setter Property="X1" Value="0"/>
+            <Setter Property="X2" Value="360"/>
+            <Setter Property="Y1" Value="0"/>
+            <Setter Property="Y2" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+            <Setter Property="Stroke" Value="Black"/>
+        </Style>
+
+
+        <x:String x:Key="PendingString">Pending</x:String>
+        <x:String x:Key="AssignedString">Assigned</x:String>
+        <x:String x:Key="InProgressString">In Progress</x:String>
+        <x:String x:Key="CompletedString">Completed</x:String>
+
+        <Style x:Key="ComplaintStatus" TargetType="Label" BasedOn="{StaticResource CardLabel}">
+            <Style.Triggers>
+                <Trigger TargetType="Label" Property="Text" Value="{StaticResource PendingString}">
+                    <Setter Property="TextColor" Value="{StaticResource PendingColor}"/>
+                </Trigger>
+                <Trigger TargetType="Label" Property="Text" Value="{StaticResource AssignedString}">
+                    <Setter Property="TextColor" Value="{StaticResource AssignedColor}"/>
+                </Trigger>
+                <Trigger TargetType="Label" Property="Text" Value="{StaticResource InProgressString}">
+                    <Setter Property="TextColor" Value="{StaticResource InProgressColor}"/>
+                </Trigger>
+                <Trigger TargetType="Label" Property="Text" Value="{StaticResource CompletedString}">
+                    <Setter Property="TextColor" Value="{StaticResource CompletedColor}"/>
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="FontSize" Value="Large"/>
+            <Setter Property="FontAttributes" Value="Bold, Italic"/>
+        </Style>
 
     </Application.Resources>
 </Application>

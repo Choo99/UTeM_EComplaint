@@ -27,11 +27,11 @@ namespace UTeM_EComplaint.ViewModels
         bool isRefresh;
         string pathToDetail = $"{nameof(StaffComplaintDetailPage)}?complaintID=";
         readonly int LOAD_SIZE = 5;
-        List<AdditionalComplaint> additionalComplaints;
 
+        List<Complaint> complaints;
 
-        AdditionalComplaint selectedComplaint;
-        public AdditionalComplaint SelectedComplaint
+        Complaint selectedComplaint;
+        public Complaint SelectedComplaint
         {
             get => selectedComplaint;
             set
@@ -40,7 +40,7 @@ namespace UTeM_EComplaint.ViewModels
                 OnPropertyChanged();
             }
         }
-        public ObservableRangeCollection<AdditionalComplaint> ComplaintList { get; }
+        public ObservableRangeCollection<Complaint> ComplaintList { get; }
         public bool IsLoading { get => isLoading; set => SetProperty(ref isLoading, value); }
 
         public AsyncCommand RefreshCommand { get; }
@@ -52,7 +52,7 @@ namespace UTeM_EComplaint.ViewModels
             Title = "All Complaints";
             staffID = Preferences.Get("userID", 0);
 
-            ComplaintList = new ObservableRangeCollection<AdditionalComplaint>();
+            ComplaintList = new ObservableRangeCollection<Complaint>();
 
             RefreshCommand = new AsyncCommand(Refresh);
             LoadMoreCommand = new AsyncCommand(LoadMore);
@@ -62,11 +62,11 @@ namespace UTeM_EComplaint.ViewModels
         }
         private async Task ItemSelected(object arg)
         {
-            var complaint = arg as AdditionalComplaint;
+            var complaint = arg as Complaint;
             if (complaint == null)
                 return;
             SelectedComplaint = null;
-            await Shell.Current.GoToAsync(pathToDetail + complaint.Complaint.ComplaintID);
+            await Shell.Current.GoToAsync(pathToDetail + complaint.ComplaintID);
         }
 
         private async Task Refresh()
@@ -80,18 +80,18 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task LoadMore()
         {
-            if (ComplaintList.Count == additionalComplaints.Count)
+            if (ComplaintList.Count == complaints.Count)
                 return;
 
             int lastItemIndexed = ComplaintList.Count;
             int nextItemIndexed = lastItemIndexed + LOAD_SIZE;
 
-            if (nextItemIndexed > additionalComplaints.Count)
-                nextItemIndexed = additionalComplaints.Count;
+            if (nextItemIndexed > complaints.Count)
+                nextItemIndexed = complaints.Count;
 
             for (int i = lastItemIndexed; i < nextItemIndexed; i++)
             {
-                ComplaintList.Add(additionalComplaints[i]);
+                ComplaintList.Add(complaints[i]);
             }
         }
 
@@ -101,25 +101,9 @@ namespace UTeM_EComplaint.ViewModels
             {
                 if (!isRefresh)
                     IsLoading = true;
-                List<Complaint> complaints = await ComplaintServices.GetAllComplaints();
-                additionalComplaints = new List<AdditionalComplaint>();
-                for (int i = 0; i < complaints.Count; i++)
-                {
-                    Color backgroundColor = Color.White;
+                complaints = await ComplaintServices.GetAllComplaints();
 
-                    if (complaints[i].Staff.StaffID == staffID)
-                    {
-                        backgroundColor = Color.Gray;
-                    }
-                    AdditionalComplaint additionalComplaint = new AdditionalComplaint
-                    {
-                        Complaint = complaints[i],
-                        BackgroundColor = backgroundColor,
-                        TextColor = ColorConverter.StatusToColor(complaints[i].ComplaintStatus)
-                    };
-                    additionalComplaints.Add(additionalComplaint);
-                }
-                ComplaintList.ReplaceRange(additionalComplaints.GetRange(0, LOAD_SIZE));
+                ComplaintList.ReplaceRange(complaints.GetRange(0, LOAD_SIZE));
             }
             catch (Exception ex)
             {
@@ -129,7 +113,6 @@ namespace UTeM_EComplaint.ViewModels
             {
                 if (!isRefresh)
                     IsLoading = false;
-
             }
         }
 
