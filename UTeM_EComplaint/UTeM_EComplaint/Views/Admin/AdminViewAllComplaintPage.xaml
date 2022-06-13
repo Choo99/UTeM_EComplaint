@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             Title="{Binding Title}"
+             x:Class="UTeM_EComplaint.Views.AdminViewAllComplaintPage">
+    <ContentPage.BindingContext>
+        <vm:AdminViewAllComplaintViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <AbsoluteLayout VerticalOptions="Fill">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" >
+                <SearchBar Placeholder="Search in Complaint ID and Date(yyyy-MM-dd)" SearchCommand="{Binding SearchCommand}"  Text="{Binding SearchText}"
+                           FontSize="Small" BackgroundColor="White" VerticalOptions="CenterAndExpand"/>
+                <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
+                      Command="{Binding RefreshCommand}" >
+                    <CollectionView ItemsSource="{Binding ComplaintList}" 
+                                RemainingItemsThreshold="1"
+                                BackgroundColor="Transparent"
+                                ItemSizingStrategy="MeasureAllItems"
+                                SelectionMode="Single"
+                                SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                                SelectionChangedCommandParameter="{Binding SelectedComplaint}"
+                                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                                SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
+                                ItemTemplate="{StaticResource StaffJobDataTemplateSelector}">
+                        <CollectionView.EmptyView>
+                            <StackLayout>
+                                <Label Text="{Binding ResultText}"
+                                       HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                            </StackLayout>
+                        </CollectionView.EmptyView>
+                        <!--<CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:AdditionalComplaint">
+                                <Grid Padding="6" RowSpacing="10" ColumnSpacing="10">
+                                    <Frame CornerRadius="10"  HasShadow="True" BackgroundColor="{Binding BackgroundColor}">
+                                        <StackLayout VerticalOptions="Center">
+                                            <Label Text="{Binding Complaint.ComplaintID}" TextColor="Black"/>
+                                            <Label Text="{Binding Complaint.Damage}" VerticalOptions="Center" FontSize="Medium" TextColor="Black"></Label>
+                                            <Label Text="{Binding Complaint.ComplaintDate}" VerticalOptions="Center" FontSize="Small" TextColor="Black"></Label>
+                                            <Label Text="{Binding Complaint.ComplaintStatus}" TextColor="{Binding TextColor}" VerticalOptions="Center" FontSize="Small"></Label>
+                                        </StackLayout>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>-->
+                    </CollectionView>
+                </RefreshView>
+            </StackLayout>
+            <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsLoading, Mode=OneWay}"/>
+            <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsLoading}" 
+                               IsRunning="{Binding IsLoading, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

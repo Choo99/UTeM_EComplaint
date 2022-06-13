@@ -45,31 +45,35 @@
                                     <StackLayout>
                                         <!--Information Report Title-->
                                         <Label Text="Information Report" Style="{StaticResource DetailTitle}" />
-                                        <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
+                                        <Line Style="{StaticResource HorizontalLine}" Stroke="black" />
                                         <Grid RowSpacing="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                                            <!--Complaint ID-->
+                                            <Label Grid.Row="0" Grid.Column="0"  Text="Complaint ID" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.ComplaintID}" Style="{StaticResource CardLabel}"/>
+                                            
                                             <!--Complaint Date-->
-                                            <Label Grid.Row="0" Grid.Column="0"  Text="Complaint Date" TextColor="#0FC5BA" FontSize="Medium" />
-                                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.ComplaintDate}" Style="{StaticResource CardLabel}"/>
+                                            <Label Grid.Row="1" Grid.Column="0"  Text="Complaint Date" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Complaint.ComplaintDate}" Style="{StaticResource CardLabel}"/>
 
                                             <!--Division-->
-                                            <Label Grid.Row="1" Grid.Column="0" Text="Division" TextColor="#0FC5BA" FontSize="Medium" />
-                                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Complaint.Division.DivisionName}" Style="{StaticResource CardLabel}"/>
+                                            <Label Grid.Row="2" Grid.Column="0" Text="Division" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Complaint.Division.DivisionName}" Style="{StaticResource CardLabel}"/>
 
                                             <!--Damage Type-->
-                                            <Label Grid.Row="2" Grid.Column="0" Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium" />
-                                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Complaint.DamageType.DamageTypeName}" Style="{StaticResource CardLabel}"/>
+                                            <Label Grid.Row="3" Grid.Column="0" Text="Damage Type" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Complaint.DamageType.DamageTypeName}" Style="{StaticResource CardLabel}"/>
 
                                             <!--Category-->
-                                            <Label Grid.Row="3" Grid.Column="0" Text="Category" TextColor="#0FC5BA" FontSize="Medium" />
-                                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Complaint.Category.CategoryName}" Style="{StaticResource CardLabel}"/>
+                                            <Label Grid.Row="4" Grid.Column="0" Text="Category" TextColor="#0FC5BA" FontSize="Medium" />
+                                            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Complaint.Category.CategoryName}" Style="{StaticResource CardLabel}"/>
 
                                             <!--Description-->
-                                            <Label Grid.Row="4" Grid.Column="0" Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
-                                            <Label Grid.Row="4" Grid.Column="1" HeightRequest="100" Text="{Binding Complaint.Damage}" Style="{StaticResource CardLabel}" />
+                                            <Label Grid.Row="5" Grid.Column="0" Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Label Grid.Row="5" Grid.Column="1" Text="{Binding Complaint.Damage}" Style="{StaticResource CardLabel}" />
 
                                             <!--Location-->
-                                            <Label Grid.Row="5" Grid.Column="0" Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
-                                            <Label Grid.Row="5" Grid.Column="1" Text="{Binding Complaint.Location}" HeightRequest="50" Style="{StaticResource CardLabel}"/>
+                                            <Label Grid.Row="6" Grid.Column="0" Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Label Grid.Row="6" Grid.Column="1" Text="{Binding Complaint.Location}" Style="{StaticResource CardLabel}"/>
                                         </Grid>
                                     </StackLayout>
                                 </Frame>
@@ -91,7 +95,7 @@
                                             <!--Action Taken Title-->
                                             <Label Grid.Row="2" Grid.Column="0" Text="Action Taken" IsVisible="{Binding IsInProgress}" TextColor="#0FC5BA" FontSize="Medium"/>
                                             <!--Action when pending-->
-                                            <Editor Grid.Row="3" Grid.Column="0" Text="{Binding Complaint.Action.ActionDescription}" Grid.ColumnSpan="2" Placeholder="Enter your action taken here" IsVisible="{Binding IsInProgress}" HeightRequest="80" Background="white" FontSize="Medium" TextColor="Black"/>
+                                            <Editor Grid.Row="3" Grid.Column="0" Text="{Binding Complaint.Action.ActionDescription}" Grid.ColumnSpan="2" Placeholder="Enter your action taken here" IsVisible="{Binding IsInProgress}" Background="white" FontSize="Medium" TextColor="Black"/>
 
                                             <!--Spare Replacement-->
                                             <Label Grid.Row="4" Grid.Column="0" Text="Spare Replacement" TextColor="#0FC5BA" IsVisible="{Binding IsInProgress}" FontSize="Medium"/>
@@ -101,7 +105,7 @@
                                             <!--Additional Note-->
                                             <Label Grid.Row="6" Grid.Column="0" Text="Additional note" IsVisible="{Binding IsInProgress}" TextColor="#0FC5BA" FontSize="Medium"/>
                                             <!--Note Display when pending-->
-                                            <Entry Grid.Row="7" Grid.Column="0" Text="{Binding Complaint.Action.AdditionalNote}" Grid.ColumnSpan="2" Placeholder="Note" FontSize="Small" TextColor="Black" IsVisible="{Binding IsInProgress}"></Entry>
+                                            <Entry Grid.Row="7" Grid.Column="0" Text="{Binding Complaint.Action.AdditionalNote}" Grid.ColumnSpan="2" Placeholder="Note" FontSize="Medium" TextColor="Black" IsVisible="{Binding IsInProgress}"></Entry>
                                         </Grid>
                                     </StackLayout>
                                 </Frame>
@@ -152,9 +156,9 @@
                                         <Label Text="Rating" Style="{StaticResource DetailTitle}" IsVisible="{Binding IsCompleted}"/>
                                         <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
                                         <Label Text="There is no rating yet"  IsVisible="{Binding Complaint.IsRated}" Style="{StaticResource DetailNoItem}"></Label>
-                                            <rating:SfRating IsEnabled="False" Value="{Binding Complaint.Rating.RatingValue}" IsVisible="{Binding IsRating}" ItemSpacing="20" >
+                                            <rating:SfRating IsEnabled="False" Value="{Binding Complaint.Rating.RatingValue}" IsVisible="{Binding IsRating}" ItemSpacing="15" >
                                             <rating:SfRating.RatingSettings>
-                                                <rating:SfRatingSettings UnRatedFill="Gray" RatedStroke="Black" />
+                                                <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
                                             </rating:SfRating.RatingSettings>
                                         </rating:SfRating>
                                     </StackLayout>

@@ -98,6 +98,8 @@ namespace UTeM_EComplaint.ViewModels
             try
             {
                 var answer = await Application.Current.MainPage.DisplayAlert("Finish", "Are you sure you want to finish the job?", "Yes", "No");
+                if (!await validate())
+                    return;
                 if (answer)
                 {
                     int result = 0;
@@ -179,6 +181,24 @@ namespace UTeM_EComplaint.ViewModels
             finally
             {
                 IsBusy = false;
+            }
+        }
+
+        async Task<bool> validate()
+        {
+            if(Complaint.Action.ActionDescription == null || Complaint.Action.SpareReplace == null || Complaint.Action.AdditionalNote == null)
+            {
+                if (Complaint.Action.ActionDescription == null)
+                    await Application.Current.MainPage.DisplayAlert("Fill", "Please find in the action taken field","OK");
+                else if(Complaint.Action.SpareReplace == null)
+                    await Application.Current.MainPage.DisplayAlert("Fill", "Please find in the spare replace field", "OK");
+                else if (Complaint.Action.AdditionalNote == null)
+                    await Application.Current.MainPage.DisplayAlert("Fill", "Please find in the additional note field", "OK");
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }

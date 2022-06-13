@@ -71,15 +71,15 @@
     <TabBar Title="Home" Icon="home.png">
         <ShellContent x:Name="StaffHome"  Icon="home.png" Title="Home" Route="StaffHomePage" ContentTemplate="{DataTemplate view:StaffHomePage}" />
         <ShellContent Icon="fileCircle.png" Title="Add Complaint" ContentTemplate="{DataTemplate view:StaffAddComplaintPage}"  />
-        <ShellContent Icon="historyClock.png" Title="Your complaint" ContentTemplate="{DataTemplate view:StaffCompaintTabbedPage}"  />
-        <ShellContent Icon="all.png" Title="All Complaints" ContentTemplate="{DataTemplate view:StaffViewAllComplaintPage}"  />
+        <ShellContent Route="StaffTab" Icon="historyClock.png" Title="Your complaint" ContentTemplate="{DataTemplate view:StaffCompaintTabbedPage}"  />
     </TabBar>
 
     <!--Admin TabBar-->
     <TabBar Title="Home" Icon="home.png">
         <ShellContent x:Name="AdminHome"  Icon="home.png" Title="Home" Route="AdminHomePage" ContentTemplate="{DataTemplate view:AdminHomePage}" />
         <ShellContent Icon="business.png" Title="Assign Complaint" ContentTemplate="{DataTemplate view:AdminAssignComplaintPage}"  />
-        <ShellContent Icon="pdf.png" Title="Report" ContentTemplate="{DataTemplate view:StaffCompaintTabbedPage}"  />
+        <ShellContent Icon="pdf.png" Title="Report" ContentTemplate="{DataTemplate view:AdminReportTabbedPage}"  />
+        <ShellContent Route="AdminViewAll" Icon="all.png" Title="All Complaint" ContentTemplate="{DataTemplate view:AdminViewAllComplaintPage}"  />
     </TabBar>
     
 </Shell>

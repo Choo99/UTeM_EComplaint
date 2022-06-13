@@ -15,7 +15,7 @@
                          AbsoluteLayout.LayoutBounds="0,0,1,1" 
                          HorizontalOptions="FillAndExpand">
 
-                <Image Source="pppk.png" WidthRequest="180" HeightRequest="180"></Image>
+                <Image Source="UTeM.png" WidthRequest="180" HeightRequest="180"></Image>
                 <Entry x:Name="txtUsername" Placeholder="Username" TextColor="Black" PlaceholderColor="Gray" Text="{Binding Username}"></Entry>
                 <Entry x:Name="txtPassword" IsPassword="{Binding IsPassword}" Placeholder="Password"  TextColor="Black" PlaceholderColor="Gray" Text="{Binding Password}"></Entry>
                 <CheckBox x:Name="passcheck" IsChecked="{Binding IsShow}"/>

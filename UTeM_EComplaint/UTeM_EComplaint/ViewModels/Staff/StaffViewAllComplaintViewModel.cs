@@ -13,19 +13,13 @@ using Command = MvvmHelpers.Commands.Command;
 
 namespace UTeM_EComplaint.ViewModels
 {
-    internal class AdditionalComplaint
-    {
-        public Complaint Complaint { get; set; }
-        public Color BackgroundColor { get; set; }
-        public Color TextColor { get; set; }
-    }
 
     internal class StaffViewAllComplaintViewModel : ViewModelBase
     {
         int staffID;
         bool isLoading;
         bool isRefresh;
-        string pathToDetail = $"{nameof(StaffComplaintDetailPage)}?complaintID=";
+        string pathToDetail = $"{nameof(AdminComplaintDetailPage)}?complaintID=";
         readonly int LOAD_SIZE = 5;
 
         List<Complaint> complaints;
@@ -73,6 +67,7 @@ namespace UTeM_EComplaint.ViewModels
         {
             isRefresh = true;
             IsBusy = true;
+            await Task.Delay(100);
             getData();
             IsBusy = false;
             isRefresh = false;
@@ -80,6 +75,7 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task LoadMore()
         {
+            await Task.Delay(100);
             if (ComplaintList.Count == complaints.Count)
                 return;
 
@@ -115,6 +111,5 @@ namespace UTeM_EComplaint.ViewModels
                     IsLoading = false;
             }
         }
-
     }
 }

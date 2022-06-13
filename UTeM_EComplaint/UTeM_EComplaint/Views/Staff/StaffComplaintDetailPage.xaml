@@ -156,9 +156,9 @@
                                         <Label Text="Your Rating" IsVisible="{Binding IsCompleted}" Style="{StaticResource DetailTitle}"/>
                                         <Line Style="{StaticResource HorizontalLine}"/>
                                         <Label FontSize="Small" IsVisible="{Binding IsNotRating}" Text="There is no rating yet" TextColor="Black"></Label>
-                                        <rating:SfRating IsEnabled="False" Value="{Binding Complaint.Rating.RatingValue}" ItemSpacing="20" IsVisible="{Binding IsRating}">
+                                        <rating:SfRating IsEnabled="False" Value="{Binding Complaint.Rating.RatingValue}" ItemSpacing="15" IsVisible="{Binding IsRating}">
                                             <rating:SfRating.RatingSettings>
-                                                <rating:SfRatingSettings UnRatedFill="Gray" RatedStroke="Black" />
+                                                <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
                                             </rating:SfRating.RatingSettings>
                                         </rating:SfRating>
                                     </StackLayout>

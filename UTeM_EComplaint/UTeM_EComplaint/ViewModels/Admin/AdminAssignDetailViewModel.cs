@@ -12,42 +12,83 @@ using Xamarin.Forms;
 
 namespace UTeM_EComplaint.ViewModels
 {
-    internal class AdminAssignDetailPage : ViewModelBase, IQueryAttributable
+    internal class AdminAssignDetailViewmModel : ViewModelBase, IQueryAttributable
     {
-        int complaintID;
-        bool isNotAssigned;
-        bool isAssigned;
-        bool isInProgress;
-        bool isCompleted;
-        bool isRating;
-        bool isNotRating;
-        bool isOnlyCompleted;
-        Complaint complaint;
+        readonly string pathToAdminDetail = $"//AdminViewAll/{nameof(AdminComplaintDetailPage)}?complaintID=";
 
-        string pathToAssignTechnician = $"{nameof(AdminAssignTechnicianViewModel)}";
+        int complaintID;
+        bool isNotAssigned = true;
+        bool isAssigned;
+        public bool IsAssigned { get => isAssigned; set { SetProperty(ref isAssigned, value); IsNotAssigned = !value; } }
+        public bool IsNotAssigned { get => isNotAssigned; set { SetProperty(ref isNotAssigned, value); } }
+
+        Complaint complaint;
+        Technician technician;
+
+        string pathToAssignTechnician = $"{nameof(AdminAssignTechnicianPage)}";
 
         public Complaint Complaint { get => complaint; set => SetProperty(ref complaint, value); }
-        public bool IsAssigned { get => isAssigned; set { SetProperty(ref isAssigned, value); IsNotAssigned = !value; } }
-        public bool IsNotAssigned { get => isNotAssigned; set => SetProperty(ref isNotAssigned, value); }
-        public bool IsInProgress { get => isInProgress; set => SetProperty(ref isInProgress, value); }
-        public bool IsCompleted { get => isCompleted; set => SetProperty(ref isCompleted, value); }
-        public bool IsNotRating { get => isNotRating; set => SetProperty(ref isNotRating, value); }
-        public bool IsRating { get => isRating; set { SetProperty(ref isRating, value); IsNotRating = !value; } }
-        public bool IsOnlyCompleted { get => isOnlyCompleted; set { SetProperty(ref isOnlyCompleted, value); } }
+        public Technician Technician { get => technician; set => SetProperty(ref technician, value); }
 
         public AsyncCommand AssignCommand { get; }
+        public AsyncCommand AddTechnicianCommand { get; }
         public AsyncCommand DoneCommand { get; }
-        public AdminComplaintDetailViewModel()
+        public AsyncCommand DeleteTechnicianCommand { get; }
+        public AdminAssignDetailViewmModel()
         {
             Title = "Complaint Detail";
 
             DoneCommand = new AsyncCommand(Done);
             AssignCommand = new AsyncCommand(Assign);
+            AddTechnicianCommand = new AsyncCommand(AddTechnician);
+            DeleteTechnicianCommand = new AsyncCommand(DeleteTechnician);
+        }
+
+        private async Task DeleteTechnician()
+        {
+            await Task.Delay(100);
+            Technician = null;
+            IsAssigned = false;
+        }
+
+        private async Task AddTechnician()
+        {
+            await Shell.Current.Navigation.PushModalAsync(new NavigationPage(new AdminAssignTechnicianPage()));
         }
 
         private async Task Assign()
         {
-            await Shell.Current.GoToAsync($"{nameof(AdminAssignTechnicianPage)}");
+            try
+            {
+                var answer = await Application.Current.MainPage.DisplayAlert("Assign", "Are you want to assign technician(ID " + Technician.TechnicianID + ") to complaint(" + Complaint.ComplaintID + ")?", "YES", "No");
+                if (answer)
+                {
+                    IsBusy = true;
+                    Complaint.Technician = Technician;
+                    int result = await TechnicianServices.UpdateTechnicianAndSubscribe(Complaint);
+                    if (result != 0)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Success", "Assign job to technician(ID " + Technician.TechnicianID + ") successfully", null, "OK");
+                        Technician = null;
+                        IsAssigned = false;
+
+                        await Shell.Current.GoToAsync("..");
+                        await Shell.Current.GoToAsync(pathToAdminDetail + complaintID);
+                    }
+                    else
+                    {
+                        throw new Exception("Update in database fail. Please try again");
+                    }
+                 }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task Done()
@@ -63,15 +104,30 @@ namespace UTeM_EComplaint.ViewModels
                 complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
                 getComplaintDetail();
             }
-            if (query.ContainsKey("TechnicianID"))
+            if (query.ContainsKey("technicianID"))
             {
-                complaintID = int.Parse(HttpUtility.UrlDecode(query["TechnicianID"]));
+                int technicianID = int.Parse(HttpUtility.UrlDecode(query["technicianID"]));
+                getStaffDetail(technicianID);
             }
         }
 
-        void getStaffDetail()
+        async void getStaffDetail(int technicianID)
         {
-
+            try
+            {
+                IsBusy = true;
+                Technician technician = await TechnicianServices.GetTechnicianWithStatistic(technicianID);
+                Technician = technician;
+                IsAssigned = true;
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
+           finally
+            {
+                IsBusy = false;
+            }
         }
 
         async void getComplaintDetail()
@@ -80,34 +136,6 @@ namespace UTeM_EComplaint.ViewModels
             {
                 IsBusy = true;
                 Complaint = await ComplaintServices.GetComplaintDetail(complaintID);
-                if (Complaint.ComplaintStatus == "Pending")
-                {
-                    IsNotAssigned = true;
-                }
-                else if (Complaint.ComplaintStatus == "Assigned")
-                {
-                    IsAssigned = true;
-                }
-                else if (Complaint.ComplaintStatus == "In Progress")
-                {
-                    IsAssigned = true;
-                    IsInProgress = true;
-                }
-                else if (Complaint.ComplaintStatus == "Completed")
-                {
-                    IsAssigned = true;
-                    IsInProgress = true;
-                    IsCompleted = true;
-                    IsOnlyCompleted = true;
-                    if (Complaint.Rating != null)
-                    {
-                        IsRating = true;
-                    }
-                    else if (Complaint.Rating == null)
-                    {
-                        IsRating = false;
-                    }
-                }
             }
             catch (Exception ex)
             {

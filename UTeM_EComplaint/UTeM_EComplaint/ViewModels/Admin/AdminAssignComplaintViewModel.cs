@@ -18,7 +18,7 @@ namespace UTeM_EComplaint.ViewModels
         readonly int LOAD_SIZE = 5;
 
         readonly int staffID;
-        readonly string pathToDetail = $"{nameof(AdminComplaintDetailPage)}?complaintID=";
+        readonly string pathToDetail = $"{nameof(AdminAssignDetailPage)}?complaintID=";
 
         Complaint selectedComplaint;
         List<Complaint> complaints;

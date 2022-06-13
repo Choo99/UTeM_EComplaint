@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             Title="{Binding Title}"
+             x:Class="UTeM_EComplaint.Views.AdminReportPage">
+    <ContentPage.BindingContext>
+        <vm:AdminReportViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <AbsoluteLayout VerticalOptions="Fill">
+            <StackLayout  AbsoluteLayout.LayoutFlags="All" 
+                          AbsoluteLayout.LayoutBounds="0,0,1,1" >
+                <ScrollView>
+                    <StackLayout>
+                        <Frame Style="{StaticResource Card}">
+                            <StackLayout>
+                                <Label Style="{StaticResource CardTitle}" Text="1 Month" Margin="0,10" HorizontalOptions="Center"/>
+                                <Grid ColumnDefinitions="Auto,0.4*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource CardLabel}" Text="Start Date" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource CardLabel}" Text="End Date" HorizontalOptions="Center"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="0" IsEnabled="False" Date="{Binding OneMonthStartTime}" HorizontalOptions="Center"/>
+                                    <Image Grid.Row="1" Grid.Column="1" Source="rightArrow.png" HeightRequest="25"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="2" IsEnabled="False" Date="{Binding MonthlyEndTime}" HorizontalOptions="Center"/>
+                                    <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Command="{Binding GenerateOneMonthCommand}" Text="Generate" 
+                                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Style="{StaticResource Card}">
+                            <StackLayout>
+                                <Label Style="{StaticResource CardTitle}" Text="2 Months" Margin="0,10" HorizontalOptions="Center"/>
+                                <Grid ColumnDefinitions="Auto,0.4*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource CardLabel}" Text="Start Date" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource CardLabel}" Text="End Date" HorizontalOptions="Center"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="0" IsEnabled="False" Date="{Binding TwoMonthStartTime}" HorizontalOptions="Center"/>
+                                    <Image Grid.Row="1" Grid.Column="1" Source="rightArrow.png" HeightRequest="25"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="2" IsEnabled="False" Date="{Binding EndDate}" HorizontalOptions="Center" TextColor="Black"/>
+                                    <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Command="{Binding GenerateTwoMonthCommand}" Text="Generate" 
+                                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Style="{StaticResource Card}">
+                            <StackLayout>
+                                <Label Style="{StaticResource CardTitle}" Text="3 Months" Margin="0,10" HorizontalOptions="Center"/>
+                                <Grid ColumnDefinitions="Auto,0.4*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource CardLabel}" Text="Start Date" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource CardLabel}" Text="End Date" HorizontalOptions="Center"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="0" IsEnabled="False" Date="{Binding ThreeMonthStartTime}" HorizontalOptions="Center"/>
+                                    <Image Grid.Row="1" Grid.Column="1" Source="rightArrow.png" HeightRequest="25"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="2" IsEnabled="False" Date="{Binding EndDate}" HorizontalOptions="Center"/>
+                                    <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Command="{Binding GenerateThreeMonthCommand}" Text="Generate" 
+                                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Style="{StaticResource Card}">
+                            <StackLayout>
+                                <Label Style="{StaticResource CardTitle}" Text="Specific Date" Margin="0,10" HorizontalOptions="Center"/>
+                                <Grid ColumnDefinitions="Auto,0.4*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource CardLabel}" Text="Start Date" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource CardLabel}" Text="End Date" HorizontalOptions="Center"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="0" Date="{Binding StartDate}" MinimumDate="{Binding MinDate}" MaximumDate="{Binding MaxDate}" 
+                                                HorizontalOptions="Center" TextColor="Chocolate"/>
+                                    <Image Grid.Row="1" Grid.Column="1" Source="rightArrow.png" HeightRequest="25"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="2" Date="{Binding EndDate}" MinimumDate="{Binding MinDate}" MaximumDate="{Binding MaxDate}"
+                                                HorizontalOptions="Center"  TextColor="Chocolate"/>
+                                    <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Command="{Binding GenerateSpecificCommand}" Text="Generate" 
+                                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+            <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsBusy, Mode=OneWay}"/>
+            <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsBusy}" 
+                               IsRunning="{Binding IsBusy, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -133,7 +133,7 @@
                             <Frame>
                                 <rating:SfRating IsEnabled="False" Value="{Binding Complaint.Rating.RatingValue}" ItemSpacing="20" >
                                     <rating:SfRating.RatingSettings>
-                                        <rating:SfRatingSettings UnRatedFill="Gray" RatedStroke="Black" />
+                                        <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
                                     </rating:SfRating.RatingSettings>
                                 </rating:SfRating>
                             </Frame>

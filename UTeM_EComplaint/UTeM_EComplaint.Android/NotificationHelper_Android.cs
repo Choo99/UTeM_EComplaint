@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using AndroidX.Core.App;
 using Firebase.Messaging;
 using Android.Media;
+using UTeM_EComplaint.Model;
 
 [assembly: Dependency(typeof(NotificationHelper_Android))]
 namespace UTeM_EComplaint.Droid
@@ -70,6 +71,7 @@ namespace UTeM_EComplaint.Droid
             notificationManager.CreateNotificationChannel(channel);
         }
 
+        [Obsolete]
         public string GetToken()
         {
             try
@@ -77,7 +79,7 @@ namespace UTeM_EComplaint.Droid
                 var token = FirebaseInstanceId.Instance.Token;
                 return token;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 throw;
             }
@@ -97,9 +99,17 @@ namespace UTeM_EComplaint.Droid
             FirebaseMessaging.Instance.UnsubscribeFromTopic(topic);
         }
 
+        [Obsolete]
         public void DeleteInstance()
         {
             FirebaseInstanceId.Instance.DeleteInstanceId();
+        }
+
+        [Obsolete]
+        public async void UpdateInstanceID(User user)
+        {
+            user.NotificationToken = FirebaseInstanceId.Instance.Token;
+            int result = await UserServices.UpdateNotificationToken(user);
         }
     }
 }

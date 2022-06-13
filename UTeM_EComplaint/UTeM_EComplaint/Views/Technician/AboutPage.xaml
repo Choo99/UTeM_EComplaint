@@ -35,7 +35,6 @@
                         <Label x:Name="dateNow" FontSize="17" VerticalOptions="EndAndExpand" Text="{Binding DateTimeString}" HorizontalOptions="StartAndExpand" Margin="10,3,0,10" FontAttributes="Bold" FontFamily="arial" TextColor="Black" />
                         <StackLayout HeightRequest="80">
                             <StackLayout Orientation="Horizontal" Margin="0,20">
-                                <Button Text="Save"/>
                                 <Label Text="{Binding ToggleText}" HorizontalOptions="EndAndExpand" TextColor="Black" FontSize="Large"/>
                                 <Switch IsToggled="{Binding IsPieChart, Mode=TwoWay}" HorizontalOptions="End" Margin="10,0"/>
                             </StackLayout>

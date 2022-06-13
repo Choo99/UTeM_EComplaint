@@ -19,7 +19,7 @@
                             <StackLayout>
                                 <Label Text="Compaint" Style="{StaticResource DetailTitle}"/>
                                 <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black"/>
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="30">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="30">
                                     <!--Compaint Date-->
                                     <Label Grid.Row="0" Grid.Column="0" Text="Date" TextColor="#0FC5BA" FontSize="Medium"/>
                                     <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.ComplaintDate}"  TextColor="Black" FontSize="Small"/>
@@ -49,16 +49,30 @@
                                                 TextColor="Black" />
 
                                     <!--Description-->
-                                    <Label Grid.Row="7" Grid.Column="0" Text="Problem Description" TextColor="#0FC5BA" FontSize="Medium"/>
-                                    <Entry Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="100" Text="{Binding Complaint.Damage}" FontSize="Medium" />
+                                    <Label Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="Problem Description" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Entry Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Complaint.Damage}" FontSize="Medium" />
 
                                     <!--Location-->
-                                    <Label Grid.Row="9" Grid.Column="0" Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
-                                    <Entry Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Complaint.Location}" HeightRequest="50" FontSize="Small" TextColor="Black"/>
+                                    <Label Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Text="Location/Department" TextColor="#0FC5BA" FontSize="Medium" />
+
+                                    <Button Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Text="Add Location" Style="{StaticResource Button}" Command="{Binding AddLocationCommand}" IsVisible="{Binding IsNotLocation}"  />
+
+                                    <AbsoluteLayout Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding IsLocation}" Margin="0,-10,0,10" >
+                                        <StackLayout>
+                                            <Label Style="{StaticResource CardLabel}" Text="{Binding Location}" HorizontalTextAlignment="Start" />
+                                        </StackLayout>
+                                        <Image HeightRequest="50" AbsoluteLayout.LayoutBounds="1, 10, 25, 25"
+                                           AbsoluteLayout.LayoutFlags="PositionProportional"
+                                           Source="xmark.png" Aspect="AspectFit" >
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding ClearLocationCommand}"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </AbsoluteLayout>
 
                                     <!--Complaint Status-->
                                     <Label Grid.Row="11" Grid.Column="0" Text="Status" TextColor="#0FC5BA" FontSize="Medium"/>
-                                    <Label Grid.Row="11" Grid.Column="1" Text="{Binding Complaint.ComplaintStatus}" Style="{StaticResource CardLabel}"></Label>
+                                    <Label Grid.Row="11" Grid.Column="1" Text="{Binding Complaint.ComplaintStatus}" Style="{StaticResource ComplaintStatus}"></Label>
 
                                     <Button Grid.Row="12" Grid.Column="0" Text="Save" BackgroundColor="{StaticResource SaveButtonColor}" Command="{Binding SaveCommand}" Style="{StaticResource Button}" Margin="3,14"/>
                                     <Button Grid.Row="12" Grid.Column="1" Text="Clear" BackgroundColor="{StaticResource ClearButtonColor}" Command="{Binding ClearCommand}" Style="{StaticResource Button}" Margin="3,14"/>

@@ -29,6 +29,7 @@ namespace UTeM_EComplaint
             Routing.RegisterRoute(nameof(StaffComplaintHistoryPage), typeof(StaffComplaintHistoryPage));
             Routing.RegisterRoute(nameof(TechnicianTabbedPage), typeof(TechnicianTabbedPage));
             Routing.RegisterRoute(nameof(StaffCompaintTabbedPage), typeof(StaffCompaintTabbedPage));
+            Routing.RegisterRoute(nameof(AdminReportTabbedPage), typeof(AdminReportTabbedPage));
             Routing.RegisterRoute(nameof(StaffComplaintPendingPage), typeof(StaffComplaintPendingPage));
             Routing.RegisterRoute(nameof(StaffComplaintInProgressPage), typeof(StaffComplaintInProgressPage));
             Routing.RegisterRoute(nameof(StaffComplaintAssignedPage), typeof(StaffComplaintAssignedPage));
@@ -41,8 +42,13 @@ namespace UTeM_EComplaint
             Routing.RegisterRoute(nameof(JobSearchingPage), typeof(JobSearchingPage));
             Routing.RegisterRoute(nameof(StaffSearchComplaintPage), typeof(StaffSearchComplaintPage));
             Routing.RegisterRoute(nameof(AdminAssignComplaintPage), typeof(AdminAssignComplaintPage));
-            Routing.RegisterRoute(nameof(AdminComplaintDetailPage), typeof(AdminComplaintDetailPage));
+            Routing.RegisterRoute(nameof(AdminAssignDetailPage), typeof(AdminAssignDetailPage));
             Routing.RegisterRoute(nameof(AdminAssignTechnicianPage), typeof(AdminAssignTechnicianPage));
+            Routing.RegisterRoute(nameof(AdminReportPage), typeof(AdminReportPage));
+            Routing.RegisterRoute(nameof(AdminTechnicianReportPage), typeof(AdminTechnicianReportPage));
+            Routing.RegisterRoute(nameof(AdminViewAllComplaintPage), typeof(AdminViewAllComplaintPage));
+            Routing.RegisterRoute(nameof(AdminComplaintDetailPage), typeof(AdminComplaintDetailPage));
+            Routing.RegisterRoute(nameof(StaffAddAddressPage), typeof(StaffAddAddressPage));
 
 
             Routing.RegisterRoute($"home/{nameof(StaffComplaintPendingPage)}", typeof(StaffComplaintPendingPage));

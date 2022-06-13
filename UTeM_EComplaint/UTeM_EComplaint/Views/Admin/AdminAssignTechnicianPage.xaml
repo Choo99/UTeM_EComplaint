@@ -3,13 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UTeM_EComplaint.Views.AdminAssignTechnicianPage"
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             BackgroundColor="{StaticResource BackgroundColor}"
              xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms" 
+             Title="{Binding Title}"
              xmlns:model="clr-namespace:UTeM_EComplaint.Model">
     <ContentPage.BindingContext>
         <vm:AdminAssignTechnicianViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Submit" Command="{Binding SubmitCommand}" IsEnabled="{Binding IsItemSelected}"/>
+        <ToolbarItem Text="Clear" Command="{Binding ClearCommand}"/>
+        <ToolbarItem Text="Submit" Command="{Binding SubmitCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
@@ -25,7 +28,7 @@
                             SelectedItem="{Binding SelectedTechnician, Mode=TwoWay}">
                     <CollectionView.EmptyView>
                         <StackLayout>
-                            <Label Text="No Assigned Complaint" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            <Label Text="No Technician Available" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                         </StackLayout>
                     </CollectionView.EmptyView>
                     <CollectionView.Header>
@@ -34,7 +37,7 @@
                         </StackLayout>
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:Complaint">
+                        <DataTemplate x:DataType="model:Technician">
                             <Grid Style="{StaticResource ListViewCell}">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
@@ -47,30 +50,25 @@
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
                                 <Frame Style="{StaticResource Card}">
-                                    <StackLayout>
-                                        <StackLayout>
-                                            <StackLayout Orientation="Horizontal" Margin="0,10,0,10">
-                                                <StackLayout Orientation="Horizontal">
-                                                    <Label Text="ID " Style="{StaticResource CardTitle}" FontAttributes="Bold"/>
-                                                    <Label Text="{Binding ComplaintID}" Style="{StaticResource CardTitle}"/>
-                                                </StackLayout>
-                                                <Label Text="{Binding ComplaintStatus}" HorizontalOptions="EndAndExpand" FontSize="Large" FontAttributes="Bold,Italic" TextColor="{StaticResource AssignedColor}"/>
-                                            </StackLayout>
-                                            <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
+                                    <Grid Margin="0,0,0,10" ColumnDefinitions="100,Auto" RowDefinitions="0.1*,Auto,Auto,Auto,Auto">
+                                        <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Source="user.png" Margin="20,0"/>
+                                        <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource CardTitle}" Text="{Binding TechnicianName}"/>
+                                        <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource CardLabel}" Text="{Binding TechnicianID}"/>
+                                        <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                                            <rating:SfRating Value="{Binding OverallRating}" Style="{StaticResource TechnicianRating}">
+                                                <rating:SfRating.RatingSettings>
+                                                    <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
+                                                </rating:SfRating.RatingSettings>
+                                            </rating:SfRating>
+                                            <Label Text="(" HorizontalOptions="Start" TextColor="Black" Margin="0,0,-5,0"/>
+                                            <Label Text="{Binding CompletedTask}" TextColor="Black" HorizontalOptions="Start"/>
+                                            <Label Text="reviews)" TextColor="Black" HorizontalOptions="Start"/>
                                         </StackLayout>
-                                        <StackLayout>
-                                            <Label Text="{Binding Damage}" HorizontalOptions="StartAndExpand" Style="{StaticResource CardLabel}"></Label>
-                                            <Label Text="{Binding Category.CategoryName}" Style="{StaticResource CardLabel}"></Label>
-                                            <Label Text="{Binding DamageType.DamageTypeName}" Style="{StaticResource CardLabel}"/>
-                                            <Line X1="0" Y1="0" X2="360" Margin="0,20" Y2="0" HorizontalOptions="CenterAndExpand" Stroke="#9B9A99" />
-                                            <StackLayout Orientation="Horizontal">
-                                                <Label Text="Technician ID " Style="{StaticResource CardLabel}"/>
-                                                <Label Text="{Binding Technician.TechnicianID}" Style="{StaticResource CardLabel}"/>
-                                            </StackLayout>
-                                            <Line X1="0" Y1="0" X2="360" Margin="0,20,0,0" Y2="0" HorizontalOptions="CenterAndExpand" Stroke="#9B9A99" />
-                                            <Label Text="{Binding ComplaintDate}" HorizontalOptions="EndAndExpand" Margin="0,0,0,30" FontAttributes="Italic" Style="{StaticResource CardLabel}"></Label>
+                                        <StackLayout Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                                            <Label Text="Completed Task : " FontSize="Small" Style="{StaticResource CardLabel}"/>
+                                            <Label Text="{Binding CompletedTask}" TextColor="Black"/>
                                         </StackLayout>
-                                    </StackLayout>
+                                    </Grid>
                                 </Frame>
                             </Grid>
                         </DataTemplate>

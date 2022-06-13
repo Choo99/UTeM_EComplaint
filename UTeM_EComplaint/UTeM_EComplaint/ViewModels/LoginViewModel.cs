@@ -8,6 +8,7 @@ using UTeM_EComplaint.Services;
 using UTeM_EComplaint.Views;
 using Xamarin.Forms;
 using Xamarin.Essentials;
+using System.Threading.Tasks;
 
 namespace UTeM_EComplaint.ViewModels
 {
@@ -24,6 +25,7 @@ namespace UTeM_EComplaint.ViewModels
 
         public LoginViewModel()
         {
+            
             loginCommand = new Command(login);
             userID = Preferences.Get("userID", 0);
             role = Preferences.Get("role", null);
@@ -38,6 +40,20 @@ namespace UTeM_EComplaint.ViewModels
                 Console.WriteLine("Errorr: " + ex.Message);
             }
             checkPreferences();
+        }
+
+        async Task<bool> validate()
+        {
+            if(username == null || password == null)
+            {
+                if (username == null)
+                    await Application.Current.MainPage.DisplayAlert("Username","Username field cannot be empty","OK");
+                else if(password == null)
+                    await Application.Current.MainPage.DisplayAlert("Password","Password field cannot be empty","OK");
+                return false;
+            }
+            else
+                return true;
         }
         void checkPreferences()
         {
@@ -63,6 +79,8 @@ namespace UTeM_EComplaint.ViewModels
         {
             try
             {
+                if (! await validate())
+                    return;
                 IsBusy = true;
                 User user = new User
                 {
@@ -87,7 +105,7 @@ namespace UTeM_EComplaint.ViewModels
                 {
                     await Shell.Current.GoToAsync($"//{nameof(AdminHomePage)}");
                 }
-
+                DependencyService.Get<INotificationHelper>().UpdateInstanceID(user);
                 IsBusy = false;
             }
             catch (Exception ex)

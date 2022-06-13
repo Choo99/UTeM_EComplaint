@@ -17,12 +17,10 @@ namespace UTeM_EComplaint.ViewModels
     {
         readonly int LOAD_SIZE = 5;
 
-        bool isItemSelected;
-        public bool IsItemSelected { get => IsItemSelected; set => SetProperty(ref isItemSelected, value); }
-
         Technician selectedTechnician;
         List<Technician> technicians;
         public ObservableRangeCollection<Technician> TechnicianList { get; }
+
         public Technician SelectedTechnician
         {
             get => selectedTechnician;
@@ -30,10 +28,6 @@ namespace UTeM_EComplaint.ViewModels
             {
                 SetProperty(ref selectedTechnician, value);
                 OnPropertyChanged();
-                if(value != null)
-                    IsItemSelected = true;
-                else
-                    IsItemSelected = false;
             }
         }
 
@@ -41,11 +35,10 @@ namespace UTeM_EComplaint.ViewModels
         public AsyncCommand<object> ItemSelectedCommand { get; }
         public AsyncCommand LoadMoreCommand { get; }
         public AsyncCommand SubmitCommand { get; }
+        public AsyncCommand ClearCommand { get; }
 
         public AdminAssignTechnicianViewModel()
         {
-            Title = "Assigned complaint";
-
             TechnicianList = new ObservableRangeCollection<Technician>();
             technicians = new List<Technician>();
 
@@ -53,16 +46,29 @@ namespace UTeM_EComplaint.ViewModels
             RefreshCommand = new AsyncCommand(Refresh);
             LoadMoreCommand = new AsyncCommand(LoadMore);
             SubmitCommand = new AsyncCommand(Submit);
+            ClearCommand = new AsyncCommand(Clear);
             getData();
+        }
+
+        private async Task Clear()
+        {
+            await Task.Delay(100);
+            SelectedTechnician = null;
         }
 
         private async Task Submit()
         {
+            if(SelectedTechnician == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Select", "Please select at least one technician", "OK");
+                return;
+            }
             await Shell.Current.GoToAsync("..?technicianID=" + SelectedTechnician.TechnicianID);
         }
 
         private async Task LoadMore()
         {
+            await Task.Delay(100);
             if (TechnicianList.Count == technicians.Count)
                 return;
 
@@ -84,7 +90,7 @@ namespace UTeM_EComplaint.ViewModels
             {
                 int size = LOAD_SIZE;
                 IsBusy = true;
-                technicians = await TechnicianServices.GetAllTechnicians();
+                technicians = await TechnicianServices.GetAllTechnicianWithStatistic();
                 if (technicians.Count < LOAD_SIZE)
                     size = technicians.Count;
                 TechnicianList.ReplaceRange(technicians.GetRange(0, size));

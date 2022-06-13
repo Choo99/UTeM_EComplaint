@@ -31,11 +31,6 @@ namespace UTeM_EComplaint.ViewModels
 
         public ObservableRangeCollection<Statistic> Statistics { get; set; }
 
-        string pathToPending = "";
-        string pathToAssigned = "";
-        string pathToInProgress = "";
-        string pathToCompleted = "";
-
         public bool IsPieChart
         {
             get => isPieChart;
@@ -89,28 +84,33 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task ToPending()
         {
-            await Shell.Current.GoToAsync(pathToPending);
+            await Task.Delay(100);
+            // await Shell.Current.GoToAsync(pathToPending);
         }
 
         private async Task ToAssigned()
         {
-            await Shell.Current.GoToAsync(pathToAssigned);
+            await Task.Delay(100);
+            // await Shell.Current.GoToAsync(pathToAssigned);
         }
 
         private async Task ToInProgress()
         {
-            await Shell.Current.GoToAsync(pathToInProgress);
+            await Task.Delay(100);
+            // await Shell.Current.GoToAsync(pathToInProgress);
         }
 
         private async Task ToCompleted()
         {
-            await Shell.Current.GoToAsync(pathToCompleted);
+            await Task.Delay(100);
+            // await Shell.Current.GoToAsync(pathToCompleted);
         }
 
         private async Task Refresh()
         {
             isRefresh = true;
             IsBusy = true;
+            await Task.Delay(100);
             getStatistic();
             IsBusy = false;
         }

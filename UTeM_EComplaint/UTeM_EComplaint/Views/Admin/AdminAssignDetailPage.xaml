@@ -1,10 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms"
              x:Class="UTeM_EComplaint.Views.AdminAssignDetailPage"
+             Title="{Binding Title}"
+             BackgroundColor="{StaticResource BackgroundColor}"
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels">
     <ContentPage.BindingContext>
-        <vm:StaffComplaintAssignedViewModel/>
+        <vm:AdminAssignDetailViewmModel/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <AbsoluteLayout VerticalOptions="Fill">
@@ -74,88 +77,49 @@
                                             </Grid>
                                         </StackLayout>
                                     </Frame>
-                                    <Frame Style="{StaticResource Card}">
-                                        <StackLayout>
-                                            <!--Information Technician information-->
-                                            <Label Text="Technician In Charge" Style="{StaticResource DetailTitle}" />
-                                            <Line Style="{StaticResource HorizontalLine}"/>
+                                <Frame Style="{StaticResource Card}">
+                                    <StackLayout>
+                                        <!--Information Technician information-->
+                                        <Label Text="Technician In Charge" Style="{StaticResource DetailTitle}" />
+                                        <Line Style="{StaticResource HorizontalLine}"/>
                                         <Label Text="There is no technician assigned yet" IsVisible="{Binding IsNotAssigned}" HorizontalOptions="Center" Style="{StaticResource DetailNoItem}"/>
-                                        <Grid RowDefinitions="Auto,Auto" RowSpacing="20">
-                                                <Label Grid.Row="0" Grid.Column="0" IsVisible="{Binding IsAssigned}" Text="Technician ID" Style="{StaticResource CardLabel}" TextColor="#0FC5BA" FontSize="Medium"/>
-                                                <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.Technician.TechnicianID}" IsVisible="{Binding IsAssigned}" Style="{StaticResource CardLabel}"/>
-
-                                                <Label Grid.Row="1" Grid.Column="0" IsVisible="{Binding IsAssigned}" Text="Name" TextColor="#0FC5BA" FontSize="Medium"/>
-                                                <Label Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsAssigned}" Text="{Binding Complaint.Technician.TechnicianName}" Style="{StaticResource CardLabel}"/>
+                                        <Frame IsVisible="{Binding IsNotAssigned}" HorizontalOptions="Center" BackgroundColor="{StaticResource BackgroundColor}" BorderColor="Black" HasShadow="False">
+                                            <Image WidthRequest="50" HeightRequest="50" Source="add.png" HorizontalOptions="Center">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding AddTechnicianCommand}"/>
+                                                </Image.GestureRecognizers>
+                                            </Image>
+                                        </Frame>
+                                        <Frame Style="{StaticResource Card}" IsVisible="{Binding IsAssigned}"  HasShadow="False" BorderColor="Black">
+                                            <Grid Margin="0,0,0,10" ColumnDefinitions="80,*" RowDefinitions="0.1*,Auto,Auto,Auto,Auto,Auto">
+                                                <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="6" WidthRequest="30" Source="user.png" Margin="10,0"/>
+                                                <Image Grid.Row="0" Grid.Column="1" Source="xmark.png" WidthRequest="15" HorizontalOptions="EndAndExpand">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding DeleteTechnicianCommand}"/>
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                                <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource CardTitle}" Text="{Binding Technician.TechnicianName}"/>
+                                                <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource CardLabel}" Text="{Binding Technician.TechnicianID}"/>
+                                                <rating:SfRating Grid.Row="3" Grid.Column="1" Value="{Binding Technician.OverallRating}" Style="{StaticResource TechnicianRating}">
+                                                        <rating:SfRating.RatingSettings>
+                                                            <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
+                                                        </rating:SfRating.RatingSettings>
+                                                    </rating:SfRating>
+                                                <StackLayout Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                                                    <Label Text="(" HorizontalOptions="Start" TextColor="Black" Margin="0,0,-5,0"/>
+                                                    <Label Text="{Binding Technician.CompletedTask}" TextColor="Black" HorizontalOptions="Start"/>
+                                                    <Label Text="reviews)" TextColor="Black" HorizontalOptions="Start"/>
+                                                </StackLayout>
+                                                <StackLayout Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
+                                                    <Label Text="Completed Task : " TextColor="Black"/>
+                                                    <Label Text="{Binding Technician.CompletedTask}" TextColor="Black"/>
+                                                </StackLayout>
                                             </Grid>
-                                        </StackLayout>
-                                    </Frame>
-                                    <Frame Style="{StaticResource Card}" IsVisible="{Binding IsInProgress}">
-                                        <StackLayout>
-                                            <!--Action Taken Title-->
-                                            <Label IsVisible="{Binding IsInProgress}" Text="In Progress" Style="{StaticResource DetailTitle}"/>
-                                            <Line Style="{StaticResource HorizontalLine}"/>
-
-                                            <Grid RowSpacing="20">
-                                                <!--Start Date-->
-                                                <Label Grid.Row="0" Grid.Column="0" IsVisible="{Binding IsInProgress}" Text="Start Date" TextColor="#0FC5BA" FontSize="Medium"/>
-                                                <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.Action.StartDate}" IsVisible="{Binding IsInProgress}" Style="{StaticResource CardLabel}"/>
-                                            </Grid>
-                                        </StackLayout>
-                                    </Frame>
-                                    <!--End Date-->
-                                    <Frame Style="{StaticResource Card}" IsVisible="{Binding IsCompleted}">
-                                        <StackLayout>
-                                            <!--Action Taken Title-->
-                                            <Label IsVisible="{Binding IsCompleted}" Text="Action Taken" Style="{StaticResource DetailTitle}"/>
-                                            <Line Style="{StaticResource HorizontalLine}"/>
-
-                                            <Grid RowSpacing="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
-                                                <!--Start Date-->
-                                                <Label Grid.Row="0" Grid.Column="0" IsVisible="{Binding IsCompleted}" Text="Start Date" TextColor="#0FC5BA" FontSize="Medium"/>
-                                                <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.Action.StartDate}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"/>
-
-                                                <Label Grid.Row="1" Grid.Column="0" IsVisible="{Binding IsCompleted}" Text="End Date" TextColor="#0FC5BA" FontSize="Medium"/>
-                                                <Label Grid.Row="1" Grid.Column="1" Text="{Binding Complaint.Action.EndDate}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"/>
-                                                <!--Action when Completed-->
-                                                <Label Grid.Row="2" Grid.Column="0" IsVisible="{Binding IsCompleted}" Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
-                                                <Label Grid.Row="2" Grid.Column="1" Text="{Binding Complaint.Action.ActionDescription}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"/>
-
-                                                <!--Spare Replacement-->
-                                                <Label Grid.Row="3" Grid.Column="0" IsVisible="{Binding IsCompleted}" Text="Spare Replacement" TextColor="#0FC5BA" FontSize="Medium"/>
-                                                <!--Replacement when completed-->
-                                                <Label Grid.Row="3" Grid.Column="1" Text="{Binding Complaint.Action.SpareReplace}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"></Label>
-
-                                                <!--Additional Note-->
-                                                <Label Grid.Row="4" Grid.Column="0" IsVisible="{Binding IsCompleted}" Text="Additional note" TextColor="#0FC5BA" FontSize="Medium"/>
-                                                <!--Note Display when completed-->
-                                                <Label Grid.Row="4" Grid.Column="1" Text="{Binding Complaint.Action.AdditionalNote}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"></Label>
-                                            </Grid>
-                                        </StackLayout>
-                                    </Frame>
-
-                                    <Frame Style="{StaticResource Card}">
-                                        <StackLayout>
-                                            <!--Complaint Status-->
-                                            <Label Text="Status" Style="{StaticResource DetailTitle}"/>
-                                            <Line Style="{StaticResource HorizontalLine}"/>
-                                            <Label Text="{Binding Complaint.ComplaintStatus}" Style="{StaticResource ComplaintStatus}" HorizontalOptions="CenterAndExpand"></Label>
-                                        </StackLayout>
-                                    </Frame>
-                                    <Frame Style="{StaticResource Card}" IsVisible="{Binding IsOnlyCompleted}">
-                                        <StackLayout>
-                                            <!--Rating-->
-                                            <Label Text="Your Rating" IsVisible="{Binding IsCompleted}" Style="{StaticResource DetailTitle}"/>
-                                            <Line Style="{StaticResource HorizontalLine}"/>
-                                            <Label FontSize="Small" IsVisible="{Binding IsNotRating}" Text="There is no rating yet" TextColor="Black"></Label>
-                                            <rating:SfRating IsEnabled="False" Value="{Binding Complaint.Rating.RatingValue}" ItemSpacing="20" IsVisible="{Binding IsRating}">
-                                                <rating:SfRating.RatingSettings>
-                                                    <rating:SfRatingSettings UnRatedFill="Gray" RatedStroke="Black" />
-                                                </rating:SfRating.RatingSettings>
-                                            </rating:SfRating>
-                                        </StackLayout>
-                                    </Frame>
+                                        </Frame>
+                                    </StackLayout>
+                                </Frame>
                                 <StackLayout Orientation="Horizontal">
-                                    <Button Text="Assign" IsVisible="{Binding IsNotAssigned}" Command="{Binding AssignCommand}" Style="{StaticResource Button}" Margin="3,14"/>
+                                    <Button Text="Assign" Command="{Binding AssignCommand}" Style="{StaticResource Button}" IsEnabled="{Binding IsAssigned}" Margin="3,14"/>
                                     <Button Text="DONE" Command="{Binding DoneCommand}" Style="{StaticResource Button}" Margin="3,14"/>
                                     </StackLayout>
                                 </StackLayout>

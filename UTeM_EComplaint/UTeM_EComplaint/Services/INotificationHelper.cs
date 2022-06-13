@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UTeM_EComplaint.Model;
 
 namespace UTeM_EComplaint.Services
 {
@@ -15,6 +16,8 @@ namespace UTeM_EComplaint.Services
         void UnsubscribeFromTopic(string role, int complaintID);
 
         void DeleteInstance();
+
+        void UpdateInstanceID(User user);
 
     }
 }

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UTeM_EComplaint.Views.AdminAssignComplaintPage"
              BackgroundColor="{StaticResource BackgroundColor}"
+             Title="{Binding Title}"
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels" xmlns:cell="clr-namespace:UTeM_EComplaint.Cells" xmlns:model="clr-namespace:UTeM_EComplaint.Model">
     <ContentPage.BindingContext>
         <vm:AdminAssignComplaintViewModel/>

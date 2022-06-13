@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.AdminTechnicianReportPage"
+             Background="{StaticResource BackgroundColor}"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels" xmlns:model="clr-namespace:UTeM_EComplaint.Model" xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms">
+    <ContentPage.BindingContext>
+        <vm:AdminTechnicianReportViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <AbsoluteLayout VerticalOptions="Fill">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" >
+                <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
+                         Command="{Binding RefreshCommand}">
+                    <CollectionView BackgroundColor="Transparent" 
+                            ItemsSource="{Binding TechnicianList}"
+                            SelectionMode="None"
+                            RemainingItemsThreshold="1"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                        <CollectionView.EmptyView>
+                            <StackLayout>
+                                <Label Text="No available technician yet" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            </StackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Technician">
+                                <Grid Style="{StaticResource ListViewCell}">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal" />
+                                            <VisualState Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="Gray" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <Frame Style="{StaticResource Card}">
+                                        <Grid Margin="0,0,0,10" ColumnDefinitions="100,Auto" RowDefinitions="0.1*,Auto,Auto,Auto,Auto">
+                                            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Source="user.png" Margin="20,0"/>
+                                            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource CardTitle}" Text="{Binding TechnicianName}"/>
+                                            <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource CardLabel}" Text="{Binding TechnicianID}"/>
+                                            <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                                                <rating:SfRating Value="{Binding OverallRating}" Style="{StaticResource TechnicianRating}">
+                                                    <rating:SfRating.RatingSettings>
+                                                        <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
+                                                    </rating:SfRating.RatingSettings>
+                                                </rating:SfRating>
+                                                <Label Text="(" HorizontalOptions="Start" TextColor="Black" Margin="0,0,-5,0"/>
+                                                <Label Text="{Binding CompletedTask}" TextColor="Black" HorizontalOptions="Start"/>
+                                                <Label Text="reviews)" TextColor="Black" HorizontalOptions="Start"/>
+                                            </StackLayout>
+                                            <StackLayout Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                                                <Label Text="Completed Task : " FontSize="Small" Style="{StaticResource CardLabel}"/>
+                                                <Label Text="{Binding CompletedTask}" TextColor="Black"/>
+                                            </StackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </RefreshView>
+                <Button Text="Download" VerticalOptions="EndAndExpand" Command="{Binding DownloadCommand}" HorizontalOptions="FillAndExpand" Style="{StaticResource Button}"/>
+            </StackLayout>
+            <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsLoading, Mode=OneWay}"/>
+            <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsLoading}" 
+                               IsRunning="{Binding IsLoading, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

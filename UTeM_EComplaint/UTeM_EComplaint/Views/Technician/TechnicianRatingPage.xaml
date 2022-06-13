@@ -23,7 +23,7 @@
             <Label Text="Average Point" CharacterSpacing="1" Margin="0,10,0,0"  FontSize="18" HorizontalOptions="CenterAndExpand" TextColor="DarkGray" FontAttributes="Italic"/>
             <rating:SfRating Precision="Exact" Value="{Binding AverageRating}" HorizontalOptions="CenterAndExpand" ReadOnly="True" TooltipPlacement="BottomRight" ItemSpacing="20"  x:Name="rating">
                 <rating:SfRating.RatingSettings>
-                    <rating:SfRatingSettings UnRatedFill="Gray" RatedFill="Green" RatedStroke="Black"/>
+                    <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}"/>
                 </rating:SfRating.RatingSettings>
             </rating:SfRating>
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
@@ -79,7 +79,7 @@
                                                 <StackLayout VerticalOptions="Center">
                                                     <rating:SfRating Value="{Binding Rating.RatingValue}" HorizontalOptions="CenterAndExpand" ReadOnly="True" ItemSpacing="20"  x:Name="rating">
                                                         <rating:SfRating.RatingSettings>
-                                                            <rating:SfRatingSettings UnRatedFill="Gray" RatedStroke="Black"/>
+                                                            <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}"/>
                                                         </rating:SfRating.RatingSettings>
                                                     </rating:SfRating>
                                                 </StackLayout>

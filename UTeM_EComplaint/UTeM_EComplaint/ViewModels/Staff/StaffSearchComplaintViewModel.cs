@@ -22,7 +22,6 @@ namespace UTeM_EComplaint.ViewModels
         string searchText;
         string resultText;
         string defaultSearchText;
-        string noFoundSearchText;
         string placeHolderText;
 
         public String PlaceHolderText { get => placeHolderText; set => SetProperty(ref placeHolderText, value); }
@@ -70,6 +69,7 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task LoadMore()
         {
+            await Task.Delay(100);
             if (complaints.Count == ComplaintList.Count)
                 return;
             int lastItemIndexed = ComplaintList.Count;
@@ -91,7 +91,7 @@ namespace UTeM_EComplaint.ViewModels
                 int size = LOAD_SIZE;
                 IsBusy = true;
                 await Task.Delay(1000);
-                complaints = await ComplaintServices.SearchComplaints(userID, SearchText);
+                complaints = await ComplaintServices.SearchAllComplaints(SearchText);
 
                 if (complaints.Count == 0)
                 {
@@ -110,12 +110,12 @@ namespace UTeM_EComplaint.ViewModels
             {
                 IsBusy = false;
             }
-
         }
 
         private async Task Refresh()
         {
             IsBusy = true;
+            await Task.Delay(100);
             ComplaintList.Clear();
             ResultText = searchText;
             IsBusy = false;

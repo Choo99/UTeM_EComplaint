@@ -97,6 +97,7 @@ namespace UTeM_EComplaint.ViewModels
         }
         async Task Refresh()
         {
+            await Task.Delay(100);
             IsBusy = true;
             getData();
             IsBusy = false;

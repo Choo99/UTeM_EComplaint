@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.AdminReportTabbedPage"
+            Title="Report"
+            BarBackgroundColor="#2196f3"
+            BackgroundColor="{StaticResource BackgroundColor}"
+            xmlns:local="clr-namespace:UTeM_EComplaint.Views">
+    <!--Pages can be added as references or inline-->
+    <local:AdminReportPage Title="Date"/>
+    <local:AdminTechnicianReportPage Title="Technician"/>
+</TabbedPage>

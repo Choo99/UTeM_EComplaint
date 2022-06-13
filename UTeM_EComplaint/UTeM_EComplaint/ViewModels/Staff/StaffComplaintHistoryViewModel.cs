@@ -61,6 +61,7 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task LoadMore()
         {
+            await Task.Delay(100);
             if (complaints.Count == ComplaintHistory.Count)
                 return;
             int lastItemIndexed = ComplaintHistory.Count;

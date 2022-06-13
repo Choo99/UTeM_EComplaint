@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.StaffAddAddressPage"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             Shell.PresentationMode="ModalAnimated"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels">
+    <ContentPage.BindingContext>
+        <vm:StaffAddAddressViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Clear" Command="{Binding ClearCommand}"/>
+        <ToolbarItem Text="Confirm" Command="{Binding ConfirmCommand}"/>
+    </ContentPage.ToolbarItems>
+    <AbsoluteLayout VerticalOptions="Fill">
+        <ScrollView AbsoluteLayout.LayoutFlags="All" 
+                 AbsoluteLayout.LayoutBounds="0,0,1,1" >
+            <StackLayout Spacing="20" Padding="20">
+                <Frame Style="{StaticResource Card}">
+                    <StackLayout>
+                        <Label Text="Location/Department" Style="{StaticResource DetailTitle}" HorizontalOptions="Center"/>
+                        <Line Style="{StaticResource HorizontalLine}"/>
+                        <Grid>
+                            <Label Grid.Row="0" Grid.Column="0" Text="Campus" TextColor="#0FC5BA" FontSize="Medium"/>
+                            <Picker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Campus --" 
+                                                ItemsSource="{Binding CampusList}" SelectedItem="{Binding Campus}"
+                                                TextColor="Black" />
+                            <Label Grid.Row="2" Grid.Column="0" Text="Building" TextColor="#0FC5BA" FontSize="Medium"/>
+                            <Picker Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Building --" 
+                                                ItemsSource="{Binding BuildingList}" SelectedItem="{Binding Building}" IsEnabled="{Binding IsCampus}"
+                                                TextColor="Black" />
+                            <Label Grid.Row="4" Grid.Column="0" Text="Level" TextColor="#0FC5BA" FontSize="Medium"/>
+                            <Picker Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Level --" 
+                                                ItemsSource="{Binding LevelList}" SelectedItem="{Binding Level}" IsEnabled="{Binding IsBuilding}"
+                                                TextColor="Black" />
+                            <Label Grid.Row="6" Grid.Column="0" Text="Department" TextColor="#0FC5BA" FontSize="Medium"/>
+                            <Picker Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Department --" 
+                                                ItemsSource="{Binding DepartmentList}" SelectedItem="{Binding Department}" IsEnabled="{Binding IsLevel}"
+                                                TextColor="Black" />
+                            <Label Grid.Row="8" Grid.Column="0" Text="Room" TextColor="#0FC5BA" FontSize="Medium"/>
+                            <Picker Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Room --" 
+                                                ItemsSource="{Binding RoomList}" SelectedItem="{Binding Room}" IsEnabled="{Binding IsDepartment}"
+                                                TextColor="Black" />
+                            <Button Grid.Row="10" Grid.Column="0" Text="Confirm" Command="{Binding ConfirmCommand}" Style="{StaticResource Button}"/>
+                            <Button Grid.Row="10" Grid.Column="1" Text="Clear" Command="{Binding ClearCommand}" Style="{StaticResource Button}"/>
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+        <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsBusy, Mode=OneWay}"/>
+        <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsBusy}" 
+                               IsRunning="{Binding IsBusy, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+    </AbsoluteLayout>
+</ContentPage>

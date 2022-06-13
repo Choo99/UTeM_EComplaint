@@ -17,6 +17,14 @@ namespace UTeM_EComplaint.ViewModels
     {
         int complaintID;
         Complaint complaint;
+        bool isLocation;
+        bool isNotLocation;
+        string location;
+
+        readonly string pathToAddAddress = $"{nameof(StaffAddAddressPage)}";
+
+        public bool IsLocation { get => isLocation; set { SetProperty(ref isLocation, value); IsNotLocation = !value; } }
+        public bool IsNotLocation { get => isNotLocation; set => SetProperty(ref isNotLocation, value); }
         public Complaint Complaint { get => complaint; set => SetProperty(ref complaint, value); }
 
         public ObservableRangeCollection<Division> divisionList { get; }
@@ -31,6 +39,8 @@ namespace UTeM_EComplaint.ViewModels
         public int SelectedCategoryIndex { get => selectedCategoryIndex; set => SetProperty(ref selectedCategoryIndex, value); }
         public int SelectedDamageTypeIndex { get => selectedDamageTypeIndex; set => SetProperty(ref selectedDamageTypeIndex, value); }
 
+        public string Location { get => location; set => SetProperty(ref location, value); }
+
         Division selectedDivision;
         Category selectedCategory;
         DamageType selectedDamageType;
@@ -42,11 +52,18 @@ namespace UTeM_EComplaint.ViewModels
         public AsyncCommand SaveCommand { get; }
         public AsyncCommand ClearCommand { get; }
 
+        public AsyncCommand AddLocationCommand { get; }
+        public AsyncCommand ClearLocationCommand { get; }
+
         public StaffEditComplaintViewModel()
         {
             Title = "Edit complaint";
             SaveCommand = new AsyncCommand(Save);
             ClearCommand = new AsyncCommand(Clear);
+            AddLocationCommand = new AsyncCommand(AddLocation);
+            ClearLocationCommand = new AsyncCommand(ClearLocation);
+
+            IsLocation = true;
 
             divisionList = new ObservableRangeCollection<Division>();
             categoryList = new ObservableRangeCollection<Category>();
@@ -55,6 +72,38 @@ namespace UTeM_EComplaint.ViewModels
             selectedDivision = new Division();
             selectedCategory = new Category();
             selectedDamageType = new DamageType();
+        }
+
+        public void ApplyQueryAttributes(IDictionary<string, string> query)
+        {
+            if (query.ContainsKey("campus"))
+            {
+                string campus = HttpUtility.UrlDecode(query["campus"]).Trim();
+                string building = HttpUtility.UrlDecode(query["building"]).Trim();
+                string level = HttpUtility.UrlDecode(query["level"]).Trim();
+                string department = HttpUtility.UrlDecode(query["department"]).Trim();
+                string room = HttpUtility.UrlDecode(query["room"]).Trim();
+
+                IsLocation = true;
+                Location = campus + ", " + building + ", " + level + ", " + department + ", " + room;
+            }
+            if (query.ContainsKey("complaintID"))
+            {
+                complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
+                getComplaintDetail();
+            }
+        }
+
+        private async Task ClearLocation()
+        {
+            await Task.Delay(100);
+            Location = null;
+            IsLocation = false;
+        }
+
+        private async Task AddLocation()
+        {
+            await Shell.Current.GoToAsync(pathToAddAddress);
         }
 
         private async Task Clear()
@@ -76,6 +125,10 @@ namespace UTeM_EComplaint.ViewModels
                 SelectedCategory = null;
                 SelectedDamageType = null;
                 selectedDivision = null;
+
+                Location = null;
+                IsLocation=false;
+
                 Complaint = newComplaint;
             }
         }
@@ -90,6 +143,7 @@ namespace UTeM_EComplaint.ViewModels
                     Complaint.Division = selectedDivision;
                     complaint.Category = selectedCategory;
                     complaint.DamageType = selectedDamageType;
+                    Complaint.Location = location;
                     complaint.Staff = new Staff
                     {
                         StaffID = Preferences.Get("userID", 0),
@@ -112,13 +166,6 @@ namespace UTeM_EComplaint.ViewModels
             }
         }
 
-        public void ApplyQueryAttributes(IDictionary<string, string> query)
-        {
-            complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
-
-            getComplaintDetail();
-        }
-
         async void getComplaintDetail()
         {
             try
@@ -137,6 +184,7 @@ namespace UTeM_EComplaint.ViewModels
                 SelectedDivision = Complaint.Division;
                 SelectedCategory = Complaint.Category;
                 SelectedDamageType = Complaint.DamageType;
+                Location = Complaint.Location;
 
                 SelectedDivisionIndex = divisions.FindIndex( item=> item.DivisionID == SelectedDivision.DivisionID);
                 SelectedDamageTypeIndex = damageTypes.FindIndex( item=> item.DamageTypeID == SelectedDamageType.DamageTypeID);

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:cell="clr-namespace:UTeM_EComplaint.Cells"
+             xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms"
              x:Class="UTeM_EComplaint.App">
     <Application.Resources>
 
@@ -20,6 +21,8 @@
         <Color x:Key="NoItemColor">#5F5E4D</Color>
         
         <Color x:Key="ButtonColor">#0FC5BA</Color>
+
+        <Color x:Key="RatingColor">#faa61a</Color>
 
         <DataTemplate x:Key="StaffPending">
             <cell:StaffPendingCell/>
@@ -108,6 +111,21 @@
             <Setter Property="Margin" Value="0,0,0,20"/>
             <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
             <Setter Property="Stroke" Value="Black"/>
+        </Style>
+
+        <Style x:Key="RatingBaseSetting" TargetType="rating:SfRatingSettings">
+            <Setter Property="UnRatedFill" Value="Transparent"/>
+            <Setter Property="UnRatedStroke" Value="{StaticResource RatingColor}"/>
+            <Setter Property="RatedFill" Value="{StaticResource RatingColor}"/>
+            <Setter Property="RatedStroke" Value="{StaticResource RatingColor}"/>
+        </Style>
+
+
+        <Style x:Key="TechnicianRating" TargetType="rating:SfRating">
+            <Setter Property="IsEnabled" Value="False"/>
+            <Setter Property="ItemSpacing" Value="10"/>
+            <Setter Property="ItemSize" Value="20"/>
+            <Setter Property="Precision" Value="Exact"/>
         </Style>
 
 

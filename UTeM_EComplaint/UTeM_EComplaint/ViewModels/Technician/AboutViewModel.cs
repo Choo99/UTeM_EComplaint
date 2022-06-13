@@ -176,6 +176,7 @@ namespace UTeM_EComplaint.ViewModels
             isRefresh = true;
             IsBusy = true;
 
+            await Task.Delay(100);
             pendingTask = 0;
             inProgressTask = 0;
             completeTask = 0;
@@ -187,6 +188,7 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task LoadMore()
         {
+            await Task.Delay(100);
             if (complaints.Count == ComplaintList.Count)
                 return;
             int lastItemIndexed = ComplaintList.Count;
