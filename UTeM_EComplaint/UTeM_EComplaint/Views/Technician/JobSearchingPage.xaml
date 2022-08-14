@@ -14,8 +14,8 @@
         <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" HorizontalOptions="Center">
                 <StackLayout>
-                    <SearchBar x:Name="SearchBar"  CancelButtonColor="Orange"
-                                   Placeholder="Search" HorizontalTextAlignment="Center"
+                    <SearchBar x:Name="SearchBar"  CancelButtonColor="Orange" FontSize="Small"
+                                   Placeholder="Search by Complaint ID and Complaint Date" HorizontalTextAlignment="Center"
                                    SearchCommand="{Binding SearchCommand}" BackgroundColor="#efefef" 
                                    Text="{Binding SearchText, Mode=TwoWay}"/>
                 </StackLayout>

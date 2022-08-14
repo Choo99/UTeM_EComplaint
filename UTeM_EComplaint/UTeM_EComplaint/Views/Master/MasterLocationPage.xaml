@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.MasterLocationPage"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             xmlns:sfPopup="clr-namespace:Syncfusion.XForms.PopupLayout;assembly=Syncfusion.SfPopupLayout.XForms"
+             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit">
+    <ContentPage.BindingContext>
+        <vm:MasterLocationViewModel/>
+    </ContentPage.BindingContext>
+    <StackLayout>
+        <StackLayout>
+            <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         Command="{Binding RefreshCommand}">
+                <CollectionView BackgroundColor="Transparent" 
+                            ItemsSource="{Binding RoomList}"
+                            SelectionMode="Single"
+                            RemainingItemsThreshold="1"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                            SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedRoom}"
+                            SelectedItem="{Binding SelectedRoom, Mode=TwoWay}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="20"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.EmptyView>
+                        <StackLayout>
+                            <Label Text="No available category yet" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.Header>
+                        <StackLayout>
+                            <Label Text="Locations" FontSize="25" Margin="0,10" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold"/>
+                        </StackLayout>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <xct:Expander>
+                                    <xct:Expander.Header>
+                                        <Grid Margin="20,0">
+                                            <Frame Style="{StaticResource Card}" BackgroundColor="#d4c02a" >
+                                                <StackLayout>
+                                                    <Label Text="{Binding RoomName}" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold"/>
+                                                </StackLayout>
+                                            </Frame>
+                                            <Image Source="expand.png" HeightRequest="20" HorizontalOptions="End" VerticalOptions="Center">
+                                                <Image.Triggers>
+                                                    <DataTrigger TargetType="Image" Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}" Value="True">
+                                                        <Setter Property="Source" Value="up.png" />
+                                                    </DataTrigger>
+                                                </Image.Triggers>
+                                            </Image>
+                                        </Grid>
+                                    </xct:Expander.Header>
+                                    <xct:Expander.ContentTemplate>
+                                        <DataTemplate>
+                                            <Frame BackgroundColor="#66d4be19">
+                                                <Grid Style="{StaticResource ListViewCell}" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto">
+                                                    <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource Card}" BackgroundColor="#d4c02a">
+                                                        <StackLayout>
+                                                            <Label Text="{Binding Department.Level.Building.Campus.CampusName}" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold"/>
+                                                        </StackLayout>
+                                                        <Frame.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MasterLocationViewModel}},Path=CampusCommand}" CommandParameter="{Binding Department.Level.Building.Campus}"/>
+                                                        </Frame.GestureRecognizers>
+                                                    </Frame>
+                                                    <Image Grid.Row="1" Grid.Column="0" Source="down.png" HeightRequest="15" HorizontalOptions="Center"></Image>
+                                                    <Frame Grid.Row="2" Grid.Column="0" Style="{StaticResource Card}" BackgroundColor="#d4c02a">
+                                                        <StackLayout>
+                                                            <Label Text="{Binding Department.Level.Building.BuildingName}" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold"/>
+                                                        </StackLayout>
+                                                        <Frame.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MasterLocationViewModel}},Path=BuildingCommand}" CommandParameter="{Binding Department.Level.Building}"/>
+                                                        </Frame.GestureRecognizers>
+                                                    </Frame>
+                                                    <Image Grid.Row="3" Grid.Column="0" Source="down.png" HeightRequest="15" HorizontalOptions="Center"></Image>
+                                                    <Frame Grid.Row="4" Grid.Column="0" Style="{StaticResource Card}" BackgroundColor="#d4c02a">
+                                                        <StackLayout>
+                                                            <Label Text="{Binding Department.Level.LevelName}" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold"/>
+                                                        </StackLayout>
+                                                        <Frame.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MasterLocationViewModel}},Path=LevelCommand}" CommandParameter="{Binding Department.Level}"/>
+                                                        </Frame.GestureRecognizers>
+                                                    </Frame>
+                                                    <Image Grid.Row="5" Grid.Column="0" Source="down.png" HeightRequest="15" HorizontalOptions="Center"></Image>
+                                                    <Frame Grid.Row="6" Grid.Column="0" Style="{StaticResource Card}"  BackgroundColor="#d4c02a">
+                                                        <StackLayout>
+                                                            <Label Text="{Binding Department.DepartmentName}" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold"/>
+                                                        </StackLayout>
+                                                        <Frame.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MasterLocationViewModel}},Path=DepartmentCommand}" CommandParameter="{Binding Department}"/>
+                                                        </Frame.GestureRecognizers>
+                                                    </Frame>
+                                                    <Image Grid.Row="7" Grid.Column="0" Source="down.png" HeightRequest="15" HorizontalOptions="Center"></Image>
+                                                    <Frame Grid.Row="8" Grid.Column="0" Style="{StaticResource Card}" BackgroundColor="#d4c02a">
+                                                        <StackLayout>
+                                                            <Label Text="{Binding RoomName}" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold"/>
+                                                        </StackLayout>
+                                                        <Frame.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MasterLocationViewModel}},Path=RoomCommand}" CommandParameter="{Binding .}"/>
+                                                        </Frame.GestureRecognizers>
+                                                    </Frame>
+                                                </Grid>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </xct:Expander.ContentTemplate>
+                                </xct:Expander>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+        <StackLayout BackgroundColor="{StaticResource BackgroundColor}">
+            <Button Margin="10,0,10,-20" VerticalOptions="End" Text="Add" Command="{Binding AddButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#d4c02a"/>
+        </StackLayout>
+
+        <!--<sfPopup:SfPopupLayout IsOpen="{Binding IsSelected}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" ShowHeader="False" ShowFooter="False" AutoSizeMode="Height" ShowCloseButton="False">
+                    <sfPopup:PopupView.HeaderTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <ImageButton Source="delete.png" HorizontalOptions="End" HeightRequest="30" BackgroundColor="Transparent" Command="{Binding DeleteCommand}" Clicked="ImageButton_Clicked"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.HeaderTemplate>
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Category ID :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" IsEnabled="False" Text="{Binding PreviousSelectedRoom.RoomID}" FontSize="Medium" TextColor="Black"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Category Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Text="{Binding PreviousSelectedRoom.RoomName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+                                    <Button Grid.Row="4" Grid.Column="0" Text="Save" HorizontalOptions="EndAndExpand" Command="{Binding SaveCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>-->
+
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsAdd}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" ShowHeader="False" ShowFooter="False" AutoSizeMode="Both" ShowCloseButton="False">
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout HorizontalOptions="FillAndExpand">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" Margin="10,10" HorizontalOptions="FillAndExpand">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Campus" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <ImageButton Grid.Row="0" Grid.Column="1" Source="add.png" HeightRequest="20" BackgroundColor="Transparent" Command="{Binding NewCampusCommand}"/>
+                                    <Picker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Campus --" 
+                                                ItemsSource="{Binding CampusList}" SelectedItem="{Binding Campus}" ItemDisplayBinding="{Binding CampusName}"
+                                                TextColor="Black" />
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Building" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Picker Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Building --" 
+                                                ItemsSource="{Binding BuildingList}" SelectedItem="{Binding Building}" IsEnabled="{Binding IsCampus}" ItemDisplayBinding="{Binding BuildingName}"
+                                                TextColor="Black" />
+                                    <Label Grid.Row="4" Grid.Column="0" Text="Level" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Picker Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Level --" 
+                                                ItemsSource="{Binding LevelList}" SelectedItem="{Binding Level}" IsEnabled="{Binding IsBuilding}" ItemDisplayBinding="{Binding LevelName}"
+                                                TextColor="Black" />
+                                    <Label Grid.Row="6" Grid.Column="0" Text="Department" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Picker Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Department --" 
+                                                ItemsSource="{Binding DepartmentList}" SelectedItem="{Binding Department}" IsEnabled="{Binding IsLevel}" ItemDisplayBinding="{Binding DepartmentName}"
+                                                TextColor="Black" />
+                                    <Label Grid.Row="8" Grid.Column="0" Text="Room" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Picker Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Room --" 
+                                                ItemsSource="{Binding RoomList}" SelectedItem="{Binding Room}" IsEnabled="{Binding IsDepartment}" ItemDisplayBinding="{Binding RoomName}"
+                                                TextColor="Black" />
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+
+        <!--Campus-->
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsCampus}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" AutoSizeMode="Height" ShowCloseButton="False" ShowHeader="False" ShowFooter="False">
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Campus ID :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" IsEnabled="False" Text="{Binding SelectedCampus.CampusID}" FontSize="Medium" TextColor="Black"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Campus Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Text="{Binding SelectedCampus.CampusName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+                                    <Button Grid.Row="4" Grid.Column="0" Text="Save" HorizontalOptions="EndAndExpand" Command="{Binding SaveCampusCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+        
+        <!--Building-->
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsBuilding}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" AutoSizeMode="Height" ShowCloseButton="False" ShowHeader="False" ShowFooter="False">
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Building ID :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" IsEnabled="False" Text="{Binding SelectedBuilding.BuildingID}" FontSize="Medium" TextColor="Black"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Building Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Text="{Binding SelectedBuilding.BuildingName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+                                    <Button Grid.Row="4" Grid.Column="0" Text="Save" HorizontalOptions="EndAndExpand" Command="{Binding SaveBuildingCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+        
+        <!--Level-->
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsLevel}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" AutoSizeMode="Height" ShowCloseButton="False" ShowHeader="False" ShowFooter="False">
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Level ID :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" IsEnabled="False" Text="{Binding SelectedLevel.LevelID}" FontSize="Medium" TextColor="Black"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Level Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Text="{Binding SelectedLevel.LevelName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+                                    <Button Grid.Row="4" Grid.Column="0" Text="Save" HorizontalOptions="EndAndExpand" Command="{Binding SaveLevelCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+        
+        <!--Department-->
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsDepartment}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" AutoSizeMode="Height" ShowCloseButton="False" ShowHeader="False" ShowFooter="False">
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Department ID :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" IsEnabled="False" Text="{Binding SelectedDepartment.DepartmentID}" FontSize="Medium" TextColor="Black"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Department Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Text="{Binding SelectedDepartment.DepartmentName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+                                    <Button Grid.Row="4" Grid.Column="0" Text="Save" HorizontalOptions="EndAndExpand" Command="{Binding SaveDepartmentCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+        
+        <!--Room-->
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsRoom}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" AutoSizeMode="Height" ShowCloseButton="False" ShowHeader="False" ShowFooter="False">
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Room ID :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" IsEnabled="False" Text="{Binding SelectedRoom.RoomID}" FontSize="Medium" TextColor="Black"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Room Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Text="{Binding SelectedRoom.RoomName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+                                    <Button Grid.Row="4" Grid.Column="0" Text="Save" HorizontalOptions="EndAndExpand" Command="{Binding SaveRoomCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+    </StackLayout>
+</ContentPage>

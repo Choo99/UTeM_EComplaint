@@ -21,7 +21,9 @@
                 <CheckBox x:Name="passcheck" IsChecked="{Binding IsShow}"/>
                 <Label Margin="40,-30,5,20" Text="Show Password" TextColor="Black"></Label>
                 <Button
+                    x:Name="button1"
                 VerticalOptions="Center"
+                CommandParameter="{x:Reference txtPassword}"
                 Text="Login"
                 TextColor="White"
                 BackgroundColor="#7c5295"

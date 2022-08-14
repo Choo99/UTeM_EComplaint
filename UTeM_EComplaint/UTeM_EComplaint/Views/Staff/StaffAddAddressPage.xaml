@@ -3,15 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UTeM_EComplaint.Views.StaffAddAddressPage"
              BackgroundColor="{StaticResource BackgroundColor}"
-             Shell.PresentationMode="ModalAnimated"
+             Shell.PresentationMode="NotAnimated"
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels">
     <ContentPage.BindingContext>
         <vm:StaffAddAddressViewModel/>
     </ContentPage.BindingContext>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Clear" Command="{Binding ClearCommand}"/>
-        <ToolbarItem Text="Confirm" Command="{Binding ConfirmCommand}"/>
-    </ContentPage.ToolbarItems>
     <AbsoluteLayout VerticalOptions="Fill">
         <ScrollView AbsoluteLayout.LayoutFlags="All" 
                  AbsoluteLayout.LayoutBounds="0,0,1,1" >
@@ -20,29 +16,52 @@
                     <StackLayout>
                         <Label Text="Location/Department" Style="{StaticResource DetailTitle}" HorizontalOptions="Center"/>
                         <Line Style="{StaticResource HorizontalLine}"/>
-                        <Grid>
+                        <Grid RowSpacing="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
                             <Label Grid.Row="0" Grid.Column="0" Text="Campus" TextColor="#0FC5BA" FontSize="Medium"/>
                             <Picker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Campus --" 
-                                                ItemsSource="{Binding CampusList}" SelectedItem="{Binding Campus}"
+                                                ItemsSource="{Binding CampusList}" SelectedItem="{Binding Campus}" ItemDisplayBinding="{Binding CampusName}"
                                                 TextColor="Black" />
                             <Label Grid.Row="2" Grid.Column="0" Text="Building" TextColor="#0FC5BA" FontSize="Medium"/>
                             <Picker Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Building --" 
-                                                ItemsSource="{Binding BuildingList}" SelectedItem="{Binding Building}" IsEnabled="{Binding IsCampus}"
+                                                ItemsSource="{Binding BuildingList}" SelectedItem="{Binding Building}" IsEnabled="{Binding IsCampus}" ItemDisplayBinding="{Binding BuildingName}"
                                                 TextColor="Black" />
                             <Label Grid.Row="4" Grid.Column="0" Text="Level" TextColor="#0FC5BA" FontSize="Medium"/>
                             <Picker Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Level --" 
-                                                ItemsSource="{Binding LevelList}" SelectedItem="{Binding Level}" IsEnabled="{Binding IsBuilding}"
+                                                ItemsSource="{Binding LevelList}" SelectedItem="{Binding Level}" IsEnabled="{Binding IsBuilding}" ItemDisplayBinding="{Binding LevelName}"
                                                 TextColor="Black" />
                             <Label Grid.Row="6" Grid.Column="0" Text="Department" TextColor="#0FC5BA" FontSize="Medium"/>
                             <Picker Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Department --" 
-                                                ItemsSource="{Binding DepartmentList}" SelectedItem="{Binding Department}" IsEnabled="{Binding IsLevel}"
+                                                ItemsSource="{Binding DepartmentList}" SelectedItem="{Binding Department}" IsEnabled="{Binding IsLevel}" ItemDisplayBinding="{Binding DepartmentName}"
                                                 TextColor="Black" />
                             <Label Grid.Row="8" Grid.Column="0" Text="Room" TextColor="#0FC5BA" FontSize="Medium"/>
                             <Picker Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Room --" 
-                                                ItemsSource="{Binding RoomList}" SelectedItem="{Binding Room}" IsEnabled="{Binding IsDepartment}"
+                                                ItemsSource="{Binding RoomList}" SelectedItem="{Binding Room}" IsEnabled="{Binding IsDepartment}" ItemDisplayBinding="{Binding RoomName}"
                                                 TextColor="Black" />
-                            <Button Grid.Row="10" Grid.Column="0" Text="Confirm" Command="{Binding ConfirmCommand}" Style="{StaticResource Button}"/>
-                            <Button Grid.Row="10" Grid.Column="1" Text="Clear" Command="{Binding ClearCommand}" Style="{StaticResource Button}"/>
+                            
+                            <!--Image-->
+                            <Label Grid.Row="10" Grid.Column="0" Text="Reference Picture" TextColor="#0FC5BA" FontSize="Medium"/>
+                            <Button Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Text="Take a picture" TextColor="White" VerticalOptions="Start" 
+                                    HorizontalOptions="FillAndExpand" Style="{StaticResource Button}" IsVisible="{Binding IsNotPicture}" Command="{Binding TakePictureCommand}"/>
+                            <Grid Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsPicture}">
+                                <Image IsVisible="{Binding IsPicture}" Source="{Binding Image}"/>
+                                <ImageButton HeightRequest="25" Source="xmark.png" VerticalOptions="Start" Command="{Binding ClearPictureCommand}"
+                                             HorizontalOptions="End" BackgroundColor="Transparent" Margin="0,-4,5,0"/>
+                            </Grid>
+
+                            <!--Position-->
+                            <Label Grid.Row="12" Grid.Column="0" Text="Position" TextColor="#0FC5BA" FontSize="Medium"/>
+                            <StackLayout Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                             <Label Text="{Binding Position}" TextColor="Black" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
+                                <ImageButton BackgroundColor="Transparent" Source="placePin.png" HeightRequest="30" Command="{Binding OpenMapCommand}" HorizontalOptions="End"/>
+                            </StackLayout>
+                            <!--Map-->
+                            <Grid Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="2">
+                                <ContentView HeightRequest="500" Content="{Binding Map}"/>
+                                <Image Source="placePin.png" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HeightRequest="25"/>
+                            </Grid>
+
+                            <Button Grid.Row="15" Grid.Column="0" Text="Confirm" Command="{Binding ConfirmCommand}" Style="{StaticResource Button}"/>
+                            <Button Grid.Row="15" Grid.Column="1" Text="Clear" Command="{Binding ClearCommand}" Style="{StaticResource Button}"/>
                         </Grid>
                     </StackLayout>
                 </Frame>

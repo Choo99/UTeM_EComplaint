@@ -21,7 +21,7 @@ namespace UTeM_EComplaint.ViewModels
         public ActionTaken ActionTaken { get => actionTaken; set => SetProperty(ref actionTaken, value); }
 
         Complaint complaint;
-        int complaintID;
+        string complaintID;
         string pathToCompleted = $"../{nameof(JobCompletedDetailPage)}?complaintID=";
         public JobEditViewModel()
         {
@@ -63,7 +63,7 @@ namespace UTeM_EComplaint.ViewModels
                     int result = await ActionServices.EditAction(complaint);
                     if (result != 0)
                     {
-                        await Application.Current.MainPage.DisplayAlert("Success", "Update Action: " + complaint.Action.ActionID + " successfully!", null, "OK");
+                        await Application.Current.MainPage.DisplayAlert("Success", "Update action successfully!", null, "OK");
                         await Shell.Current.GoToAsync("..");
                     }
                     else
@@ -80,7 +80,7 @@ namespace UTeM_EComplaint.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
-            complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
+            complaintID =HttpUtility.UrlDecode(query["complaintID"]);
             getComplaintDetail();
         }
 

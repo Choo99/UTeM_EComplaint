@@ -49,12 +49,19 @@ namespace UTeM_EComplaint
             Routing.RegisterRoute(nameof(AdminViewAllComplaintPage), typeof(AdminViewAllComplaintPage));
             Routing.RegisterRoute(nameof(AdminComplaintDetailPage), typeof(AdminComplaintDetailPage));
             Routing.RegisterRoute(nameof(StaffAddAddressPage), typeof(StaffAddAddressPage));
+            Routing.RegisterRoute(nameof(StaffMapPage), typeof(StaffMapPage));
+            Routing.RegisterRoute(nameof(MasterCategoryPage), typeof(MasterCategoryPage));
+            Routing.RegisterRoute(nameof(MasterDivisionPage), typeof(MasterDivisionPage));
+            Routing.RegisterRoute(nameof(MasterDamageTypePage), typeof(MasterDamageTypePage));
+            Routing.RegisterRoute(nameof(MasterLocationPage), typeof(MasterLocationPage));
+            Routing.RegisterRoute(nameof(MasterAddLocationPage), typeof(MasterAddLocationPage));
 
 
             Routing.RegisterRoute($"home/{nameof(StaffComplaintPendingPage)}", typeof(StaffComplaintPendingPage));
             Routing.RegisterRoute($"home/{nameof(StaffComplaintAssignedPage)}", typeof(StaffComplaintAssignedPage));
             Routing.RegisterRoute($"home/{nameof(StaffComplaintInProgressPage)}", typeof(StaffComplaintInProgressPage));
             Routing.RegisterRoute($"home/{nameof(StaffComplaintHistoryPage)}", typeof(StaffComplaintHistoryPage));
+
         }
     }
 }

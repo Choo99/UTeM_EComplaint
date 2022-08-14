@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UTeM_EComplaint.Model;
 using UTeM_EComplaint.Services;
+using UTeM_EComplaint.Tools;
 using UTeM_EComplaint.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -87,6 +88,8 @@ namespace UTeM_EComplaint.ViewModels
                 IsBusy = true;
                 
                 complaints = await ComplaintServices.GetComplaintsByStatus(userID, "Completed");
+
+                DurationHandler.durationList(ref complaints);
 
                 if (complaints.Count < LOAD_SIZE)
                     size = complaints.Count;

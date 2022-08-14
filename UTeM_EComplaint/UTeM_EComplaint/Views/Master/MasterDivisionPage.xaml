@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.MasterDivisionPage"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             xmlns:sfPopup="clr-namespace:Syncfusion.XForms.PopupLayout;assembly=Syncfusion.SfPopupLayout.XForms">
+    <ContentPage.BindingContext>
+        <vm:MasterDivisionViewModel/>
+    </ContentPage.BindingContext>
+    <StackLayout>
+        <StackLayout>
+            <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         Command="{Binding RefreshCommand}">
+                <CollectionView BackgroundColor="Transparent" 
+                            ItemsSource="{Binding DivisionList}"
+                            SelectionMode="Single"
+                            RemainingItemsThreshold="1"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                            SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedDivision}"
+                            SelectedItem="{Binding SelectedDivision, Mode=TwoWay}">
+                    <CollectionView.EmptyView>
+                        <StackLayout>
+                            <Label Text="No available division yet" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.Header>
+                        <StackLayout>
+                            <Label Text="Divisions" FontSize="25" Margin="0,20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold"/>
+                        </StackLayout>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Style="{StaticResource ListViewCell}" >
+                                <Frame Style="{StaticResource Card}" Margin="30,0" BackgroundColor="#d4c02a">
+                                    <StackLayout>
+                                        <Label Text="{Binding DivisionName}" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold"/>
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+        <StackLayout>
+            <Button Margin="10,0" Text="Add" Command="{Binding AddButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#d4c02a"/>
+        </StackLayout>
+
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsSelected}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" ShowFooter="False" AutoSizeMode="Height" ShowCloseButton="False">
+                    <sfPopup:PopupView.HeaderTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <ImageButton Source="delete.png" HorizontalOptions="End" HeightRequest="30" BackgroundColor="Transparent" Command="{Binding DeleteCommand}" Clicked="ImageButton_Clicked"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.HeaderTemplate>
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Division ID :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" IsEnabled="False" Text="{Binding PreviousSelectedDivision.DivisionID}" FontSize="Medium" TextColor="Black"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Division Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Text="{Binding PreviousSelectedDivision.DivisionName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+                                    <Button Grid.Row="4" Grid.Column="0" Text="Save" HorizontalOptions="EndAndExpand" Command="{Binding SaveCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsAdd}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" AutoSizeMode="Height" ShowCloseButton="False" ShowHeader="False" ShowFooter="False">
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Division Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" Text="{Binding NewDivision.DivisionName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+                                    <Button Grid.Row="2" Grid.Column="0" Text="Add" HorizontalOptions="CenterAndExpand" Command="{Binding AddCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+    </StackLayout>
+</ContentPage>

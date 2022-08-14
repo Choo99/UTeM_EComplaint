@@ -104,7 +104,7 @@ namespace UTeM_EComplaint.Services
             }
         }
 
-        public static async Task<int> AddRatingAndSendMessage(int complaintID, int ratingValue)
+        public static async Task<int> AddRatingAndSendMessage(string complaintID, int ratingValue)
         {
             try
             {

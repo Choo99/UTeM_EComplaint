@@ -30,13 +30,12 @@ namespace UTeM_EComplaint.Services
                     client.Dispose();
                     return result;
                 }
-                else if (response.StatusCode == HttpStatusCode.NoContent)
-                {
-                    throw new Exception("Wrong username and password! Please try again");
-                }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
                 }
             }
             catch (Exception)
@@ -77,7 +76,7 @@ namespace UTeM_EComplaint.Services
             }
         }
 
-        public static async Task<Complaint> GetComplaintDetail(int complaintID)
+        public static async Task<Complaint> GetComplaintDetail(string complaintID)
         {
             try
             {
@@ -97,7 +96,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
                 }
             }
             catch (Exception)
@@ -164,7 +166,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
                 }
             }
             catch (Exception)
@@ -193,7 +198,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
                 }
             }
             catch (Exception)
@@ -284,6 +292,9 @@ namespace UTeM_EComplaint.Services
                 form.Add(new StringContent(complaint.Damage), "damage");
                 form.Add(new StringContent(complaint.Location), "location");
                 form.Add(new StringContent(complaint.ContactPhoneNumber), "contactPhoneNumber");
+                form.Add(new StringContent(complaint.Longitude.ToString()), "longitude");
+                form.Add(new StringContent(complaint.Latitude.ToString()), "latitude");
+                form.Add(new StringContent(complaint.ImageBase64), "imageBase64");
                 form.Add(new StringContent(notificationToken), "notificationToken");
 
                 HttpResponseMessage response = await client.PostAsync(url, form);
@@ -297,7 +308,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
                 }
             }
             catch (Exception)
@@ -355,6 +369,9 @@ namespace UTeM_EComplaint.Services
                 form.Add(new StringContent(complaint.Damage), "damage");
                 form.Add(new StringContent(complaint.Location), "location");
                 form.Add(new StringContent(complaint.ContactPhoneNumber), "contactPhoneNumber");
+                form.Add(new StringContent(complaint.Longitude.ToString()), "longitude");
+                form.Add(new StringContent(complaint.Latitude.ToString()), "latitude");
+                form.Add(new StringContent(complaint.ImageBase64.ToString()), "imageBase64");
 
                 HttpResponseMessage response = await client.PostAsync(url, form);
 

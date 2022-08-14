@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:model="clr-namespace:UTeM_EComplaint.Models"
-              x:Class="UTeM_EComplaint.Views.AdminHomePage"
+             x:Class="UTeM_EComplaint.Views.AdminHomePage"
              BackgroundColor="WhiteSmoke" 
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
              Shell.FlyoutBehavior="Disabled"

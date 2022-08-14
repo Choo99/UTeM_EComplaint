@@ -16,7 +16,7 @@ namespace UTeM_EComplaint.ViewModels
     {
         readonly string pathToAdminDetail = $"//AdminViewAll/{nameof(AdminComplaintDetailPage)}?complaintID=";
 
-        int complaintID;
+        string complaintID;
         bool isNotAssigned = true;
         bool isAssigned;
         public bool IsAssigned { get => isAssigned; set { SetProperty(ref isAssigned, value); IsNotAssigned = !value; } }
@@ -101,7 +101,7 @@ namespace UTeM_EComplaint.ViewModels
         {
             if (query.ContainsKey("complaintID"))
             {
-                complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
+                complaintID = HttpUtility.UrlDecode(query["complaintID"]);
                 getComplaintDetail();
             }
             if (query.ContainsKey("technicianID"))

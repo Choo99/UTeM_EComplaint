@@ -81,5 +81,10 @@
         <ShellContent Icon="pdf.png" Title="Report" ContentTemplate="{DataTemplate view:AdminReportTabbedPage}"  />
         <ShellContent Route="AdminViewAll" Icon="all.png" Title="All Complaint" ContentTemplate="{DataTemplate view:AdminViewAllComplaintPage}"  />
     </TabBar>
-    
+
+    <!--Master TabBar-->
+    <TabBar Title="Home" Icon="home.png">
+        <ShellContent x:Name="MasterHome" Icon="home.png" Title="Home" Route="MasterHomePage" ContentTemplate="{DataTemplate view:MasterHomePage}" />
+    </TabBar>
+
 </Shell>

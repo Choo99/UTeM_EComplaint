@@ -7,25 +7,33 @@ using System.Threading.Tasks;
 using System.Web;
 using UTeM_EComplaint.Model;
 using UTeM_EComplaint.Services;
+using UTeM_EComplaint.Tools;
 using UTeM_EComplaint.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
+using Map = Xamarin.Forms.Maps.Map;
 
 namespace UTeM_EComplaint.ViewModels
 {
     internal class StaffEditComplaintViewModel : ViewModelBase, IQueryAttributable
     {
-        int complaintID;
+        string complaintID;
         Complaint complaint;
         bool isLocation;
         bool isNotLocation;
         string location;
+        ImageSource image;
+
+        public static string base64String;
 
         readonly string pathToAddAddress = $"{nameof(StaffAddAddressPage)}";
 
         public bool IsLocation { get => isLocation; set { SetProperty(ref isLocation, value); IsNotLocation = !value; } }
         public bool IsNotLocation { get => isNotLocation; set => SetProperty(ref isNotLocation, value); }
         public Complaint Complaint { get => complaint; set => SetProperty(ref complaint, value); }
+        public ImageSource Image { get => image; set => SetProperty(ref image, value); }
+        public Map Map { get; private set; }
 
         public ObservableRangeCollection<Division> divisionList { get; }
         public ObservableRangeCollection<Category> categoryList { get; }
@@ -72,6 +80,9 @@ namespace UTeM_EComplaint.ViewModels
             selectedDivision = new Division();
             selectedCategory = new Category();
             selectedDamageType = new DamageType();
+
+            Map = new Map();
+            Map.IsEnabled = false;
         }
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
@@ -83,13 +94,24 @@ namespace UTeM_EComplaint.ViewModels
                 string level = HttpUtility.UrlDecode(query["level"]).Trim();
                 string department = HttpUtility.UrlDecode(query["department"]).Trim();
                 string room = HttpUtility.UrlDecode(query["room"]).Trim();
+                Complaint.Longitude = Convert.ToDouble(HttpUtility.UrlDecode(query["longitude"]).Trim());
+                Complaint.Latitude = Convert.ToDouble(HttpUtility.UrlDecode(query["latitude"]).Trim());
 
+                Map.MoveToRegion(MapHandler.moveToLocation(Complaint.Latitude, Complaint.Longitude));
+
+                if (base64String != null)
+                {
+                    Image = ImageHandler.LoadBase64(base64String);
+                    Complaint.ImageBase64 = base64String;
+                    base64String = null;
+                }
+                    
                 IsLocation = true;
                 Location = campus + ", " + building + ", " + level + ", " + department + ", " + room;
             }
             if (query.ContainsKey("complaintID"))
             {
-                complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
+                complaintID = HttpUtility.UrlDecode(query["complaintID"]);
                 getComplaintDetail();
             }
         }
@@ -103,7 +125,8 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task AddLocation()
         {
-            await Shell.Current.GoToAsync(pathToAddAddress);
+            StaffAddAddressViewModel.imageString = Complaint.ImageBase64;
+            await Shell.Current.GoToAsync(string.Format("{0}?longitude={1}&latitude={2}&location={3}&edit=&image=",pathToAddAddress,Complaint.Longitude,Complaint.Latitude,Complaint.Location));
         }
 
         private async Task Clear()
@@ -144,6 +167,9 @@ namespace UTeM_EComplaint.ViewModels
                     complaint.Category = selectedCategory;
                     complaint.DamageType = selectedDamageType;
                     Complaint.Location = location;
+
+                    //longitude, latitude & image solved in query
+
                     complaint.Staff = new Staff
                     {
                         StaffID = Preferences.Get("userID", 0),
@@ -173,13 +199,18 @@ namespace UTeM_EComplaint.ViewModels
                 IsBusy = true;
                 Complaint = await ComplaintServices.GetComplaintDetail(complaintID);
 
+                //Initiate value of location
+                Image = ImageHandler.LoadBase64(Complaint.ImageBase64);
+
+                Map.MoveToRegion(MapHandler.moveToLocation(Complaint.Latitude, Complaint.Longitude));
+
                 List<Division> divisions = await DivisionServices.GetDivisions();
                 List<Category> categories = await CategoryServices.GetCategories();
                 List<DamageType> damageTypes = await DamageTypeServices.GetDamageTypes();
 
-                divisionList.AddRange(divisions);
-                categoryList.AddRange(categories);
-                damageTypeList.AddRange(damageTypes);
+                divisionList.ReplaceRange(divisions);
+                categoryList.ReplaceRange(categories);
+                damageTypeList.ReplaceRange(damageTypes);
 
                 SelectedDivision = Complaint.Division;
                 SelectedCategory = Complaint.Category;

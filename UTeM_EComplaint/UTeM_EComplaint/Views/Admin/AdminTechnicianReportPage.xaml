@@ -12,54 +12,61 @@
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" >
                 <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
                          Command="{Binding RefreshCommand}">
-                    <CollectionView BackgroundColor="Transparent" 
+                    <StackLayout>
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" >
+                            <Label Grid.Row="0" Grid.Column="0" Text="Year" Style="{StaticResource CardLabel}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Picker Grid.Row="0" Grid.Column="1" FontSize="20" ItemsSource="{Binding YearList}" 
+                                        SelectedItem="{Binding SelectedYear}" TextColor="Black" HorizontalOptions="CenterAndExpand"/>
+                        </Grid>
+                        <CollectionView BackgroundColor="Transparent" 
                             ItemsSource="{Binding TechnicianList}"
                             SelectionMode="None"
                             RemainingItemsThreshold="1"
                             RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
-                        <CollectionView.EmptyView>
-                            <StackLayout>
-                                <Label Text="No available technician yet" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                            </StackLayout>
-                        </CollectionView.EmptyView>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="model:Technician">
-                                <Grid Style="{StaticResource ListViewCell}">
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup Name="CommonStates">
-                                            <VisualState Name="Normal" />
-                                            <VisualState Name="Selected">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BackgroundColor" Value="Gray" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
-                                    <Frame Style="{StaticResource Card}">
-                                        <Grid Margin="0,0,0,10" ColumnDefinitions="100,Auto" RowDefinitions="0.1*,Auto,Auto,Auto,Auto">
-                                            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Source="user.png" Margin="20,0"/>
-                                            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource CardTitle}" Text="{Binding TechnicianName}"/>
-                                            <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource CardLabel}" Text="{Binding TechnicianID}"/>
-                                            <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
-                                                <rating:SfRating Value="{Binding OverallRating}" Style="{StaticResource TechnicianRating}">
-                                                    <rating:SfRating.RatingSettings>
-                                                        <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
-                                                    </rating:SfRating.RatingSettings>
-                                                </rating:SfRating>
-                                                <Label Text="(" HorizontalOptions="Start" TextColor="Black" Margin="0,0,-5,0"/>
-                                                <Label Text="{Binding CompletedTask}" TextColor="Black" HorizontalOptions="Start"/>
-                                                <Label Text="reviews)" TextColor="Black" HorizontalOptions="Start"/>
-                                            </StackLayout>
-                                            <StackLayout Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
-                                                <Label Text="Completed Task : " FontSize="Small" Style="{StaticResource CardLabel}"/>
-                                                <Label Text="{Binding CompletedTask}" TextColor="Black"/>
-                                            </StackLayout>
-                                        </Grid>
-                                    </Frame>
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                            <CollectionView.EmptyView>
+                                <StackLayout>
+                                    <Label Text="No available technician yet" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:Technician">
+                                    <Grid Style="{StaticResource ListViewCell}">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal" />
+                                                <VisualState Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor" Value="Gray" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <Frame Style="{StaticResource Card}">
+                                            <Grid Margin="0,0,0,10" ColumnDefinitions="100,Auto" RowDefinitions="0.1*,Auto,Auto,Auto,Auto">
+                                                <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Source="user.png" Margin="20,0"/>
+                                                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource CardTitle}" Text="{Binding TechnicianName}"/>
+                                                <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource CardLabel}" Text="{Binding TechnicianID}"/>
+                                                <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                                                    <rating:SfRating Value="{Binding OverallRating}" Style="{StaticResource TechnicianRating}">
+                                                        <rating:SfRating.RatingSettings>
+                                                            <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
+                                                        </rating:SfRating.RatingSettings>
+                                                    </rating:SfRating>
+                                                    <Label Text="(" HorizontalOptions="Start" TextColor="Black" Margin="0,0,-5,0"/>
+                                                    <Label Text="{Binding CompletedTask}" TextColor="Black" HorizontalOptions="Start"/>
+                                                    <Label Text="reviews)" TextColor="Black" HorizontalOptions="Start"/>
+                                                </StackLayout>
+                                                <StackLayout Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                                                    <Label Text="Completed Task : " FontSize="Small" Style="{StaticResource CardLabel}"/>
+                                                    <Label Text="{Binding CompletedTask}" TextColor="Black"/>
+                                                </StackLayout>
+                                            </Grid>
+                                        </Frame>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
                 </RefreshView>
                 <Button Text="Download" VerticalOptions="EndAndExpand" Command="{Binding DownloadCommand}" HorizontalOptions="FillAndExpand" Style="{StaticResource Button}"/>
             </StackLayout>

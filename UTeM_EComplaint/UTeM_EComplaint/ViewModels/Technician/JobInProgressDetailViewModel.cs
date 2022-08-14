@@ -24,7 +24,7 @@ namespace UTeM_EComplaint.ViewModels
         public ActionTaken ActionTaken { get => actionTaken; set => SetProperty(ref actionTaken, value); }
 
         Complaint complaint;
-        int complaintID;
+        string complaintID;
         string pathToCompleted = $"../{nameof(JobCompletedDetailPage)}?complaintID=";
         public JobInProgressDetailViewModel()
         {
@@ -47,7 +47,8 @@ namespace UTeM_EComplaint.ViewModels
                 if (answer)
                 {
                     int result = 0;
-                    ActionTaken.ActionID = complaint.Action.ActionID;
+                    //TODO:
+                    //ActionTaken.ActionID = complaint.Action.ActionID;
                     Complaint newComplaint = new Complaint
                     {
                         ComplaintID = complaintID,
@@ -76,7 +77,7 @@ namespace UTeM_EComplaint.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
-            complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
+            complaintID = HttpUtility.UrlDecode(query["complaintID"]);
             getComplaintDetail();
         }
 

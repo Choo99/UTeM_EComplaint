@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using MvvmHelpers;
@@ -26,7 +27,7 @@ namespace UTeM_EComplaint.ViewModels
         DateTime minDate;
         DateTime maxDate;
 
-        DateTime oneMonthStartTime;       
+        DateTime oneMonthStartTime;
         DateTime twoMonthStartTime;
         DateTime threeMonthStartTime;
         DateTime monthlyEndTime;
@@ -38,11 +39,11 @@ namespace UTeM_EComplaint.ViewModels
         public DateTime ThreeMonthStartTime { get => threeMonthStartTime; set => threeMonthStartTime = value; }
         public DateTime MonthlyEndTime { get => monthlyEndTime; set => monthlyEndTime = value; }
 
-        public DateTime MinDate { get=> minDate; set => minDate = value; }
-        public DateTime MaxDate { get=> maxDate; set => maxDate = value; }
+        public DateTime MinDate { get => minDate; set => minDate = value; }
+        public DateTime MaxDate { get => maxDate; set => maxDate = value; }
         public DateTime StartDate { get => startDate; set => startDate = value; }
-        public DateTime EndDate { get=> endDate; set => endDate = value; }
-        
+        public DateTime EndDate { get => endDate; set => endDate = value; }
+
         public AsyncCommand GenerateSpecificCommand { get; }
         public AsyncCommand GenerateOneMonthCommand { get; }
         public AsyncCommand GenerateTwoMonthCommand { get; }
@@ -81,7 +82,7 @@ namespace UTeM_EComplaint.ViewModels
         private async Task GenerateOneMonth()
         {
             IsBusy = true;
-            await GenerateByDate(OneMonthStartTime,monthlyEndTime);
+            await GenerateByDate(OneMonthStartTime, monthlyEndTime);
             IsBusy = false;
         }
         private async Task GenerateTwoMonth()
@@ -107,25 +108,40 @@ namespace UTeM_EComplaint.ViewModels
 
                 complaints = await ComplaintServices.GetComplaintsByDate(startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
 
-                if(complaints.Count == 0)
+                if (complaints.Count == 0)
                 {
                     await Application.Current.MainPage.DisplayAlert("No result", "No result found between this period", "OK");
                     return;
                 }
 
+                int totalHeight = 0;
+
                 PdfDocument doc = new PdfDocument();
                 PdfPage page = doc.Pages.Add();
-                 
+
                 PdfGraphics graphics = page.Graphics;
-                PdfFont font = new PdfStandardFont(PdfFontFamily.TimesRoman, 12);
+
+                var assembly = this.GetType().GetTypeInfo().Assembly;
+                Stream stream = assembly.GetManifestResourceStream("UTeM_EComplaint.UTeM.png");
+
+                PdfImage image = PdfBitmap.FromStream(stream);
+
+                //get the half of page width and minus half of image width
+                var imageStartPoint = page.GetClientSize().Width / 2 - (image.Width / 2) / 2;
+                graphics.DrawImage(image, new RectangleF(imageStartPoint, 0, image.Width / 2, image.Height / 2));
+                totalHeight += (image.Height / 2);
+
+                PdfFont font = new PdfStandardFont(PdfFontFamily.TimesRoman, 12, PdfFontStyle.Bold);
 
                 string text = "Complaint Record from " + startDate.ToString("yyyy-MM-dd") + " - " + endDate.ToString("yyyy-MM-dd");
 
                 SizeF size = font.MeasureString(text);
-                
+
                 PdfStringFormat titleFormat = new PdfStringFormat();
                 titleFormat.Alignment = PdfTextAlignment.Center;
-                graphics.DrawString(text, font, PdfBrushes.Black, new PointF(10, 0));
+
+                graphics.DrawString(text, font, PdfBrushes.Black, new RectangleF(0, totalHeight + 20, page.GetClientSize().Width, size.Height), titleFormat);
+                totalHeight += (int)size.Height;
 
                 PdfGrid pdfGrid = new PdfGrid();
                 DataTable dataTable = new DataTable();
@@ -179,27 +195,30 @@ namespace UTeM_EComplaint.ViewModels
                 layoutFormat.Layout = PdfLayoutType.Paginate;
 
                 pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.PlainTable1);
-                PdfGridLayoutResult pdfGridLayoutResult = pdfGrid.Draw(page, new PointF(10, size.Height + 10), layoutFormat);
+                PdfGridLayoutResult pdfGridLayoutResult = pdfGrid.Draw(page, new PointF(0, totalHeight + 50), layoutFormat);
+                totalHeight += (int)pdfGridLayoutResult.Bounds.Height;
 
-                string time = DateTimeOffset.Now.ToString("yyyy/MM//dd hh:mm:ss tt");
-                graphics.DrawString("Generated At " + time, font, PdfBrushes.Black, new PointF(10, pdfGridLayoutResult.Bounds.Bottom + 20));
 
-                MemoryStream stream = new MemoryStream();
 
-                doc.Save(stream);
+                string time = DateTimeOffset.Now.ToString("yyyy/MM/dd hh:mm:ss tt");
+                pdfGridLayoutResult.Page.Graphics.DrawString("Generated At " + time, font, PdfBrushes.Black, new PointF(0, page.GetClientSize().Height - 20));
+
+                MemoryStream memoryStream = new MemoryStream();
+
+                doc.Save(memoryStream);
 
                 //Close the document.
 
                 doc.Close(true);
-                
+
                 //The operation in Save under Xamarin varies between Windows Phone, Android and iOS platforms. Please refer PDF/Xamarin section for respective code samples.
-                await DependencyService.Get<ISave>().SaveAndView("Complaint_Date_" + DateTimeOffset.Now.ToUnixTimeSeconds() + ".pdf", "application / pdf", stream);
+                await DependencyService.Get<ISave>().SaveAndView("Complaint_Date_" + DateTimeOffset.Now.ToUnixTimeSeconds() + ".pdf", "application / pdf", memoryStream);
+
             }
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
             }
         }
-
     }
 }

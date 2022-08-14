@@ -7,7 +7,8 @@ namespace UTeM_EComplaint.Model
 {
     public class ActionTaken
     {
-        public int ActionID { get; set; }
+        public Complaint Complaint { get; set; }
+        public Technician Technician { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string ActionDescription { get; set; }

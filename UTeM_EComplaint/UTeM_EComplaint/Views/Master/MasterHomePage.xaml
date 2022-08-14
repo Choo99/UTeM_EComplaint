@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.MasterHomePage"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             Shell.FlyoutBehavior="Disabled">
+    <ContentPage.BindingContext>
+        <vm:MasterHomeViewModel/>
+    </ContentPage.BindingContext>
+    <AbsoluteLayout VerticalOptions="Fill">
+        <RefreshView Command="{Binding RefreshCommand}" 
+                     AbsoluteLayout.LayoutFlags="All" 
+                     AbsoluteLayout.LayoutBounds="0,0,1,1" 
+                     IsRefreshing="{Binding IsBusy, Mode=OneWay}">
+            <ScrollView>
+                <Grid RowDefinitions="auto,*" BackgroundColor="{StaticResource BackgroundColor}">
+                    <StackLayout Grid.Row="0" Grid.Column="0" Margin="3" VerticalOptions="CenterAndExpand">
+                        <Button x:Name="Logout" Text="LOGOUT" CornerRadius="18" FontAttributes="Bold" BackgroundColor="White" 
+                            TextColor="Black" Margin="0,30,10,-40" HorizontalOptions="End" Command="{Binding LogoutCommand}"></Button>
+                        <Label FontSize="17" VerticalOptions="EndAndExpand" 
+                           Text="{Binding DateTimeString}" HorizontalOptions="StartAndExpand" Margin="10,0,0,10" 
+                           FontAttributes="Bold" FontFamily="arial" TextColor="Black" />
+                    </StackLayout>
+                    <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*,*,*,*" RowSpacing="20" VerticalOptions="CenterAndExpand">
+                        <Frame Grid.Row="0" Grid.Column="0" Margin="50,5" BackgroundColor="#5BB7C9" CornerRadius="10">
+                            <StackLayout>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToDamageTypeCommand}"/>
+                                </StackLayout.GestureRecognizers>
+                                <Label Text="Damage Type" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" FontSize="20"></Label>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Grid.Row="1" Grid.Column="0" Margin="50,5" BackgroundColor="CadetBlue" CornerRadius="10">
+                            <StackLayout>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToDivisionCommand}"/>
+                                </StackLayout.GestureRecognizers>
+                                <Label Text="Division" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" FontSize="20"></Label>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Grid.Row="2" Grid.Column="0" Margin="50,5" BackgroundColor="YellowGreen" CornerRadius="10">
+                            <StackLayout>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToCategoryCommand}"/>
+                                </StackLayout.GestureRecognizers>
+                                <Label Text="Category" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Grid.Row="3" Grid.Column="0" Margin="50,5" BackgroundColor="LightCoral" CornerRadius="10">
+                            <StackLayout>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToLocationCommand}"/>
+                                </StackLayout.GestureRecognizers>
+                                <Label Text="Location" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
+                            </StackLayout>
+                        </Frame>
+                    </Grid>
+                </Grid>
+            </ScrollView>
+        </RefreshView>
+        <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsBusy, Mode=OneWay}"/>
+        <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsBusy}" 
+                               IsRunning="{Binding IsBusy, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+    </AbsoluteLayout>
+</ContentPage>

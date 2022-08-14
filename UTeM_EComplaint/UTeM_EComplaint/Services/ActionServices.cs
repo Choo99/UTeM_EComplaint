@@ -12,7 +12,7 @@ namespace UTeM_EComplaint.Services
 {
     internal class ActionServices
     {
-        public static async Task<int> StartAction(int complaintID)
+        public static async Task<int> StartAction(string complaintID)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace UTeM_EComplaint.Services
             }
         }
 
-        public static async Task<int> StartActionAndSendMessage(int complaintID)
+        public static async Task<int> StartActionAndSendMessage(string complaintID)
         {
             try
             {

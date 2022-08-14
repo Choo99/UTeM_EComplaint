@@ -85,7 +85,7 @@ namespace UTeM_EComplaint.Droid
             }
 
         }
-        public void UnsubscribeFromTopic(string role, int complaintID)
+        public void UnsubscribeFromTopic(string role, string complaintID)
         {
             string topic = "";
             if(role == "staff")

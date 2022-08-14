@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -7,9 +8,12 @@ using MvvmHelpers;
 using MvvmHelpers.Commands;
 using UTeM_EComplaint.Model;
 using UTeM_EComplaint.Services;
+using UTeM_EComplaint.Tools;
 using UTeM_EComplaint.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
+using Map = Xamarin.Forms.Maps.Map;
 
 namespace UTeM_EComplaint.ViewModels
 {
@@ -17,8 +21,12 @@ namespace UTeM_EComplaint.ViewModels
     {
         readonly string pathToAddAddress = $"{nameof(StaffAddAddressPage)}";
 
+        public static string imageString;
+
         string dateTime;
         string location;
+        string longitude;
+        string latitude;
         bool isLoading;
         bool isLocation;
         bool isNotLocation;
@@ -39,6 +47,11 @@ namespace UTeM_EComplaint.ViewModels
         DamageType selectedDamageType;
         Complaint complaint;
 
+        ImageSource image;
+        Map map;
+
+        public Map Map { get => map; set => SetProperty(ref map, value); }
+
         public bool IsLoading { get => isLoading; set => SetProperty(ref isLoading, value); }
         public bool IsLocation { get => isLocation; set { SetProperty(ref isLocation, value); IsNotLocation = !value; } }
         public bool IsNotLocation { get => isNotLocation; set => SetProperty(ref isNotLocation, value); }
@@ -49,8 +62,10 @@ namespace UTeM_EComplaint.ViewModels
         public DamageType SelectedDamageType { get => selectedDamageType; set => SetProperty(ref selectedDamageType, value); }
         public string DateTimeString { get => dateTime; set => SetProperty(ref dateTime, value); }
         public string Location { get => location; set => SetProperty(ref location, value); }
+        public ImageSource Image { get => image; set => SetProperty(ref image, value); }
 
         public AsyncCommand AddLocationCommand { get; }
+        public AsyncCommand EditLocationCommand { get; }
         public AsyncCommand ClearLocationCommand { get; }
         public AsyncCommand SaveCommand { get; }
 
@@ -71,23 +86,44 @@ namespace UTeM_EComplaint.ViewModels
 
             SaveCommand = new AsyncCommand(Save);
             AddLocationCommand = new AsyncCommand(AddLocation);
+            EditLocationCommand = new AsyncCommand(EditLocation);
             ClearLocationCommand = new AsyncCommand(ClearLocation);
+
+            map = new Map()
+            {
+                IsEnabled = false,
+            };
 
             getData();
         }
 
-        public void ApplyQueryAttributes(IDictionary<string, string> query)
+        public async void ApplyQueryAttributes(IDictionary<string, string> query)
         {
-            if (query.ContainsKey("campus"))
+            try
             {
-                string campus = HttpUtility.UrlDecode(query["campus"]).Trim();
-                string building = HttpUtility.UrlDecode(query["building"]).Trim();
-                string level = HttpUtility.UrlDecode(query["level"]).Trim();
-                string department = HttpUtility.UrlDecode(query["department"]).Trim();
-                string room = HttpUtility.UrlDecode(query["room"]).Trim();
+                if (query.ContainsKey("campus"))
+                {
+                    string campus = HttpUtility.UrlDecode(query["campus"]).Trim();
+                    string building = HttpUtility.UrlDecode(query["building"]).Trim();
+                    string level = HttpUtility.UrlDecode(query["level"]).Trim();
+                    string department = HttpUtility.UrlDecode(query["department"]).Trim();
+                    string room = HttpUtility.UrlDecode(query["room"]).Trim();
 
-                IsLocation = true;
-                Location = campus + ", " + building + ", " + level + ", " + department + ", " + room;
+                    IsLocation = true;
+                    Location = campus + ", " + building + ", " + level + ", " + department + ", " + room;
+
+                    latitude = HttpUtility.UrlDecode(query["latitude"]).Trim();
+                    longitude = HttpUtility.UrlDecode(query["longitude"]).Trim();
+
+                    //move the map position
+                    Map.MoveToRegion(MapHandler.moveToLocation(Double.Parse(latitude), Double.Parse(longitude)));
+
+                    Image = ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(imageString)));
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
             }
         }
 
@@ -101,6 +137,12 @@ namespace UTeM_EComplaint.ViewModels
         private async Task AddLocation()
         {
             await Shell.Current.GoToAsync(pathToAddAddress);
+        }
+
+        private async Task EditLocation()
+        {
+            StaffAddAddressViewModel.imageString = imageString;
+            await Shell.Current.GoToAsync(String.Format("{0}?location={1}&longitude={2}&latitude={3}", pathToAddAddress, location, longitude, latitude));
         }
 
         private async Task Save()
@@ -117,6 +159,10 @@ namespace UTeM_EComplaint.ViewModels
                     complaint.Category = selectedCategory;
                     complaint.DamageType = selectedDamageType;
                     complaint.Location = Location;
+                    complaint.Longitude = Double.Parse(longitude);
+                    complaint.Latitude = Double.Parse(latitude);
+                    complaint.ImageBase64 = imageString;
+                    
                     complaint.Staff = new Staff
                     {
                         StaffID = Preferences.Get("userID", 0),

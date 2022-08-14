@@ -42,7 +42,7 @@ namespace UTeM_EComplaint.ViewModels
             Title = "Job Searching";
             userID = Preferences.Get("userID", 0);
 
-            ResultText = "You can search by Location,Staff Name, Job Category, Damage Type or Division";
+            ResultText = "Search by Complaint ID and Complaint Date(YYYY-MM-DD)";
 
             RefreshCommand = new AsyncCommand(Refresh);
             SearchCommand = new AsyncCommand(Search);
@@ -65,6 +65,7 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task LoadMore()
         {
+            await Task.Delay(100);
             if (complaints.Count == ComplaintList.Count)
                 return;
             int lastItemIndexed = ComplaintList.Count;

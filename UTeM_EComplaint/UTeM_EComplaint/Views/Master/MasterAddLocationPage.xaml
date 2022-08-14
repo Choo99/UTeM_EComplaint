@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             x:Class="UTeM_EComplaint.Views.MasterAddLocationPage"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+    <ContentPage.BindingContext>
+        <vm:MasterAddLocationViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:InvertedBoolConverter x:Key="Converter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout VerticalOptions="Fill">
+            <ScrollView AbsoluteLayout.LayoutFlags="All" 
+                 AbsoluteLayout.LayoutBounds="0,0,1,1" >
+                <StackLayout Spacing="20" Padding="20">
+                    <StackLayout>
+                        <Frame Style="{StaticResource Card}">
+                            <StackLayout>
+                                <Label Text="Location/Department" Style="{StaticResource DetailTitle}" HorizontalOptions="Center"/>
+                                <Line Style="{StaticResource HorizontalLine}"/>
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                                    
+                                    <!--Campus-->
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Campus" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <ImageButton Grid.Row="0" Grid.Column="1" Source="add.png" HeightRequest="20" BackgroundColor="Transparent" Command="{Binding NewCampusCommand}" 
+                                                 IsVisible="{Binding IsCampusNew, Converter={StaticResource Converter}}" HorizontalOptions="End"/>
+                                    <ImageButton Grid.Row="0" Grid.Column="1" Source="xmark.png" HeightRequest="20" BackgroundColor="Transparent" Command="{Binding NewCampusCommand}" 
+                                                 IsVisible="{Binding IsCampusNew}" HorizontalOptions="End"/>
+                                    <Picker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Campus --" IsVisible="{Binding IsCampusNew, Converter={StaticResource Converter}}"
+                                                ItemsSource="{Binding CampusList}" SelectedItem="{Binding Campus}" TextColor="Black" ItemDisplayBinding="{Binding CampusName}" />
+                                    <Entry Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding NewCampusName}" IsVisible="{Binding IsCampusNew}" Placeholder="New Campus Name"/>
+                                    
+                                    <!--Building-->
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Building" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <ImageButton Grid.Row="2" Grid.Column="1" Source="add.png" HeightRequest="20" BackgroundColor="Transparent" Command="{Binding NewBuildingCommand}" 
+                                                 IsEnabled="{Binding IsCampus}" IsVisible="{Binding IsBuildingNew, Converter={StaticResource Converter}}" HorizontalOptions="End"/>
+                                    <ImageButton Grid.Row="2" Grid.Column="1" Source="xmark.png" HeightRequest="20" BackgroundColor="Transparent" Command="{Binding NewBuildingCommand}" 
+                                                 IsVisible="{Binding IsBuildingNew}" HorizontalOptions="End"/>
+                                    <Picker Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Building --" IsVisible="{Binding IsBuildingNew, Converter={StaticResource Converter}}"
+                                                ItemsSource="{Binding BuildingList}" SelectedItem="{Binding Building}" IsEnabled="{Binding IsCampus}" TextColor="Black" ItemDisplayBinding="{Binding BuildingName}" />
+                                    <Entry Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding NewBuildingName}" IsVisible="{Binding IsBuildingNew}" Placeholder="New Building Name"/>
+                                    
+                                    <!--Level-->
+                                    <Label Grid.Row="4" Grid.Column="0" Text="Level" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <ImageButton Grid.Row="4" Grid.Column="1" Source="add.png" HeightRequest="20" BackgroundColor="Transparent" Command="{Binding NewLevelCommand}" 
+                                                 IsEnabled="{Binding IsBuilding}" IsVisible="{Binding IsLevelNew, Converter={StaticResource Converter}}" HorizontalOptions="End"/>
+                                    <ImageButton Grid.Row="4" Grid.Column="1" Source="xmark.png" HeightRequest="20" BackgroundColor="Transparent" Command="{Binding NewLevelCommand}" 
+                                                 IsVisible="{Binding IsLevelNew}" HorizontalOptions="End"/>
+                                    <Picker Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Level --"  ItemDisplayBinding="{Binding LevelName}" IsVisible="{Binding IsLevelNew, Converter={StaticResource Converter}}"
+                                                ItemsSource="{Binding LevelList}" SelectedItem="{Binding Level}" IsEnabled="{Binding IsBuilding}" TextColor="Black" />
+                                    <Entry Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding NewLevelName}" IsVisible="{Binding IsLevelNew}" Placeholder="New Level Name"/>
+                                    
+                                    <!--Department-->
+                                    <Label Grid.Row="6" Grid.Column="0" Text="Department" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <ImageButton Grid.Row="6" Grid.Column="1" Source="add.png" HeightRequest="20" BackgroundColor="Transparent" Command="{Binding NewDepartmentCommand}" 
+                                                 IsEnabled="{Binding IsLevel}" IsVisible="{Binding IsDepartmentNew, Converter={StaticResource Converter}}" HorizontalOptions="End"/>
+                                    <ImageButton Grid.Row="6" Grid.Column="1" Source="xmark.png" HeightRequest="20" BackgroundColor="Transparent" Command="{Binding NewDepartmentCommand}" 
+                                                 IsVisible="{Binding IsDepartmentNew}" HorizontalOptions="End"/>
+                                    <Picker Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Department --" ItemDisplayBinding="{Binding DepartmentName}" IsVisible="{Binding IsDepartmentNew, Converter={StaticResource Converter}}"
+                                                ItemsSource="{Binding DepartmentList}" SelectedItem="{Binding Department}" IsEnabled="{Binding IsLevel}" TextColor="Black" />
+                                    <Entry Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding NewDepartmentName}" IsVisible="{Binding IsDepartmentNew}" Placeholder="New Department Name"/>
+                                    
+                                    <!--Room-->
+                                    <Label Grid.Row="8" Grid.Column="0" Text="Room" TextColor="#0FC5BA" FontSize="Medium"/>
+                                    <Entry Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding NewRoomName}" Placeholder="New Room Name"/>
+
+                                    <Button Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Margin="20,0" Text="Save" Style="{StaticResource Button}" Command="{Binding SaveCommand}" />
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+            <BoxView AbsoluteLayout.LayoutFlags="All" 
+             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+             BackgroundColor="Transparent" 
+             InputTransparent="false" 
+             IsVisible="{Binding IsBusy, Mode=OneWay}"/>
+            <ActivityIndicator BackgroundColor="#80000000"  IsVisible="{Binding IsBusy}" 
+                               IsRunning="{Binding IsBusy, Mode=OneWay}"
+                               AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" 
+                               Color="LightSkyBlue"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

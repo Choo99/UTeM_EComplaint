@@ -77,9 +77,30 @@
                                             <Label Grid.Row="5" Grid.Column="0" Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
                                             <Label Grid.Row="5" Grid.Column="1" Text="{Binding Complaint.Damage}" Style="{StaticResource CardLabel}" />
 
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Style="{StaticResource Card}">
+                                    <StackLayout>
+                                        <!--Location Title-->
+                                        <Label Text="Location" HorizontalOptions="Center" Margin="0,20,0,0" Style="{StaticResource DetailTitle}" TextColor="{StaticResource DetailColor}" FontSize="Large" />
+                                        <Line Style="{StaticResource HorizontalLine}"/>
+                                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
                                             <!--Location-->
-                                            <Label Grid.Row="6" Grid.Column="0" Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
-                                            <Label Grid.Row="6" Grid.Column="1" Text="{Binding Complaint.Location}" Style="{StaticResource CardLabel}"/>
+                                            <Label Grid.Row="0" Grid.Column="0" Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.Location}" Style="{StaticResource CardLabel}"/>
+
+                                            <!--Map-->
+                                            <Label Grid.Row="3" Grid.Column="0" Text="Location in Map"  TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+                                                <ContentView HeightRequest="500" Content="{Binding Map}"/>
+                                                <Image Source="placePin.png" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HeightRequest="25"/>
+                                            </Grid>
+                                            
+                                            <!--Image-->
+                                            <Label Grid.Row="5" Grid.Column="0" Text="Reference Picture"  TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Image Grid.Row="6" Grid.Column="0" Source="{Binding Image}" HorizontalOptions="CenterAndExpand" Grid.ColumnSpan="2"/>
                                         </Grid>
                                     </StackLayout>
                                 </Frame>
@@ -118,7 +139,7 @@
                                         <Label IsVisible="{Binding IsCompleted}" Text="Action Taken" Style="{StaticResource DetailTitle}"/>
                                         <Line Style="{StaticResource HorizontalLine}"/>
 
-                                        <Grid RowSpacing="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                                        <Grid RowSpacing="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
                                             <!--Start Date-->
                                             <Label Grid.Row="0" Grid.Column="0" IsVisible="{Binding IsCompleted}" Text="Start Date" TextColor="#0FC5BA" FontSize="Medium"/>
                                             <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.Action.StartDate}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"/>
@@ -138,6 +159,10 @@
                                             <Label Grid.Row="4" Grid.Column="0" IsVisible="{Binding IsCompleted}" Text="Additional note" TextColor="#0FC5BA" FontSize="Medium"/>
                                             <!--Note Display when completed-->
                                             <Label Grid.Row="4" Grid.Column="1" Text="{Binding Complaint.Action.AdditionalNote}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"></Label>
+
+                                            <!--Duration-->
+                                            <Label Grid.Row="5" Grid.Column="0" IsVisible="{Binding IsCompleted}" Text="Duration" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Label Grid.Row="5" Grid.Column="1" Text="{Binding Duration}" IsVisible="{Binding IsCompleted}" Style="{StaticResource CardLabel}"></Label>
                                         </Grid>
                                     </StackLayout>
                                 </Frame>

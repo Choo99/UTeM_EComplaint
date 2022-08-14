@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
 using MvvmHelpers;
@@ -18,7 +19,7 @@ namespace UTeM_EComplaint.ViewModels
         readonly int LOAD_SIZE = 5;
 
         int staffID;
-        string pathToDetail = $"{nameof(StaffComplaintDetailPage)}?complaintID=";
+        string pathToDetail = $"{nameof(StaffComplaintDetailPage)}?complaintID="; 
 
         Complaint selectedComplaint;
         List<Complaint> complaints;
@@ -36,6 +37,8 @@ namespace UTeM_EComplaint.ViewModels
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand<object> ItemSelectedCommand { get; }
         public AsyncCommand LoadMoreCommand { get; }
+
+        
 
         public StaffComplaintAssignedViewModel()
         {

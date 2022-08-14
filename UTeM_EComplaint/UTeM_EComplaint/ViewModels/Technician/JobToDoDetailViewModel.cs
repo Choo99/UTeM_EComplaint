@@ -22,7 +22,7 @@ namespace UTeM_EComplaint.ViewModels
         public AsyncCommand BackCommand { get; }
 
         Complaint complaint;
-        int complaintID;
+        string complaintID;
 
         string pathToInProgress = $"../{nameof(JobProgressPage)}";
         public JobToDoDetailViewModel()
@@ -61,7 +61,7 @@ namespace UTeM_EComplaint.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
-            complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
+            complaintID = HttpUtility.UrlDecode(query["complaintID"]);
             getComplaintDetail();
         }
 

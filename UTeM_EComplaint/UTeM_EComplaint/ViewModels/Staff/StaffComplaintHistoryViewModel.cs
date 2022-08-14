@@ -6,6 +6,7 @@ using MvvmHelpers;
 using MvvmHelpers.Commands;
 using UTeM_EComplaint.Model;
 using UTeM_EComplaint.Services;
+using UTeM_EComplaint.Tools;
 using UTeM_EComplaint.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -93,6 +94,7 @@ namespace UTeM_EComplaint.ViewModels
                 {
                     size = complaints.Count;
                 }
+                DurationHandler.durationList(ref complaints);
                 ComplaintHistory.ReplaceRange(complaints.GetRange(0, size));
                 
             }

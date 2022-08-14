@@ -13,7 +13,7 @@ namespace UTeM_EComplaint.ViewModels
     internal class StaffAddRatingViewModel : ViewModelBase, IQueryAttributable
     {
         Complaint complaint;
-        int complaintID;
+        string complaintID;
         int ratingValue;
         public int RatingValue { get => ratingValue; set => SetProperty(ref ratingValue,value); }
         public Complaint Complaint { get => complaint; set => SetProperty(ref complaint, value); }
@@ -37,7 +37,7 @@ namespace UTeM_EComplaint.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
-            complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
+            complaintID = HttpUtility.UrlDecode(query["complaintID"]);
             getComplaint();
         }
 

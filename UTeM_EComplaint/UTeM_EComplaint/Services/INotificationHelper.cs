@@ -13,7 +13,7 @@ namespace UTeM_EComplaint.Services
 
         void CreateNotificationChannel();
 
-        void UnsubscribeFromTopic(string role, int complaintID);
+        void UnsubscribeFromTopic(string role, string complaintID);
 
         void DeleteInstance();
 

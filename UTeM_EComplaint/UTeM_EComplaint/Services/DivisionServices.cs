@@ -40,5 +40,114 @@ namespace UTeM_EComplaint.Services
                 throw;
             }
         }
+
+        public static async Task<int> EditDivision(Division division)
+        {
+            try
+            {
+                string url = string.Format("{0}/editDivision", Global.apiUrl);
+                var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(5000);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                form.Add(new StringContent(division.DivisionID.ToString()), "divisionID");
+                form.Add(new StringContent(division.DivisionName), "divisionName");
+
+                HttpResponseMessage response = await client.PostAsync(url, form);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    int result = JsonConvert.DeserializeObject<int>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<int> AddDivision(Division division)
+        {
+            try
+            {
+                string url = string.Format("{0}/addDivision", Global.apiUrl);
+                var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(5000);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                form.Add(new StringContent(division.DivisionName), "divisionName");
+
+                HttpResponseMessage response = await client.PostAsync(url, form);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    int result = JsonConvert.DeserializeObject<int>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<int> DeleteDivision(Division division)
+        {
+            try
+            {
+                string url = string.Format("{0}/deleteDivision", Global.apiUrl);
+                var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(5000);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                form.Add(new StringContent(division.DivisionID.ToString()), "divisionID");
+
+                HttpResponseMessage response = await client.PostAsync(url, form);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    int result = JsonConvert.DeserializeObject<int>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

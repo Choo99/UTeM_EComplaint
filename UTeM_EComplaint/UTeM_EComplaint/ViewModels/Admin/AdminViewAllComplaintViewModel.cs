@@ -17,7 +17,7 @@ namespace UTeM_EComplaint.ViewModels
     {
         bool isLoading;
         bool isRefresh;
-        string pathToDetail = $"{nameof(StaffComplaintDetailPage)}?complaintID=";
+        string pathToDetail = $"{nameof(AdminComplaintDetailPage)}?complaintID=";
         string pathToAdminSearch = $"{nameof(StaffComplaintDetailPage)}?complaintID=";
         string searchText;
         string resultText;

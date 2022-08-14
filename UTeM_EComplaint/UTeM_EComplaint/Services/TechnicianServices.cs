@@ -133,6 +133,37 @@ namespace UTeM_EComplaint.Services
             }
         }
 
+        public static async Task<List<Technician>> GetAllTechnicianWithStatisticByYear(string year)
+        {
+            try
+            {
+                string url = string.Format("{0}/getAllTechnicianWithStatisticOrderByRatingByYear?year={1}", Global.apiUrl, year);
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    List<Technician> result = JsonConvert.DeserializeObject<List<Technician>>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    client.Dispose();
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public static async Task<Technician> GetTechnicianWithStatistic(int technicianID)
         {
             try

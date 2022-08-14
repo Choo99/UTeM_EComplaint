@@ -1,20 +1,24 @@
 ﻿using MvvmHelpers.Commands;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using UTeM_EComplaint.Model;
 using UTeM_EComplaint.Services;
+using UTeM_EComplaint.Tools;
 using UTeM_EComplaint.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
+using Map = Xamarin.Forms.Maps.Map;
 
 namespace UTeM_EComplaint.ViewModels
 {
     internal class StaffComplaintDetailViewModel : ViewModelBase, IQueryAttributable
     {
-        int complaintID;
+        string complaintID;
         bool isOwner;
         bool isNotAssigned;
         bool isAssigned;
@@ -25,11 +29,16 @@ namespace UTeM_EComplaint.ViewModels
         bool isEdit;
         bool isOnlyCompleted;
         Complaint complaint;
+        ImageSource image;
 
         string pathToAddRating = $"{nameof(StaffAddRatingPage)}?complaintID=";
         string pathToEditComplaint = $"{nameof(StaffEditComplaintPage)}?complaintID=";
 
+        string duration;
+
         public Complaint Complaint { get => complaint; set => SetProperty(ref complaint,value) ; }
+        public ImageSource Image { get => image; set => SetProperty(ref image, value) ; }
+        public Map Map { get; private set; }
         public bool IsEdit { get => isEdit; set => SetProperty(ref isEdit, value) ; }
         public bool IsOwner { get => isOwner; set => SetProperty(ref isOwner, value) ; }
         public bool IsAssigned { get => isAssigned; set { SetProperty(ref isAssigned, value); IsNotAssigned = !value; } }
@@ -39,6 +48,7 @@ namespace UTeM_EComplaint.ViewModels
         public bool IsNotRating { get => isNotRating; set => SetProperty(ref isNotRating, value);   }
         public bool IsRating { get => isRating; set { SetProperty(ref isRating, value); IsNotRating = !value; } }
         public bool IsOnlyCompleted { get => isOnlyCompleted; set { SetProperty(ref isOnlyCompleted, value); } }
+        public string Duration { get => duration; set { SetProperty(ref duration, value); } }
 
         public AsyncCommand DoneCommand { get; }
         public AsyncCommand RateCommand { get; }
@@ -50,6 +60,11 @@ namespace UTeM_EComplaint.ViewModels
             DoneCommand = new AsyncCommand(Done);
             RateCommand = new AsyncCommand(Rate);
             EditCommand = new AsyncCommand(Edit);
+
+            Map = new Map
+            {
+                IsEnabled = false
+            };
         }
 
         private async Task Edit()
@@ -81,7 +96,7 @@ namespace UTeM_EComplaint.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
-            complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
+            complaintID =HttpUtility.UrlDecode(query["complaintID"]);
             getComplaintDetail();
         }
 
@@ -115,7 +130,6 @@ namespace UTeM_EComplaint.ViewModels
                 else if(Complaint.ComplaintStatus == "Completed")
                 {
                     IsAssigned = true;
-                    IsInProgress = true;
                     IsCompleted = true;
                     IsOnlyCompleted = true;
                     if(Complaint.Rating != null)
@@ -126,7 +140,17 @@ namespace UTeM_EComplaint.ViewModels
                     {
                         IsRating = false;
                     }
+                    Duration = DurationHandler.calculateDuration(Complaint.TotalDays);
                 }
+
+                if(Complaint.ImageBase64 != null)
+                    Image = ImageHandler.LoadBase64(Complaint.ImageBase64);
+
+                if(Complaint.Longitude != 0 && Complaint.Latitude != 0)
+                {
+                    Map.MoveToRegion(MapHandler.moveToLocation(Complaint.Latitude, Complaint.Longitude));
+                }
+                
             }
             catch (Exception ex)
             {

@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 using System.Web;
 using UTeM_EComplaint.Model;
 using UTeM_EComplaint.Services;
+using UTeM_EComplaint.Tools;
 using UTeM_EComplaint.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
+using Map = Xamarin.Forms.Maps.Map;
 
 namespace UTeM_EComplaint.ViewModels
 {
     internal class AdminComplaintDetailViewModel : ViewModelBase, IQueryAttributable
     {
-        int complaintID;
+        string complaintID;
         bool isNotAssigned;
         bool isAssigned;
         bool isInProgress;
@@ -23,11 +26,15 @@ namespace UTeM_EComplaint.ViewModels
         bool isNotRating;
         bool isOnlyCompleted;
         Complaint complaint;
+        ImageSource image;
+        Map map;
 
         string pathToAddRating = $"{nameof(StaffAddRatingPage)}?complaintID=";
         string pathToEditComplaint = $"{nameof(StaffEditComplaintPage)}?complaintID=";
 
         public Complaint Complaint { get => complaint; set => SetProperty(ref complaint, value); }
+        public ImageSource Image { get => image; set => SetProperty(ref image, value); }
+        public Map Map { get => map; set => SetProperty(ref map, value); }
         public bool IsAssigned { get => isAssigned; set { SetProperty(ref isAssigned, value); IsNotAssigned = !value; } }
         public bool IsNotAssigned { get => isNotAssigned; set => SetProperty(ref isNotAssigned, value); }
         public bool IsInProgress { get => isInProgress; set => SetProperty(ref isInProgress, value); }
@@ -46,6 +53,11 @@ namespace UTeM_EComplaint.ViewModels
             DoneCommand = new AsyncCommand(Done);
             RateCommand = new AsyncCommand(Rate);
             EditCommand = new AsyncCommand(Edit);
+
+            Map = new Map()
+            {
+                IsEnabled = false
+            };
         }
 
         private async Task Edit()
@@ -73,7 +85,7 @@ namespace UTeM_EComplaint.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
-            complaintID = int.Parse(HttpUtility.UrlDecode(query["complaintID"]));
+            complaintID = HttpUtility.UrlDecode(query["complaintID"]);
             getComplaintDetail();
         }
 
@@ -111,6 +123,10 @@ namespace UTeM_EComplaint.ViewModels
                         IsRating = false;
                     }
                 }
+                if (Complaint.Longitude != 0 && Complaint.Latitude != 0)
+                    Map.MoveToRegion(MapHandler.moveToLocation(Complaint.Latitude, Complaint.Longitude));
+                if (Complaint.ImageBase64 != null)
+                    Image = ImageHandler.LoadBase64(Complaint.ImageBase64);
             }
             catch (Exception ex)
             {

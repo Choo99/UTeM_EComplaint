@@ -20,15 +20,15 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="My Rating" CharacterSpacing="1" Margin="10,40,3,5" FontSize="25" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" TextColor="Black" FontAttributes="Bold"/>
-            <Label Text="Average Point" CharacterSpacing="1" Margin="0,10,0,0"  FontSize="18" HorizontalOptions="CenterAndExpand" TextColor="DarkGray" FontAttributes="Italic"/>
+            <Label Text="Overall Rating" CharacterSpacing="1" Margin="0,10,0,0"  FontSize="18" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Italic"/>
             <rating:SfRating Precision="Exact" Value="{Binding AverageRating}" HorizontalOptions="CenterAndExpand" ReadOnly="True" TooltipPlacement="BottomRight" ItemSpacing="20"  x:Name="rating">
                 <rating:SfRating.RatingSettings>
                     <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}"/>
                 </rating:SfRating.RatingSettings>
             </rating:SfRating>
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                <Label Text="{Binding AverageRating}" CharacterSpacing="1" Margin="0,0,0,10"  FontSize="18" HorizontalOptions="Start" TextColor="DarkGray" FontAttributes="Italic"/>
-                <Label Text="{Binding TotalReviews}" CharacterSpacing="1" Margin="0,0,0,10"  FontSize="18" HorizontalOptions="Start" TextColor="DarkGray" FontAttributes="Italic"/>
+                <Label Text="{Binding AverageRating}" CharacterSpacing="1" Margin="0,0,0,10"  FontSize="18" HorizontalOptions="Start" TextColor="Black" FontAttributes="Italic"/>
+                <Label Text="{Binding TotalReviews}" CharacterSpacing="1" Margin="0,0,0,10"  FontSize="18" HorizontalOptions="Start" TextColor="Black" FontAttributes="Italic"/>
             </StackLayout>
             <StackLayout>
                 <ListView BackgroundColor="Transparent" SeparatorVisibility="None" HasUnevenRows="True"
