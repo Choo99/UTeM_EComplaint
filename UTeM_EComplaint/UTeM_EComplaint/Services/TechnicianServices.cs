@@ -31,7 +31,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -59,7 +62,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -68,7 +74,7 @@ namespace UTeM_EComplaint.Services
             }
         }
 
-        public static async Task<int> UpdateTechnicianAndSubscribe(Complaint complaint)
+       /* public static async Task<int> UpdateTechnicianAndSubscribe(Complaint complaint)
         {
             try
             {
@@ -100,7 +106,7 @@ namespace UTeM_EComplaint.Services
             {
                 throw;
             }
-        }
+        }*/
 
         public static async Task<List<Technician>> GetAllTechnicianWithStatistic()
         {
@@ -122,9 +128,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -153,9 +159,46 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<List<Technician>> GetTechnicianWithStatistic(List<Technician> technicians)
+        {
+            try
+            {
+                string parameters = "";
+                foreach(Technician technician in technicians)
+                {
+                    parameters += $"technicianIDs={technician.TechnicianID}&";
+                }
+
+                string url = string.Format("{0}/GetSelectedTechnicianWithStatistic?{1}", Global.apiUrl, parameters);
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    List<Technician> result = JsonConvert.DeserializeObject<List<Technician>>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -184,9 +227,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)

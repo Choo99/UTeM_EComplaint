@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.MasterModulePage"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             xmlns:model="clr-namespace:UTeM_EComplaint.Model"
+             xmlns:sfPopup="clr-namespace:Syncfusion.XForms.PopupLayout;assembly=Syncfusion.SfPopupLayout.XForms">
+    <ContentPage.BindingContext>
+        <vm:MasterModuleViewModel/>
+    </ContentPage.BindingContext>
+    <StackLayout>
+        <StackLayout>
+            <StackLayout Margin="20,20">
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                    <Label Grid.Row="0" Grid.Column="0" Text="System" Style="{StaticResource CardLabel}" VerticalOptions="Center"/>
+                    <Picker Grid.Row="0" Grid.Column="1" Title="-- Select System --" HorizontalTextAlignment="Center"
+                                                ItemsSource="{Binding SoftwareSystemList}" SelectedItem="{Binding SoftwareSystem}" TextColor="Black" ItemDisplayBinding="{Binding SoftwareSystemName}" />
+                </Grid>
+            </StackLayout>
+            <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         Command="{Binding RefreshCommand}">
+                <CollectionView BackgroundColor="Transparent" 
+                            ItemsSource="{Binding ModuleList}"
+                            SelectionMode="Single"
+                            RemainingItemsThreshold="1"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                            SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedModule}"
+                            SelectedItem="{Binding SelectedModule, Mode=TwoWay}">
+                    <CollectionView.EmptyView>
+                        <StackLayout>
+                            <Label Text="No available module yet" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.Header>
+                        <StackLayout>
+                            <Label Text="Modules" FontSize="25" Margin="0,20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold"/>
+                        </StackLayout>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Module">
+                            <Grid Style="{StaticResource ListViewCell}" >
+                                <Frame Style="{StaticResource Card}" Margin="30,0" BackgroundColor="MediumPurple">
+                                    <StackLayout>
+                                        <Label Text="{Binding ModuleName}" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold"/>
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+        <StackLayout>
+            <Button Margin="10,0" Text="Add" Command="{Binding AddButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="MediumPurple"/>
+        </StackLayout>
+
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsSelected}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" ShowFooter="False" ShowHeader="False" AutoSizeMode="Height" ShowCloseButton="False">
+                    <sfPopup:PopupView.HeaderTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <ImageButton Source="delete.png" HorizontalOptions="End" HeightRequest="30" BackgroundColor="Transparent" Command="{Binding DeleteCommand}" Clicked="ImageButton_Clicked"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.HeaderTemplate>
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Module ID :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsEnabled="False" Text="{Binding PreviousSelectedModule.ModuleID}" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="System Name" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding PreviousSelectedModule.System.SoftwareSystemName}" IsEnabled="False" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="Module Code :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding PreviousSelectedModule.ModuleCode}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="Module Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding PreviousSelectedModule.ModuleName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="8" Grid.Column="0" Text="Status :" FontSize="Medium" TextColor="Black"/>
+                                    <CheckBox Grid.Row="8" Grid.Column="1" IsChecked="{Binding PreviousSelectedModule.Status}" Focused="FocusEvent" Unfocused="UnfocusEvent"/>
+
+                                    <Button Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Text="Save" HorizontalOptions="EndAndExpand" Command="{Binding SaveCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsAdd}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" AutoSizeMode="Height" ShowCloseButton="False" ShowHeader="False" ShowFooter="False">
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="System Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Picker Grid.Row="1" Grid.Column="0" Title="-- Select System --" Grid.ColumnSpan="2" HorizontalTextAlignment="Center"
+                                                ItemsSource="{Binding SoftwareSystemList}" SelectedItem="{Binding NewModule.System}" TextColor="Black" ItemDisplayBinding="{Binding SoftwareSystemName}" />
+
+                                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Module Code :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MaxLength="5" Text="{Binding NewModule.ModuleCode}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="Module Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding NewModule.ModuleName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="6" Grid.Column="0" Text="Status :" FontSize="Medium" TextColor="Black"/>
+                                    <CheckBox Grid.Row="6" Grid.Column="1" IsChecked="{Binding NewModule.Status}" Focused="FocusEvent" Unfocused="UnfocusEvent"/>
+
+                                    <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="Add" HorizontalOptions="CenterAndExpand" Command="{Binding AddCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+    </StackLayout>
+</ContentPage>

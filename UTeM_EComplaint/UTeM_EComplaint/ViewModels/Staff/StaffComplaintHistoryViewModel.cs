@@ -94,7 +94,6 @@ namespace UTeM_EComplaint.ViewModels
                 {
                     size = complaints.Count;
                 }
-                DurationHandler.durationList(ref complaints);
                 ComplaintHistory.ReplaceRange(complaints.GetRange(0, size));
                 
             }

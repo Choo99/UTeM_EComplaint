@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UTeM_EComplaint.Views.MasterSoftwareSystemPage"
+             xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             xmlns:model="clr-namespace:UTeM_EComplaint.Model"
+             xmlns:sfPopup="clr-namespace:Syncfusion.XForms.PopupLayout;assembly=Syncfusion.SfPopupLayout.XForms">
+    <ContentPage.BindingContext>
+        <vm:MasterSoftwareSystemViewModel/>
+    </ContentPage.BindingContext>
+    <StackLayout>
+        <StackLayout>
+            <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         Command="{Binding RefreshCommand}">
+                <CollectionView BackgroundColor="Transparent" 
+                            ItemsSource="{Binding SoftwareSystemList}"
+                            SelectionMode="Single"
+                            RemainingItemsThreshold="1"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                            SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedSoftwareSystem}"
+                            SelectedItem="{Binding SelectedSoftwareSystem, Mode=TwoWay}">
+                    <CollectionView.EmptyView>
+                        <StackLayout>
+                            <Label Text="No available system yet" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.Header>
+                        <StackLayout>
+                            <Label Text="Systems" FontSize="25" Margin="0,20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold"/>
+                        </StackLayout>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:SoftwareSystem">
+                            <Grid Style="{StaticResource ListViewCell}" >
+                                <Frame Style="{StaticResource Card}" Margin="30,0" BackgroundColor="MediumPurple">
+                                    <StackLayout>
+                                        <Label Text="{Binding SoftwareSystemName}" HorizontalOptions="Center" TextColor="Black" FontAttributes="Bold"/>
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+        <StackLayout>
+            <Button Margin="10,0" Text="Add" Command="{Binding AddButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="MediumPurple"/>
+        </StackLayout>
+
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsSelected}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" ShowFooter="False" AutoSizeMode="Height" ShowCloseButton="False">
+                    <sfPopup:PopupView.HeaderTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <ImageButton Source="delete.png" HorizontalOptions="End" HeightRequest="30" BackgroundColor="Transparent" Command="{Binding DeleteCommand}" Clicked="ImageButton_Clicked"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.HeaderTemplate>
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="System ID :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsEnabled="False" Text="{Binding PreviousSelectedSoftwareSystem.SoftwareSystemID}" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="System Code :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding PreviousSelectedSoftwareSystem.SystemCode}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="System Abbreviation :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding PreviousSelectedSoftwareSystem.Abbreviation}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="System Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding PreviousSelectedSoftwareSystem.SoftwareSystemName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="8" Grid.Column="0" Text="Status :" FontSize="Medium" TextColor="Black"/>
+                                    <CheckBox Grid.Row="8" Grid.Column="1" IsChecked="{Binding PreviousSelectedSoftwareSystem.Status}" Focused="FocusEvent" Unfocused="UnfocusEvent"/>
+
+                                    <Button Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Text="Save" HorizontalOptions="EndAndExpand" Command="{Binding SaveCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+
+        <sfPopup:SfPopupLayout IsOpen="{Binding IsAdd}">
+            <sfPopup:SfPopupLayout.PopupView >
+                <sfPopup:PopupView AnimationMode="Zoom" AutoSizeMode="Height" ShowCloseButton="False" ShowHeader="False" ShowFooter="False">
+                    <sfPopup:PopupView.ContentTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto" Margin="10,10">
+                                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  Text="System Code :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" MaxLength="5" Text="{Binding NewSoftwareSystem.SystemCode}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="System Abbreviation :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MaxLength="10" Text="{Binding NewSoftwareSystem.Abbreviation}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="System Name :" FontSize="Medium" TextColor="Black"/>
+                                    <Entry Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding NewSoftwareSystem.SoftwareSystemName}" Focused="FocusEvent" Unfocused="UnfocusEvent" FontSize="Medium" TextColor="Black"/>
+
+                                    <Label Grid.Row="6" Grid.Column="0" Text="Status :" FontSize="Medium" TextColor="Black"/>
+                                    <CheckBox Grid.Row="6" Grid.Column="1" IsChecked="{Binding NewSoftwareSystem.Status}" Focused="FocusEvent" Unfocused="UnfocusEvent"/>
+
+                                    <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="Add" HorizontalOptions="CenterAndExpand" Command="{Binding AddCommand}" Clicked="ImageButton_Clicked"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </sfPopup:PopupView.ContentTemplate>
+                </sfPopup:PopupView>
+            </sfPopup:SfPopupLayout.PopupView>
+        </sfPopup:SfPopupLayout>
+    </StackLayout>
+</ContentPage>

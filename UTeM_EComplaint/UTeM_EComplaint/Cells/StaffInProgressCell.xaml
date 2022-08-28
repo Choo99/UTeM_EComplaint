@@ -21,17 +21,8 @@
                 <Label Text="{Binding Category.CategoryName}" Style="{StaticResource CardLabel}"></Label>
                 <Label Text="{Binding DamageType.DamageTypeName}" Style="{StaticResource CardLabel}"></Label>
                 <Line X1="0" Y1="0" X2="360" Margin="0,20" Y2="0" HorizontalOptions="CenterAndExpand" Stroke="#9B9A99" />
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Technician ID " Style="{StaticResource CardLabel}"/>
-                    <Label Text="{Binding Technician.TechnicianID}" Style="{StaticResource CardLabel}"/>
-                </StackLayout>
-                <Line X1="0" Y1="0" X2="360" Margin="0,20,0,0" Y2="0" HorizontalOptions="CenterAndExpand" Stroke="#9B9A99" />
-                <StackLayout Orientation="Horizontal" Margin="0,0,0,30">
-                    <Label Text="Start At" Style="{StaticResource CardLabel}"/>
-                    <Label Text="{Binding Action.StartDate}" HorizontalOptions="Start"  Style="{StaticResource CardLabel}"></Label>
-                    <Label Text="{Binding ComplaintDate}" HorizontalOptions="EndAndExpand" FontAttributes="Italic" Style="{StaticResource CardLabel}"></Label>
-                </StackLayout>
             </StackLayout>
+            <Label Text="{Binding ComplaintDate}" HorizontalOptions="EndAndExpand" FontAttributes="Italic" Style="{StaticResource CardLabel}"></Label>
         </StackLayout>
     </Frame>
 </Grid>

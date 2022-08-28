@@ -12,6 +12,7 @@ using AndroidX.Core.App;
 using Firebase.Messaging;
 using Android.Media;
 using UTeM_EComplaint.Model;
+using Xamarin.Essentials;
 
 [assembly: Dependency(typeof(NotificationHelper_Android))]
 namespace UTeM_EComplaint.Droid
@@ -45,7 +46,7 @@ namespace UTeM_EComplaint.Droid
                                         .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone))
                                         .SetContentIntent(pendingIntent);
             var notificationManager = NotificationManagerCompat.From(mContext);
-            notificationManager.Notify(MainActivity.NOTIFICATION_ID, notificationBuilder.Build());
+            notificationManager.Notify(new Random().Next(), notificationBuilder.Build());
 
         }
 
@@ -72,12 +73,20 @@ namespace UTeM_EComplaint.Droid
         }
 
         [Obsolete]
-        public string GetToken()
+        public async void GetToken()
         {
             try
             {
                 var token = FirebaseInstanceId.Instance.Token;
-                return token;
+
+                await NotificationServices.CheckNotificationAvailabilityAddNewNotificationTokenAndUpdateTokenTimeStamp(new NotificationManagement
+                {
+                    User = new User
+                    {
+                        UserID = Preferences.Get("userID", 0),
+                    },
+                    NotificationToken = token,
+                });
             }
             catch(Exception)
             {

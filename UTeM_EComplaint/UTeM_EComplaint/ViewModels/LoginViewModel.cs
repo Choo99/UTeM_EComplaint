@@ -30,18 +30,20 @@ namespace UTeM_EComplaint.ViewModels
             userID = Preferences.Get("userID", 0);
             role = Preferences.Get("role", null);
 
-            try
-            {
-                string token = DependencyService.Get<INotificationHelper>().GetToken();
-                Console.WriteLine("Token: " + token);
-
-            } catch (Exception ex)
-            {
-                Console.WriteLine("Errorr: " + ex.Message);
-            }
             checkPreferences();
         }
 
+        async void getNotification()
+        {
+            try
+            {
+                DependencyService.Get<INotificationHelper>().GetToken();
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
+        }
         async Task<bool> validate()
         {
             if(username == null || password == null)
@@ -75,6 +77,8 @@ namespace UTeM_EComplaint.ViewModels
                 {
                     Shell.Current.GoToAsync($"//{nameof(MasterHomePage)}");
                 }
+                if (role != "master")
+                    getNotification();
             }
         }
 
@@ -127,7 +131,7 @@ namespace UTeM_EComplaint.ViewModels
                 {
                     await Shell.Current.GoToAsync($"//{nameof(MasterHomePage)}");
                 }
-                DependencyService.Get<INotificationHelper>().UpdateInstanceID(user);
+                getNotification();
                 IsBusy = false;
             }
             catch (Exception ex)

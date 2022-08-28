@@ -15,6 +15,10 @@ namespace UTeM_EComplaint.ViewModels
         readonly string PATH_TO_DIVISION = $"{nameof(MasterDivisionPage)}";
         readonly string PATH_TO_CATEGORY = $"{nameof(MasterCategoryPage)}";
         readonly string PATH_TO_LOCATION = $"{nameof(MasterLocationPage)}";
+        readonly string PATH_TO_SOFTWARESYSTEM = $"{nameof(MasterSoftwareSystemPage)}";
+        readonly string PATH_TO_MODULE = $"{nameof(MasterModulePage)}";
+        readonly string PATH_TO_SUBMODULE = $"{nameof(MasterSubmodulePage)}";
+        readonly string PATH_TO_SUBMENU = $"{nameof(MasterSubmenuPage)}";
 
         string dateTimeString;
 
@@ -23,6 +27,10 @@ namespace UTeM_EComplaint.ViewModels
         public AsyncCommand ToDivisionCommand { get; }
         public AsyncCommand ToCategoryCommand { get; }
         public AsyncCommand ToLocationCommand { get; }
+        public AsyncCommand ToSoftwareSystemCommand { get; }
+        public AsyncCommand ToModuleCommand { get; }
+        public AsyncCommand ToSubmoduleCommand { get; }
+        public AsyncCommand ToSubmenuCommand { get; }
 
         public string DateTimeString { get => dateTimeString; set => SetProperty(ref dateTimeString, value); }
 
@@ -35,6 +43,58 @@ namespace UTeM_EComplaint.ViewModels
             ToDivisionCommand = new AsyncCommand(ToDivision);
             ToCategoryCommand = new AsyncCommand(ToCategory);
             ToLocationCommand = new AsyncCommand(ToLocation);
+            ToSoftwareSystemCommand = new AsyncCommand(ToSoftwareSystem);
+            ToModuleCommand = new AsyncCommand(ToModule);
+            ToSubmoduleCommand = new AsyncCommand(ToSubmodule);
+            ToSubmenuCommand = new AsyncCommand(ToSubmenu);
+        }
+
+        private async Task ToSoftwareSystem()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync(PATH_TO_SOFTWARESYSTEM);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
+        }
+
+        private async Task ToModule()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync(PATH_TO_MODULE);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
+        }
+
+        private async Task ToSubmodule()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync(PATH_TO_SUBMODULE);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
+        }
+
+        private async Task ToSubmenu()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync(PATH_TO_SUBMENU);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
         }
 
         private async Task Logout()

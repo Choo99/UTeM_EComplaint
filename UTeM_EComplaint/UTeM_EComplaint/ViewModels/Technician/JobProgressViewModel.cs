@@ -18,10 +18,10 @@ namespace UTeM_EComplaint.ViewModels
 
         int userID;
 
-        List<Complaint> complaints;
+        List<ComplaintDetail> complaintDetails;
 
-        Complaint selectedComplaint;
-        public ObservableRangeCollection<Complaint> ComplaintList { get; set; }
+        ComplaintDetail selectedComplaintDetail;
+        public ObservableRangeCollection<ComplaintDetail> ComplaintDetailList { get; set; }
 
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand LoadMoreCommand { get; }
@@ -38,8 +38,8 @@ namespace UTeM_EComplaint.ViewModels
             LoadMoreCommand = new AsyncCommand(LoadMore);
             ItemSelectedCommand = new AsyncCommand<object>(ItemSelected);
 
-            ComplaintList = new ObservableRangeCollection<Complaint>();
-            complaints = new List<Complaint>();
+            ComplaintDetailList = new ObservableRangeCollection<ComplaintDetail>();
+            complaintDetails = new List<ComplaintDetail>();
 
             userID = Preferences.Get("userID", 0);
             getData();
@@ -47,17 +47,17 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task LoadMore()
         {
-            if (complaints.Count == ComplaintList.Count)
+            if (complaintDetails.Count == ComplaintDetailList.Count)
                 return;
-            int lastItemIndexed = ComplaintList.Count;
+            int lastItemIndexed = complaintDetails.Count;
             int nextItemIndexed = lastItemIndexed + LOAD_SIZE;
 
-            if (nextItemIndexed > complaints.Count)
-                nextItemIndexed = complaints.Count;
+            if (nextItemIndexed > complaintDetails.Count)
+                nextItemIndexed = complaintDetails.Count;
 
             for (int i = lastItemIndexed; i < nextItemIndexed; i++)
             {
-                ComplaintList.Add(complaints[i]);
+                ComplaintDetailList.Add(complaintDetails[i]);
             }
         }
 
@@ -65,12 +65,12 @@ namespace UTeM_EComplaint.ViewModels
         {
             try
             {
-                var complaint = arg as Complaint;
-                if (complaint == null)
+                var complaintDetail = arg as ComplaintDetail;
+                if (complaintDetail == null)
                     return;
-                SelectedComplaint = null;
+                SelectedComplaintDetail = null;
 
-                await Shell.Current.GoToAsync(pathToJobDetail + complaint.ComplaintID);
+                await Shell.Current.GoToAsync(pathToJobDetail + complaintDetail.Complaint.ComplaintID);
             }
             catch (Exception ex)
             {
@@ -86,12 +86,20 @@ namespace UTeM_EComplaint.ViewModels
                 int size = LOAD_SIZE;
                 IsBusy = true;
 
-                List<Complaint> complaints = await ComplaintServices.GetComplaintsByStatus(userID, "In Progress");
+                ComplaintDetail tempComplaintDetail = new ComplaintDetail
+                {
+                    ComplaintDetailStatus = "In Progress",
+                    Technician = new Technician
+                    {
+                        TechnicianID = Preferences.Get("userID", 0),
+                    }
+                };
+                List<ComplaintDetail> complaintDetailList = await ComplaintDetailServices.GetComplaintDetailByStatus(tempComplaintDetail);
 
-                if (complaints.Count < LOAD_SIZE)
-                    size = complaints.Count;
+                if (complaintDetailList.Count < LOAD_SIZE)
+                    size = complaintDetailList.Count;
 
-                ComplaintList.ReplaceRange(complaints.GetRange(0, size));
+                ComplaintDetailList.ReplaceRange(complaintDetailList.GetRange(0, size));
             }
             catch (Exception ex)
             {
@@ -109,10 +117,10 @@ namespace UTeM_EComplaint.ViewModels
             getData();
         }
 
-        public Complaint SelectedComplaint
+        public ComplaintDetail SelectedComplaintDetail
         {
-            get => selectedComplaint;
-            set => SetProperty(ref selectedComplaint, value);
+            get => selectedComplaintDetail;
+            set => SetProperty(ref selectedComplaintDetail, value);
         }
     }
 }

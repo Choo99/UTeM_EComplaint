@@ -19,7 +19,8 @@
                             RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                             SelectionChangedCommand="{Binding ItemSelectedCommand}"
                             SelectionChangedCommandParameter="{Binding SelectedComplaint}"
-                            SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}">
+                            SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
+                            ItemTemplate="{StaticResource StaffPendingDataTemplateSelector}">
                     <CollectionView.EmptyView>
                         <StackLayout>
                             <Label Text="No Pending Complaint" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
@@ -30,36 +31,7 @@
                             <Label Text="Pending Complaints" FontSize="25" Margin="0,20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold"/>
                         </StackLayout>
                     </CollectionView.Header>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:Complaint">
-                            <Grid Style="{StaticResource ListViewCell}">
-                                <Frame Style="{StaticResource Card}">
-                                    <StackLayout>
-                                        <StackLayout>
-                                            <StackLayout Orientation="Horizontal" Margin="0,10,0,10">
-                                                <StackLayout Orientation="Horizontal">
-                                                    <Label Text="ID " Style="{StaticResource CardTitle}" FontAttributes="Bold"/>
-                                                    <Label Text="{Binding ComplaintID}" Style="{StaticResource CardTitle}"/>
-                                                </StackLayout>
-                                                <Label Text="{Binding ComplaintStatus}" HorizontalOptions="EndAndExpand" FontSize="Large" FontAttributes="Bold,Italic" TextColor="{StaticResource PendingColor}"/>
-                                            </StackLayout>
-                                            <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
-                                        </StackLayout>
-                                        <StackLayout>
-                                            <Label Text="{Binding Damage}" HorizontalOptions="StartAndExpand" Style="{StaticResource CardLabel}"></Label>
-                                            <Label Text="{Binding Category.CategoryName}" Style="{StaticResource CardLabel}"></Label>
-                                            <Label Text="{Binding DamageType.DamageTypeName}" Style="{StaticResource CardLabel}"></Label>
-                                            <Line X1="0" Y1="0" X2="360" Margin="0,20,0,0" Y2="0" HorizontalOptions="CenterAndExpand" Stroke="#9B9A99"/>
-                                            <StackLayout Orientation="Horizontal">
-                                                <Label Text="Created At" Style="{StaticResource CardLabel}" FontAttributes="Italic" HorizontalOptions="EndAndExpand"/>
-                                                <Label Text="{Binding ComplaintDate}" HorizontalOptions="End" Margin="0,0,0,30" FontAttributes="Italic" Style="{StaticResource CardLabel}"></Label>
-                                            </StackLayout>
-                                        </StackLayout>
-                                    </StackLayout>
-                                </Frame>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
+                    
                 </CollectionView>
             </RefreshView>
         </StackLayout>

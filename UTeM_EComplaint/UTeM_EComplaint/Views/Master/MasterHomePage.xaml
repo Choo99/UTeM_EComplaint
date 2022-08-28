@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UTeM_EComplaint.Views.MasterHomePage"
              xmlns:vm="clr-namespace:UTeM_EComplaint.ViewModels"
+             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
              Shell.FlyoutBehavior="Disabled">
     <ContentPage.BindingContext>
         <vm:MasterHomeViewModel/>
@@ -21,39 +22,50 @@
                            Text="{Binding DateTimeString}" HorizontalOptions="StartAndExpand" Margin="10,0,0,10" 
                            FontAttributes="Bold" FontFamily="arial" TextColor="Black" />
                     </StackLayout>
-                    <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*,*,*,*" RowSpacing="20" VerticalOptions="CenterAndExpand">
-                        <Frame Grid.Row="0" Grid.Column="0" Margin="50,5" BackgroundColor="#5BB7C9" CornerRadius="10">
-                            <StackLayout>
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding ToDamageTypeCommand}"/>
-                                </StackLayout.GestureRecognizers>
-                                <Label Text="Damage Type" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" FontSize="20"></Label>
-                            </StackLayout>
-                        </Frame>
-                        <Frame Grid.Row="1" Grid.Column="0" Margin="50,5" BackgroundColor="CadetBlue" CornerRadius="10">
-                            <StackLayout>
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding ToDivisionCommand}"/>
-                                </StackLayout.GestureRecognizers>
-                                <Label Text="Division" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" FontSize="20"></Label>
-                            </StackLayout>
-                        </Frame>
-                        <Frame Grid.Row="2" Grid.Column="0" Margin="50,5" BackgroundColor="YellowGreen" CornerRadius="10">
-                            <StackLayout>
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding ToCategoryCommand}"/>
-                                </StackLayout.GestureRecognizers>
-                                <Label Text="Category" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
-                            </StackLayout>
-                        </Frame>
-                        <Frame Grid.Row="3" Grid.Column="0" Margin="50,5" BackgroundColor="LightCoral" CornerRadius="10">
-                            <StackLayout>
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding ToLocationCommand}"/>
-                                </StackLayout.GestureRecognizers>
-                                <Label Text="Location" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20"></Label>
-                            </StackLayout>
-                        </Frame>
+                    <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="20" VerticalOptions="Center" Margin="50,0">
+
+                        <Button Grid.Row="0" Grid.Column="0" BackgroundColor="#5BB7C9" Text="Damage Type" TextColor="White" HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
+                                CornerRadius="10" Command="{Binding ToDamageTypeCommand}"/>
+
+                        <Button Grid.Row="1" Grid.Column="0" Text="Division" TextColor="White" HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
+                                BackgroundColor="CadetBlue" CornerRadius="10" Command="{Binding ToDivisionCommand}"/>
+
+                        <Button Grid.Row="2" Grid.Column="0" BackgroundColor="YellowGreen" Text="Category" TextColor="White" HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
+                                CornerRadius="10" Command="{Binding ToCategoryCommand}"/>
+
+                        <Button Grid.Row="3" Grid.Column="0" BackgroundColor="LightCoral" Text="Location" TextColor="White" HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
+                                CornerRadius="10" Command="{Binding ToLocationCommand}"/>
+                        <StackLayout Grid.Row="4" Grid.Column="0" >
+                            <xct:Expander>
+                                <xct:Expander.Header>
+                                    <Grid>
+                                        <Button Grid.Row="0" Grid.Column="0" Text="Software System" TextColor="White" HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
+                                BackgroundColor="MediumPurple" CornerRadius="10"/>
+                                        <Image Source="expand.png" HeightRequest="20" HorizontalOptions="End" VerticalOptions="Center">
+                                            <Image.Triggers>
+                                                <DataTrigger TargetType="Image" Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}" Value="True">
+                                                    <Setter Property="Source" Value="up.png" />
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                        </Image>
+                                    </Grid>
+                                </xct:Expander.Header>
+                                <xct:Expander.ContentTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Margin="0,20" Spacing="20">
+                                            <Button BackgroundColor="MediumPurple" Text="System" TextColor="White" HorizontalOptions="Fill" 
+                                                    FontAttributes="Bold" FontSize="20" CornerRadius="10" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MasterHomeViewModel}},Path=ToSoftwareSystemCommand}"/>
+                                            <Button BackgroundColor="MediumPurple" Text="Module" TextColor="White" HorizontalOptions="Fill" 
+                                                    FontAttributes="Bold" FontSize="20" CornerRadius="10" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MasterHomeViewModel}},Path=ToModuleCommand}"/>
+                                            <Button BackgroundColor="MediumPurple" Text="Submodule" TextColor="White" HorizontalOptions="Fill" 
+                                                    FontAttributes="Bold" FontSize="20" CornerRadius="10" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MasterHomeViewModel}},Path=ToSubmoduleCommand}"/>
+                                            <Button BackgroundColor="MediumPurple" Text="Submenu" TextColor="White" HorizontalOptions="Fill" 
+                                                    FontAttributes="Bold" FontSize="20" CornerRadius="10" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MasterHomeViewModel}},Path=ToSubmenuCommand}"/>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </xct:Expander.ContentTemplate>
+                            </xct:Expander>
+                        </StackLayout>
                     </Grid>
                 </Grid>
             </ScrollView>

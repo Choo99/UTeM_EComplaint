@@ -26,11 +26,11 @@ namespace UTeM_EComplaint.ViewModels
         public String SearchText { get => searchText; set => SetProperty(ref searchText,value); }
         public String ResultText { get => resultText; set => SetProperty(ref resultText, value); }
 
-        List<Complaint> complaints;
-        public ObservableRangeCollection<Complaint> ComplaintList { get; }
+        List<ComplaintDetail> complaintDetails;
+        public ObservableRangeCollection<ComplaintDetail> ComplaintDetailList { get; }
 
-        Complaint selectedComplaint;
-        public Complaint SelectedComplaint { get => selectedComplaint; set => SetProperty(ref selectedComplaint, value); }
+        ComplaintDetail selectedComplaintDetail;
+        public ComplaintDetail SelectedComplaintDetail { get => selectedComplaintDetail; set => SetProperty(ref selectedComplaintDetail, value); }
 
         public AsyncCommand SearchCommand { get; }
         public AsyncCommand RefreshCommand { get; }
@@ -50,15 +50,15 @@ namespace UTeM_EComplaint.ViewModels
             ClearCommand = new Command(Clear);
             ItemSelectedCommand = new AsyncCommand<object>(ItemSelected);
 
-            complaints = new List<Complaint>();
-            ComplaintList = new ObservableRangeCollection<Complaint>();
+            complaintDetails = new List<ComplaintDetail>();
+            ComplaintDetailList = new ObservableRangeCollection<ComplaintDetail>();
 
         }
 
         private void Clear(object obj)
         {
             IsBusy = true;
-            ComplaintList.Clear();
+            ComplaintDetailList.Clear();
             Task.Delay(1000);
             IsBusy = false;
         }
@@ -66,17 +66,17 @@ namespace UTeM_EComplaint.ViewModels
         private async Task LoadMore()
         {
             await Task.Delay(100);
-            if (complaints.Count == ComplaintList.Count)
+            if (complaintDetails.Count == ComplaintDetailList.Count)
                 return;
-            int lastItemIndexed = ComplaintList.Count;
+            int lastItemIndexed = ComplaintDetailList.Count;
             int nextItemIndexed = lastItemIndexed + LOAD_SIZE;
 
-            if (nextItemIndexed > complaints.Count)
-                nextItemIndexed = complaints.Count;
+            if (nextItemIndexed > complaintDetails.Count)
+                nextItemIndexed = complaintDetails.Count;
 
             for (int i = lastItemIndexed; i < nextItemIndexed; i++)
             {
-                ComplaintList.Add(complaints[i]);
+                ComplaintDetailList.Add(complaintDetails[i]);
             }
         }
 
@@ -87,16 +87,19 @@ namespace UTeM_EComplaint.ViewModels
                 int size = LOAD_SIZE;
                 IsBusy = true;
                 await Task.Delay(1000);
-                complaints = await ComplaintServices.SearchComplaints(userID, SearchText);
+                complaintDetails = await ComplaintDetailServices.TechnicianSearchComplaitDetail(new Technician
+                {
+                    TechnicianID = Preferences.Get("userID", 0)
+                }, SearchText) ;
 
-                if(complaints.Count == 0)
+                if(complaintDetails.Count == 0)
                 {
                     ResultText = "Opps! No job found for key word\"" + searchText + "\"";
                 }
-                if (complaints.Count < LOAD_SIZE)
-                    size = complaints.Count;
+                if (complaintDetails.Count < LOAD_SIZE)
+                    size = complaintDetails.Count;
 
-                ComplaintList.ReplaceRange(complaints.GetRange(0, size));
+                ComplaintDetailList.ReplaceRange(complaintDetails.GetRange(0, size));
             }
             catch (Exception ex)
             {
@@ -112,7 +115,7 @@ namespace UTeM_EComplaint.ViewModels
         private async Task Refresh()
         {
             IsBusy = true;
-            ComplaintList.Clear();
+            ComplaintDetailList.Clear();
             ResultText = "You can search by Location,Staff Name, Job Category, Damage Type or Division";
             IsBusy =false;
         }
@@ -121,12 +124,12 @@ namespace UTeM_EComplaint.ViewModels
         {
             try
             {
-                var complaint = arg as Complaint;
-                if (complaint == null)
+                var complaintDetail = arg as ComplaintDetail;
+                if (complaintDetail == null)
                     return;
-                SelectedComplaint = null;
+                SelectedComplaintDetail = null;
 
-                await Shell.Current.GoToAsync(pathToJobDetail + complaint.ComplaintID);
+                await Shell.Current.GoToAsync(pathToJobDetail + complaintDetail.Complaint.ComplaintID);
             }
             catch (Exception ex)
             {

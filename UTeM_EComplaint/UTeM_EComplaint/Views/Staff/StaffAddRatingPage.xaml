@@ -21,12 +21,12 @@
 
                     <Label Text="Technician ID" TextColor="Black" FontSize="Medium"/>
                     <Frame>
-                        <Label Text="{Binding Complaint.Technician.TechnicianID}" FontSize="Small" TextColor="Black"/>
+                        <Label Text="{Binding ComplaintDetail.Technician.TechnicianID}" FontSize="Small" TextColor="Black"/>
                     </Frame>
 
                     <Label Text="Name" TextColor="#Black" FontSize="Medium"/>
                     <Frame>
-                        <Label Text="{Binding Complaint.Technician.TechnicianName}" FontSize="Small" TextColor="Black"/>
+                        <Label Text="{Binding ComplaintDetail.Technician.TechnicianName}" FontSize="Small" TextColor="Black"/>
                     </Frame>
                     <Label Text="Your rating will help us to improve our performance" TextColor="Black" HorizontalTextAlignment="Center" FontSize="Large"/>
                     <BoxView Margin="0,30"  Color="Gray" WidthRequest="200" HeightRequest="1"/>

@@ -15,13 +15,14 @@
             <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                          Command="{Binding RefreshCommand}">
                 <CollectionView x:Name="listTask" BackgroundColor="Transparent" 
-                                     SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
+                                     SelectedItem="{Binding SelectedComplaintDetail, Mode=TwoWay}"
                                      SelectionMode="Single"
                                      RemainingItemsThreshold="1"
                                      RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                                      SelectionChangedCommand="{Binding ItemSelectedCommand}"
-                                     SelectionChangedCommandParameter="{Binding SelectedComplaint}"
-                                     ItemsSource="{Binding ComplaintList}">
+                                     SelectionChangedCommandParameter="{Binding SelectedComplaintDetail}"
+                                     ItemTemplate="{StaticResource TechnicianInProgressDataTemplateSelector}"
+                                     ItemsSource="{Binding ComplaintDetailList}">
                     <CollectionView.Header>
                         <StackLayout>
                             <Label Text="In Progress Tasks" FontSize="25" Margin="0,20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold"/>
@@ -29,13 +30,9 @@
                     </CollectionView.Header>
                     <CollectionView.EmptyView>
                         <StackLayout>
-                            <Label Text="There is no In Progress tak" Style="{StaticResource DetailNoItem}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                        </StackLayout>                    </CollectionView.EmptyView>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:Complaint">
-                            <cell:TechnicianInProgressCell/>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
+                            <Label Text="There is no In Progress task" Style="{StaticResource DetailNoItem}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
                 </CollectionView>
             </RefreshView>
         </StackLayout>

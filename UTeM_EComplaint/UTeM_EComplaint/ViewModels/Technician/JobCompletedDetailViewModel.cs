@@ -68,10 +68,6 @@ namespace UTeM_EComplaint.ViewModels
             try
             {
                 Complaint = await ComplaintServices.GetComplaintDetail(complaintID);
-                if(complaint.Rating != null)
-                {
-                    IsRated = true;
-                }
             }
             catch (Exception ex)
             {

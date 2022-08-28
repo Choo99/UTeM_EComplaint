@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using System.Threading.Tasks;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using UTeM_EComplaint.Model;
 using UTeM_EComplaint.Services;
-using UTeM_EComplaint.Views;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace UTeM_EComplaint.ViewModels

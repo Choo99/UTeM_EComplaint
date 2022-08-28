@@ -26,6 +26,25 @@ namespace UTeM_EComplaint.Tools
             }
         }
 
+        public static void durationList(ref List<ComplaintDetail> complaintDetails)
+        {
+            for (var i = 0; i < complaintDetails.Count; i++)
+            {
+                var days = Math.Truncate(complaintDetails[i].Action.TotalDays);
+                var hoursInDay = complaintDetails[i].Action.TotalDays - days;
+
+                var hours = Math.Truncate(hoursInDay * 24);
+                var minutes = hours * 60;
+
+                if (days > 0)
+                    complaintDetails[i].Action.Duration = String.Format("{0} days {1} hours", days, hours);
+                else if (days == 0 && hours > 0)
+                    complaintDetails[i].Action.Duration = String.Format("{0} hours", hours);
+                else
+                    complaintDetails[i].Action.Duration = String.Format("{0} minutes", minutes);
+            }
+        }
+
         public static string calculateDuration(double totalDays)
         {
             string duration = null;

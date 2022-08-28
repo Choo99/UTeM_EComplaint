@@ -13,9 +13,7 @@ namespace UTeM_EComplaint.ViewModels
 {
     internal class AboutViewModel : BaseViewModel
     {
-        readonly int LOAD_SIZE = 5;
-
-        public ObservableRangeCollection<Complaint> ComplaintList { get; set; }
+        public ObservableRangeCollection<ComplaintDetail> ComplaintDetailList { get; set; }
 
         string toggleText;
 
@@ -29,7 +27,7 @@ namespace UTeM_EComplaint.ViewModels
         bool isLoading;
         bool isPieChart;
 
-        List<Complaint> complaints;
+        List<ComplaintDetail> complaintDetails;
         public ObservableRangeCollection<Statistic> Statistics { get;}
 
         public string ToggleText { get => toggleText; set => SetProperty(ref toggleText, value); }
@@ -60,12 +58,12 @@ namespace UTeM_EComplaint.ViewModels
         string pathToCompletedDetail = $"{nameof(JobCompletedDetailPage)}?complaintID=";
         string pathToDetail = $"{nameof(JobDetailPage)}?complaintID=";
 
-        public Complaint SelectedComplaint
+        public ComplaintDetail SelectedComplaintDetail
         {
-            get => selectedComplaint;
+            get => selectedComplaintDetail;
             set
             {
-                SetProperty(ref selectedComplaint, value);
+                SetProperty(ref selectedComplaintDetail, value);
                 OnPropertyChanged();
             }
         }
@@ -98,24 +96,23 @@ namespace UTeM_EComplaint.ViewModels
             set => SetProperty(ref dateTime, value);
         }
 
-        Complaint selectedComplaint;
+        ComplaintDetail selectedComplaintDetail;
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand TotalTabbedCommand { get; }
         public AsyncCommand PendingTabbedCommand { get; }
         public AsyncCommand InProgressTabbedCommand { get; }
         public AsyncCommand CompletedTabbedCommand { get; }
         public AsyncCommand LogoutCommand { get; }
-        public AsyncCommand LoadMoreCommand { get; }
         public AsyncCommand<object> ItemSelectedCommand { get; }
          
 
         public AboutViewModel()
         {
             DateTimeString = DateTime.Now.ToString("dd/MM/yyyy");
-            ComplaintList = new ObservableRangeCollection<Complaint>();
+            ComplaintDetailList = new ObservableRangeCollection<ComplaintDetail>();
             technicianID = Preferences.Get("userID", 0);
 
-            complaints = new List<Complaint>();
+            complaintDetails = new List<ComplaintDetail>();
             Statistics = new ObservableRangeCollection<Statistic>();
 
             TotalTabbedCommand = new AsyncCommand(TotalTabbed);
@@ -124,7 +121,6 @@ namespace UTeM_EComplaint.ViewModels
             CompletedTabbedCommand = new AsyncCommand(CompletedTabbed);
             RefreshCommand = new AsyncCommand(Refresh);
             LogoutCommand = new AsyncCommand(Logout);
-            LoadMoreCommand = new AsyncCommand(LoadMore);
             ItemSelectedCommand = new AsyncCommand<object>(ItemSelected);
 
             GetData();
@@ -132,11 +128,11 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task ItemSelected(object arg)
         {
-            var complaint = arg as Complaint;
-            if (complaint == null)
+            var complaintDetail = arg as ComplaintDetail;
+            if (complaintDetail == null)
                 return;
-            SelectedComplaint = null;
-            await Shell.Current.GoToAsync(pathToDetail + complaint.ComplaintID);
+            SelectedComplaintDetail = null;
+            await Shell.Current.GoToAsync(pathToDetail + complaintDetail.Complaint.ComplaintID);
         }
 
         async Task TotalTabbed()
@@ -153,9 +149,8 @@ namespace UTeM_EComplaint.ViewModels
             var isLogout = await Application.Current.MainPage.DisplayAlert("logout", "Are you sure you want to logout", "Yes", "No");
             if (isLogout)
             {
-                Preferences.Remove("userID");
-                Preferences.Remove("role");
-                await Shell.Current.GoToAsync("//LoginPages");
+                Preferences.Clear();
+                await Shell.Current.GoToAsync("///LoginPages");
             }
         }
         async Task PendingTabbed()
@@ -186,23 +181,6 @@ namespace UTeM_EComplaint.ViewModels
             IsBusy = false;
         }
 
-        private async Task LoadMore()
-        {
-            await Task.Delay(100);
-            if (complaints.Count == ComplaintList.Count)
-                return;
-            int lastItemIndexed = ComplaintList.Count;
-            int nextItemIndexed = lastItemIndexed + LOAD_SIZE;
-
-            if (nextItemIndexed > complaints.Count)
-                nextItemIndexed = complaints.Count;
-
-            for (int i = lastItemIndexed; i < nextItemIndexed; i++)
-            {
-                ComplaintList.Add(complaints[i]);
-            }
-        }
-
         private async void GetData()
         {
             try
@@ -210,32 +188,34 @@ namespace UTeM_EComplaint.ViewModels
                 if (!isRefresh)
                     isLoading = true;
 
-                int size = LOAD_SIZE;
 
-                complaints = await ComplaintServices.GetTechnicianComplaint(technicianID);
-                if (complaints.Count < LOAD_SIZE)
+                complaintDetails = await ComplaintDetailServices.GetComplaintDetailByTechnician(new Technician
                 {
-                    size = complaints.Count;
-                }
-                ComplaintList.ReplaceRange(complaints.GetRange(0, size));
+                    TechnicianID = technicianID
+                });
 
-                List<KeyValuePair<string, int>> list = await ComplaintServices.GetComplaintStatistic(technicianID);
+                ComplaintDetailList.ReplaceRange(complaintDetails);
+
+                List<KeyValuePair<string, int>> list = await ComplaintDetailServices.GetComplaintDetailStatisticByTechnician(new Technician
+                {
+                    TechnicianID = technicianID
+                });
 
                 foreach (KeyValuePair<string, int> item in list)
                 {
-                    if (item.Key == "Assigned")
+                    if (item.Key == "PendingJob")
                     {
                         PendingTask = item.Value;
                     }
-                    else if (item.Key == "In Progress")
+                    else if (item.Key == "InProgressJob")
                     {
                         InProgressTask = item.Value;
                     }
-                    else if (item.Key == "Completed")
+                    else if (item.Key == "CompletedJob")
                     {
                         CompleteTask = item.Value;
                     }
-                    else if (item.Key == "Total Task")
+                    else if (item.Key == "TotalJob")
                     {
                         TotalTask = item.Value;
                         PieChartTitle = "Total " + TotalTask + " complaints";
@@ -247,19 +227,19 @@ namespace UTeM_EComplaint.ViewModels
                     foreach (KeyValuePair<string, int> item in list)
                     {
                         Statistic statistic = null;
-                        if (item.Key == "Assigned")
+                        if (item.Key == "PendingJob")
                         {
                             statistic = new Statistic();
                             statistic.Name = "Assigned";
                             statistic.Value = PendingTask;
                         }
-                        else if (item.Key == "In Progress")
+                        else if (item.Key == "InProgressJob")
                         {
                             statistic = new Statistic();
                             statistic.Name = "In Progress";
                             statistic.Value = InProgressTask;
                         }
-                        else if (item.Key == "Completed")
+                        else if (item.Key == "CompletedJob")
                         {
                             statistic = new Statistic();
                             statistic.Name = "Completed";

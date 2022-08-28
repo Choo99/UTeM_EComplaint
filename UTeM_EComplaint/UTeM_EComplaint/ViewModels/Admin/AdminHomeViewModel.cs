@@ -54,7 +54,6 @@ namespace UTeM_EComplaint.ViewModels
         public string ToggleText { get => toggleText; set => SetProperty(ref toggleText, value); }
         public string PieChartTitle { get => pieChartTitle; set => SetProperty(ref pieChartTitle, value); }
 
-        public ObservableRangeCollection<Complaint> complaintList { get; }
         public AsyncCommand LogoutCommand { get; }
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand ToPendingCommand { get; }
@@ -75,10 +74,8 @@ namespace UTeM_EComplaint.ViewModels
             IsPieChart = Preferences.Get("isPieChart", false);
 
             Title = "Home";
-            complaintList = new ObservableRangeCollection<Complaint>();
             Statistics = new ObservableRangeCollection<Statistic>();
             staffID = Preferences.Get("userID", 0);
-            getStaffComplaint();
             getStatistic();
         }
 
@@ -124,19 +121,7 @@ namespace UTeM_EComplaint.ViewModels
                 Application.Current.MainPage = new AppShell();
             }
         }
-        async void getStaffComplaint()
-        {
-            try
-            {
-                List<Complaint> complaints = await ComplaintServices.GetStaffComplaint(staffID);
-                complaintList.AddRange(complaints);
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
-            }
-
-        }
+        
 
         async void getStatistic()
         {

@@ -25,6 +25,8 @@ namespace UTeM_EComplaint.ViewModels
         bool isRating;
         bool isNotRating;
         bool isOnlyCompleted;
+        bool isSoftware;
+        bool isHardware;
         Complaint complaint;
         ImageSource image;
         Map map;
@@ -42,6 +44,8 @@ namespace UTeM_EComplaint.ViewModels
         public bool IsNotRating { get => isNotRating; set => SetProperty(ref isNotRating, value); }
         public bool IsRating { get => isRating; set { SetProperty(ref isRating, value); IsNotRating = !value; } }
         public bool IsOnlyCompleted { get => isOnlyCompleted; set { SetProperty(ref isOnlyCompleted, value); } }
+        public bool IsSoftware { get => isSoftware; set { SetProperty(ref isSoftware, value); } }
+        public bool IsHardware { get => isHardware; set { SetProperty(ref isHardware, value); } }
 
         public AsyncCommand DoneCommand { get; }
         public AsyncCommand RateCommand { get; }
@@ -94,7 +98,8 @@ namespace UTeM_EComplaint.ViewModels
             try
             {
                 IsBusy = true;
-                Complaint = await ComplaintServices.GetComplaintDetail(complaintID);
+                Complaint = await ComplaintServices.GetComplaintAndComplaintDetail(complaintID);
+                
                 if (Complaint.ComplaintStatus == "Pending")
                 {
                     IsNotAssigned = true;
@@ -114,14 +119,14 @@ namespace UTeM_EComplaint.ViewModels
                     IsInProgress = true;
                     IsCompleted = true;
                     IsOnlyCompleted = true;
-                    if (Complaint.Rating != null)
-                    {
-                        IsRating = true;
-                    }
-                    else if (Complaint.Rating == null)
-                    {
-                        IsRating = false;
-                    }
+                }
+                if(Complaint.ComplaintType.ComplaintTypeCode == "S")
+                {
+                    IsSoftware = true;
+                }
+                else
+                {
+                    IsHardware = true;
                 }
                 if (Complaint.Longitude != 0 && Complaint.Latitude != 0)
                     Map.MoveToRegion(MapHandler.moveToLocation(Complaint.Latitude, Complaint.Longitude));

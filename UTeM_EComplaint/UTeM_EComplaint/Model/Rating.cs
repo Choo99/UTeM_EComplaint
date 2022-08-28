@@ -7,7 +7,8 @@ namespace UTeM_EComplaint.Model
 {
     public class Rating
     {
-        public int RatingID { get; set; }
+        public Complaint Complaint { get; set; }
+        public Technician Technician { get; set; }
         public int RatingValue { get; set; }
         public string CreatedAt { get; set; }
         public string UpdatedAt { get; set; }

@@ -13,6 +13,7 @@ namespace UTeM_EComplaint
         public static int G_StatusLogon = 0;
         public static string G_Msg = "x";
         public static string apiUrl = "https://devmobile.utem.edu.my/student1/api/Complaint";
+        public static string notificationUrl = "https://devmobile.utem.edu.my/student1/api/Notification";
 
         // public event PropertyChangedEventHandler PropertyChanged;
 

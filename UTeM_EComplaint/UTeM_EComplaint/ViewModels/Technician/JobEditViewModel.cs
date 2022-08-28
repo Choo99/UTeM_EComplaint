@@ -51,7 +51,7 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task Save()
         {
-            try
+           /* try
             {
                 var answer = await Application.Current.MainPage.DisplayAlert("Save", "Are you sure you want to save it?", "YES", "NO");
                 if (answer)
@@ -75,7 +75,7 @@ namespace UTeM_EComplaint.ViewModels
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
-            }
+            }*/
         }
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
@@ -86,7 +86,7 @@ namespace UTeM_EComplaint.ViewModels
 
         private async void getComplaintDetail()
         {
-            try
+          /*  try
             {
                 IsBusy = true;
                 complaint = await ComplaintServices.GetComplaintDetail(complaintID);
@@ -99,7 +99,7 @@ namespace UTeM_EComplaint.ViewModels
             finally
             {
                 IsBusy = false;
-            }
+            }*/
         }
     }
 }

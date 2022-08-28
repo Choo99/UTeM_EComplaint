@@ -33,41 +33,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public static async Task<List<Complaint>> GetTechnicianComplaint(int technicianID)
-        {
-            try
-            {
-                string url = string.Format("{0}/getTechnicianComplaint?technicianID={1}", Global.apiUrl, technicianID);
-                var client = new HttpClient();
-                client.Timeout = TimeSpan.FromSeconds(5000);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage response = await client.GetAsync(url);
-
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string resultString = await response.Content.ReadAsStringAsync();
-                    List<Complaint> result = JsonConvert.DeserializeObject<List<Complaint>>(resultString);
-                    client.Dispose();
-                    return result;
-                }
-                else
-                {
-                    string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
-                    client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -97,9 +65,41 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<Complaint> GetComplaintAndComplaintDetail(string complaintID)
+        {
+            try
+            {
+                string url = string.Format("{0}/getComplaintAndComplaintDetail?complaintID={1}", Global.apiUrl, complaintID);
+                var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(5000);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    Complaint result = JsonConvert.DeserializeObject<Complaint>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -135,9 +135,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -167,9 +167,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -199,9 +199,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -210,36 +210,9 @@ namespace UTeM_EComplaint.Services
             }
         }
 
-        public static async Task<List<Complaint>> GetStaffComplaintByStatus(int staffID,string complaintStatus)
-        {
-            try
-            {
-                string url = string.Format("{0}/getStaffComplaintByStatus?staffID={1}&complaintStatus={2}", Global.apiUrl, staffID,complaintStatus);
-                var client = new HttpClient();
-                client.Timeout = TimeSpan.FromSeconds(5000);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        
 
-                HttpResponseMessage response = await client.GetAsync(url);
-
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string resultString = await response.Content.ReadAsStringAsync();
-                    List<Complaint> result = JsonConvert.DeserializeObject<List<Complaint>>(resultString);
-                    client.Dispose();
-                    return result;
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public static async Task<int> AddComplaint(Complaint complaint)
+        public static async Task<string> AddComplaint(Complaint complaint)
         {
             try
             {
@@ -249,69 +222,36 @@ namespace UTeM_EComplaint.Services
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 MultipartFormDataContent form = new MultipartFormDataContent();
                 form.Add(new StringContent(complaint.Staff.StaffID.ToString()), "staffID");
-                form.Add(new StringContent(complaint.Division.DivisionID.ToString()), "divisionID");
-                form.Add(new StringContent(complaint.DamageType.DamageTypeID.ToString()), "damageTypeID");
-                form.Add(new StringContent(complaint.Category.CategoryId.ToString()), "categoryID");
+                form.Add(new StringContent(complaint.ComplaintType.ComplaintTypeCode), "complaintTypeCode");
+                form.Add(new StringContent(complaint.SoftwareSystem != null? complaint.SoftwareSystem.SystemCode: string.Empty), "systemCode");
+                form.Add(new StringContent(complaint.Module != null ? complaint.Module.ModuleCode: string.Empty), "moduleCode");
+                form.Add(new StringContent(complaint.Submodule != null ? complaint.Submodule.SubmoduleCode: string.Empty), "submoduleCode");
+                form.Add(new StringContent(complaint.Submenu != null ? complaint.Submenu.SubmenuCode: string.Empty), "submenuCode");
+                form.Add(new StringContent(complaint.Division != null ? complaint.Division.DivisionID.ToString(): "0"), "divisionID");
+                form.Add(new StringContent(complaint.DamageType != null ? complaint.DamageType.DamageTypeID.ToString(): "0"), "damageTypeID");
+                form.Add(new StringContent(complaint.Category != null ?complaint.Category.CategoryId.ToString(): "0"), "categoryID");
                 form.Add(new StringContent(complaint.Damage), "damage");
-                form.Add(new StringContent(complaint.Location), "location");
+                form.Add(new StringContent(complaint.Location != null ? complaint.Location : string.Empty), "location");
                 form.Add(new StringContent(complaint.ContactPhoneNumber), "contactPhoneNumber");
+                form.Add(new StringContent(complaint.Longitude != 0 ? complaint.Longitude.ToString() : "0"), "longitude"); 
+                form.Add(new StringContent(complaint.Latitude != 0 ? complaint.Latitude.ToString() : "0"), "latitude");
+                form.Add(new StringContent(complaint.ImageBase64 != null ? complaint.ImageBase64 : string.Empty), "imageBase64");
 
                 HttpResponseMessage response = await client.PostAsync(url, form);
 
                 if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string resultString = await response.Content.ReadAsStringAsync();
-                    int result = JsonConvert.DeserializeObject<int>(resultString);
-                    client.Dispose();
-                    return result;
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public static async Task<int> AddComplaintAndSubscribe(Complaint complaint, string notificationToken)
-        {
-            try
-            {
-                string url = string.Format("{0}/addComplaintAndsubscribe", Global.apiUrl);
-                var client = new HttpClient();
-                client.Timeout = TimeSpan.FromSeconds(5000);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                MultipartFormDataContent form = new MultipartFormDataContent();
-                form.Add(new StringContent(complaint.Staff.StaffID.ToString()), "staffID");
-                form.Add(new StringContent(complaint.Division.DivisionID.ToString()), "divisionID");
-                form.Add(new StringContent(complaint.DamageType.DamageTypeID.ToString()), "damageTypeID");
-                form.Add(new StringContent(complaint.Category.CategoryId.ToString()), "categoryID");
-                form.Add(new StringContent(complaint.Damage), "damage");
-                form.Add(new StringContent(complaint.Location), "location");
-                form.Add(new StringContent(complaint.ContactPhoneNumber), "contactPhoneNumber");
-                form.Add(new StringContent(complaint.Longitude.ToString()), "longitude");
-                form.Add(new StringContent(complaint.Latitude.ToString()), "latitude");
-                form.Add(new StringContent(complaint.ImageBase64), "imageBase64");
-                form.Add(new StringContent(notificationToken), "notificationToken");
-
-                HttpResponseMessage response = await client.PostAsync(url, form);
-
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string resultString = await response.Content.ReadAsStringAsync();
-                    int result = JsonConvert.DeserializeObject<int>(resultString);
-                    client.Dispose();
-                    return result;
-                }
-                else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
                     string result = JsonConvert.DeserializeObject<string>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -341,9 +281,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -385,8 +325,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
-                    throw new Exception(result);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -416,9 +357,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -448,9 +389,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -479,9 +420,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -511,9 +452,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -543,9 +484,41 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task UpdateComplaintReportAndCompleteComplaint(Complaint complaint)
+        {
+            try
+            {
+                string url = string.Format("{0}/updateComplaintReportAndCompleteComplaint", Global.apiUrl);
+                var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(5000);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                form.Add(new StringContent(complaint.ComplaintID), "complaintID");
+                form.Add(new StringContent(complaint.Report), "report");
+
+                HttpResponseMessage response = await client.PostAsync(url, form);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)

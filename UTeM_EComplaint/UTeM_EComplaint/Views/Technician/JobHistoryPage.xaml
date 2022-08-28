@@ -16,13 +16,14 @@
             <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                          Command="{Binding RefreshCommand}">
                 <CollectionView x:Name="listTask" BackgroundColor="Transparent" 
-                                     SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
+                                     SelectedItem="{Binding SelectedComplaintDetail, Mode=TwoWay}"
                                      SelectionMode="Single"
                                      RemainingItemsThreshold="1"
                                      RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                                      SelectionChangedCommand="{Binding ItemSelectedCommand}"
-                                     SelectionChangedCommandParameter="{Binding SelectedComplaint}"
-                                     ItemsSource="{Binding ComplaintList}">
+                                     SelectionChangedCommandParameter="{Binding SelectedComplaintDetail}"
+                                     ItemTemplate="{StaticResource TechnicianCompletedDataTemplateSelector}"
+                                     ItemsSource="{Binding ComplaintDetailList}">
                     <CollectionView.Header>
                         <StackLayout>
                             <Label Text="Job History" FontSize="25" Margin="0,20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold"/>
@@ -31,12 +32,8 @@
                     <CollectionView.EmptyView>
                         <StackLayout>
                             <Label Text="There is no Completed Job" Style="{StaticResource DetailNoItem}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                        </StackLayout>                    </CollectionView.EmptyView>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:Complaint">
-                            <cell:TechnicianCompletedCell/>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
                 </CollectionView>
             </RefreshView>
         </StackLayout>

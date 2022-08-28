@@ -40,7 +40,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -72,9 +75,9 @@ namespace UTeM_EComplaint.Services
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)

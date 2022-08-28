@@ -17,14 +17,14 @@ namespace UTeM_EComplaint.ViewModels
         string totalReviews;
         public string TotalReviews { get => totalReviews; set => SetProperty(ref totalReviews, value); }
 
-        public ObservableRangeCollection<Complaint> RatingList { get; set; }
+        public ObservableRangeCollection<ComplaintDetail> RatingList { get; set; }
         public double SumRating { get => sumRating; set => SetProperty(ref sumRating, value); }
         public double TotalRating { get => totalRating; set => SetProperty(ref totalRating, value); }
         public string AverageRating { get => averageRating; set => SetProperty(ref averageRating, value); }
         public AsyncCommand<object> ItemSelectedCommand { get; }
         public AsyncCommand RefreshCommand { get; }
-        public Complaint SelectedComplaint { get => selectedComplaint; set => SetProperty(ref selectedComplaint, value); }
-        Complaint selectedComplaint;
+        public ComplaintDetail SelectedComplaintDetail { get => selectedComplaintDetail; set => SetProperty(ref selectedComplaintDetail, value); }
+        ComplaintDetail selectedComplaintDetail;
 
 
         double sumRating;
@@ -36,7 +36,7 @@ namespace UTeM_EComplaint.ViewModels
         {
             Title = "Rating";
             userID = Preferences.Get("userID", 0);
-            RatingList = new ObservableRangeCollection<Complaint>();
+            RatingList = new ObservableRangeCollection<ComplaintDetail>();
             getData();
             ItemSelectedCommand = new AsyncCommand<object>(ItemSelected);
             RefreshCommand = new AsyncCommand(Refresh);
@@ -51,11 +51,11 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task ItemSelected(object arg)
         {
-            var complaint = arg as Complaint;
-            if (complaint == null)
+            var complaintDetail = arg as ComplaintDetail;
+            if (complaintDetail == null)
                 return;
-            SelectedComplaint = null;
-            string path = pathToDetail + complaint.ComplaintID;
+            SelectedComplaintDetail = null;
+            string path = pathToDetail + complaintDetail.Complaint.ComplaintID;
             await Shell.Current.GoToAsync(path);
         }
 
@@ -79,7 +79,7 @@ namespace UTeM_EComplaint.ViewModels
                 AverageRating = string.Format("{0:0.0}", averageRating);
 
                 TotalReviews = "(" + TotalRating + " Reviews)";
-                List<Complaint> ratings = await RatingServices.GetTechnicianRatings(userID);
+                List<ComplaintDetail> ratings = await RatingServices.GetTechnicianRatings(userID);
                 RatingList.ReplaceRange(ratings);
             }
             catch (Exception ex)

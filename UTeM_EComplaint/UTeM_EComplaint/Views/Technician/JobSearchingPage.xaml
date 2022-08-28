@@ -20,14 +20,14 @@
                                    Text="{Binding SearchText, Mode=TwoWay}"/>
                 </StackLayout>
                 <CollectionView x:Name="listTask" BackgroundColor="Transparent" 
-                                     SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
+                                     SelectedItem="{Binding SelectedComplaintDetail, Mode=TwoWay}"
                                      SelectionMode="Single"
                                      RemainingItemsThreshold="3"
                                      RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                                      SelectionChangedCommand="{Binding ItemSelectedCommand}"
-                                     SelectionChangedCommandParameter="{Binding SelectedComplaint}"
+                                     SelectionChangedCommandParameter="{Binding SelectedComplaintDetail}"
                                      ItemTemplate="{StaticResource TechnicianJobDataTemplateSelector}"
-                                     ItemsSource="{Binding ComplaintList}">
+                                     ItemsSource="{Binding ComplaintDetailList}">
                     <CollectionView.EmptyView>
                         <StackLayout>
                             <Label Text="{Binding ResultText}"
@@ -35,22 +35,6 @@
                                        HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
                         </StackLayout>
                     </CollectionView.EmptyView>
-                    <!--<CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="model:Complaint">
-                                <Grid Padding="10" RowSpacing="10" ColumnSpacing="10">
-                                    <Frame CornerRadius="10" HasShadow="True">
-                                        <StackLayout Orientation="Horizontal">
-                                            <StackLayout VerticalOptions="Center">
-                                                <Label x:Name="lblid" Text="{Binding ComplaintID}"/>
-                                                <Label x:Name="lblnostaff" Text="{Binding Staff.StaffID}" IsVisible="false" />
-                                                <Label x:Name="lblprob" VerticalOptions="Center" FontSize="Medium" Text="{Binding Damage}"  TextColor="Black"></Label>
-                                                <Label x:Name="lbldate" VerticalOptions="Center" FontSize="Small" Text="{Binding ComplaintDate}" TextColor="Black"></Label>
-                                            </StackLayout>
-                                        </StackLayout>
-                                    </Frame>
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>-->
                 </CollectionView>
             </StackLayout>
             <BoxView AbsoluteLayout.LayoutFlags="All" 

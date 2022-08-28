@@ -12,7 +12,7 @@ namespace UTeM_EComplaint.Services
 {
     internal class ActionServices
     {
-        public static async Task<int> StartAction(string complaintID)
+        public static async Task StartAction(ActionTaken action)
         {
             try
             {
@@ -21,19 +21,20 @@ namespace UTeM_EComplaint.Services
                 client.Timeout = TimeSpan.FromSeconds(5000);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 MultipartFormDataContent form = new MultipartFormDataContent();
-                form.Add(new StringContent(complaintID.ToString()), "complaintID");
+                form.Add(new StringContent(action.Complaint.ComplaintID), "complaintID");
+                form.Add(new StringContent(action.Technician.TechnicianID.ToString()), "technicianID");
 
                 HttpResponseMessage response = await client.PostAsync(url,form);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    string resultString = await response.Content.ReadAsStringAsync();
-                    int result = JsonConvert.DeserializeObject<int>(resultString);
-                    client.Dispose();
-                    return result;
+                    return;
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -63,7 +64,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -73,33 +77,37 @@ namespace UTeM_EComplaint.Services
         }
 
 
-        public static async Task<int> EndAction(Complaint complaint)
+        public static async Task EndActionAndCompleteComplaintDetail(ComplaintDetail complaintDetail)
         {
             try
             {
-                string url = string.Format("{0}/endActionAndUpdateComplaint", Global.apiUrl);
+                string url = string.Format("{0}/endAction", Global.apiUrl);
                 var client = new HttpClient();
                 client.Timeout = TimeSpan.FromSeconds(5000);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 MultipartFormDataContent form = new MultipartFormDataContent();
-                form.Add(new StringContent(complaint.ComplaintID.ToString()), "complaintID");
-                form.Add(new StringContent(complaint.Action.ActionDescription), "actionDescription");
-                form.Add(new StringContent(complaint.Action.SpareReplace), "spareReplace");
-                form.Add(new StringContent(complaint.Action.AdditionalNote), "additionalNote");
+                form.Add(new StringContent(complaintDetail.Complaint.ComplaintID), "complaintID");
+                form.Add(new StringContent(complaintDetail.Technician.TechnicianID.ToString()), "technicianID");
+                form.Add(new StringContent(complaintDetail.Action.ActionDescription), "actionDescription");
+                form.Add(new StringContent(complaintDetail.Action.SpareReplace), "spareReplace");
+                form.Add(new StringContent(complaintDetail.Action.AdditionalNote), "additionalNote");
                 
 
                 HttpResponseMessage response = await client.PostAsync(url, form);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    string resultString = await response.Content.ReadAsStringAsync();
+                    /*string resultString = await response.Content.ReadAsStringAsync();
                     int result = JsonConvert.DeserializeObject<int>(resultString);
                     client.Dispose();
-                    return result;
+                    return result;*/
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -108,8 +116,7 @@ namespace UTeM_EComplaint.Services
             }
         }
 
-     
-        public static async Task<int> EndActionAndSendNotification(Complaint complaint)
+        /*public static async Task<int> EndActionAndSendNotification(Complaint complaint)
         {
             try
             {
@@ -119,7 +126,7 @@ namespace UTeM_EComplaint.Services
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 MultipartFormDataContent form = new MultipartFormDataContent();
                 form.Add(new StringContent(complaint.ComplaintID.ToString()), "complaintID");
-                form.Add(new StringContent(complaint.Action.ActionDescription), "actionDescription");
+                form.Add(new StringContent(complaint.ComplaintDetail.ActionDescription), "actionDescription");
                 form.Add(new StringContent(complaint.Action.SpareReplace), "spareReplace");
                 form.Add(new StringContent(complaint.Action.AdditionalNote), "additionalNote");
 
@@ -145,42 +152,45 @@ namespace UTeM_EComplaint.Services
             {
                 throw;
             }
-        }
+        }*/
 
-        public static async Task<int> EditAction(Complaint complaint)
-        {
-            try
-            {
-                string url = string.Format("{0}/editAction", Global.apiUrl);
-                var client = new HttpClient();
-                client.Timeout = TimeSpan.FromSeconds(5000);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                MultipartFormDataContent form = new MultipartFormDataContent();
-                form.Add(new StringContent(complaint.ComplaintID.ToString()), "complaintID");
-                form.Add(new StringContent(complaint.Technician.TechnicianID.ToString()), "technicianID");
-                form.Add(new StringContent(complaint.Action.ActionDescription), "actionDescription");
-                form.Add(new StringContent(complaint.Action.SpareReplace), "spareReplace");
-                form.Add(new StringContent(complaint.Action.AdditionalNote), "additionalNote");
+        /* public static async Task<int> EditAction(Complaint complaint)
+         {
+             try
+             {
+                 string url = string.Format("{0}/editAction", Global.apiUrl);
+                 var client = new HttpClient();
+                 client.Timeout = TimeSpan.FromSeconds(5000);
+                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                 MultipartFormDataContent form = new MultipartFormDataContent();
+                 form.Add(new StringContent(complaint.ComplaintID.ToString()), "complaintID");
+                 form.Add(new StringContent(complaint.Technician.TechnicianID.ToString()), "technicianID");
+                 form.Add(new StringContent(complaint.Action.ActionDescription), "actionDescription");
+                 form.Add(new StringContent(complaint.Action.SpareReplace), "spareReplace");
+                 form.Add(new StringContent(complaint.Action.AdditionalNote), "additionalNote");
 
 
-                HttpResponseMessage response = await client.PostAsync(url, form);
+                 HttpResponseMessage response = await client.PostAsync(url, form);
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string resultString = await response.Content.ReadAsStringAsync();
-                    int result = JsonConvert.DeserializeObject<int>(resultString);
+                 if (response.StatusCode == HttpStatusCode.OK)
+                 {
+                     string resultString = await response.Content.ReadAsStringAsync();
+                     int result = JsonConvert.DeserializeObject<int>(resultString);
+                     client.Dispose();
+                     return result;
+                 }
+                 else
+                 {
+                     string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    return result;
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+                    throw new Exception(result.ToString());
+                 }
+             }
+             catch (Exception)
+             {
+                 throw;
+             }
+         }*/
     }
 }

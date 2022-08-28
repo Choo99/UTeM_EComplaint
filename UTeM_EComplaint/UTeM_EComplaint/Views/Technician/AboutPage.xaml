@@ -116,20 +116,14 @@
                     </StackLayout>
                     <Label Text="Activity" CharacterSpacing="5" Margin="10,5,3,5" FontSize="25" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" TextColor="Black" FontAttributes="Bold"/>
                     <StackLayout >
-                        <CollectionView x:Name="listTask" BackgroundColor="Transparent" ItemsSource="{Binding ComplaintList}"
-                                        SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
-                                        SelectionMode="Single"
-                                        RemainingItemsThreshold="1"
-                                        RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-                                        SelectionChangedCommand="{Binding ItemSelectedCommand}"
-                                        SelectionChangedCommandParameter="{Binding SelectedComplaint}"
-                                        ItemTemplate="{StaticResource TechnicianJobDataTemplateSelector}">
-                            <CollectionView.EmptyView>
+                        <FlexLayout Direction="Column"
+                            BindableLayout.ItemsSource="{Binding ComplaintDetailList}" BindableLayout.ItemTemplateSelector="{StaticResource TechnicianJobDataTemplateSelector}">
+                            <BindableLayout.EmptyView>
                                 <StackLayout>
                                     <Label Text="No Activity" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                                 </StackLayout>
-                            </CollectionView.EmptyView>
-                        </CollectionView>
+                            </BindableLayout.EmptyView>
+                        </FlexLayout>
                     </StackLayout>
                 </StackLayout>
             </ScrollView>

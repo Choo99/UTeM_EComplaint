@@ -12,7 +12,7 @@ namespace UTeM_EComplaint.Services
 {
     internal class RatingServices
     {
-        public static async Task<List<Complaint>> GetTechnicianRatings(int technicianID)
+        public static async Task<List<ComplaintDetail>> GetTechnicianRatings(int technicianID)
         {
             try
             {
@@ -26,16 +26,16 @@ namespace UTeM_EComplaint.Services
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    List<Complaint> result = JsonConvert.DeserializeObject<List<Complaint>>(resultString);
+                    List<ComplaintDetail> result = JsonConvert.DeserializeObject<List<ComplaintDetail>>(resultString);
                     client.Dispose();
                     return result;
                 }
                 else
                 {
                     string resultString = await response.Content.ReadAsStringAsync();
-                    string result = JsonConvert.DeserializeObject<string>(resultString);
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
                     client.Dispose();
-                    throw new Exception(result);
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -63,7 +63,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -72,7 +75,7 @@ namespace UTeM_EComplaint.Services
             }
         }
 
-        public static async Task<int> AddRating(int complaintID,int ratingValue)
+        public static async Task AddRating(Rating rating)
         {
             try
             {
@@ -81,21 +84,22 @@ namespace UTeM_EComplaint.Services
                 client.Timeout = TimeSpan.FromSeconds(5000);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 MultipartFormDataContent form = new MultipartFormDataContent();
-                form.Add(new StringContent(complaintID.ToString()), "complaintID");
-                form.Add(new StringContent(ratingValue.ToString()), "ratingValue");
+                form.Add(new StringContent(rating.Complaint.ComplaintID), "complaintID");
+                form.Add(new StringContent(rating.Technician.TechnicianID.ToString()), "technicianID");
+                form.Add(new StringContent(rating.RatingValue.ToString()), "ratingValue");
 
                 HttpResponseMessage response = await client.PostAsync(url,form);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    string resultString = await response.Content.ReadAsStringAsync();
-                    int result = JsonConvert.DeserializeObject<int>(resultString);
-                    client.Dispose();
-                    return result;
+                    return;
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)
@@ -127,7 +131,10 @@ namespace UTeM_EComplaint.Services
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
                 }
             }
             catch (Exception)

@@ -7,7 +7,7 @@ namespace UTeM_EComplaint.Services
 {
     public interface INotificationHelper
     {
-        string GetToken();
+        void GetToken();
 
         void SendNotification(string title, string messageBody, IDictionary<string, string> data);
 

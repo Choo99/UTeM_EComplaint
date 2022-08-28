@@ -59,7 +59,6 @@ namespace UTeM_EComplaint.ViewModels
         public string ToggleText { get => toggleText; set => SetProperty(ref toggleText, value); }
         public string PieChartTitle { get => pieChartTitle; set => SetProperty(ref pieChartTitle, value); }
 
-        public ObservableRangeCollection<Complaint> complaintList { get; }
         public AsyncCommand LogoutCommand { get; }
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand ToPendingCommand { get; }
@@ -80,11 +79,37 @@ namespace UTeM_EComplaint.ViewModels
             IsPieChart = Preferences.Get("isPieChart",false);
 
             Title = "Home";
-            complaintList = new ObservableRangeCollection<Complaint>();
             Statistics = new ObservableRangeCollection<Statistic>();
             staffID = Preferences.Get("userID", 0);
-            getStaffComplaint();
             getStatistic();
+            test();
+        }
+
+        private async void test()
+        {
+            try
+            {
+                test2();
+            }
+            catch (Exception ex)
+            {
+                var st = new System.Diagnostics.StackTrace(ex, true);
+                var frame = st.GetFrame(st.FrameCount - 1);
+                var linenumber = frame.GetFileLineNumber();
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
+        }
+
+        private void test2()
+        {
+            try
+            {
+                throw new Exception("haha");
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
         }
 
         private async Task ToPending()
@@ -124,19 +149,7 @@ namespace UTeM_EComplaint.ViewModels
                 Application.Current.MainPage = new AppShell();
             }
         }
-        async void getStaffComplaint()
-        {
-            try
-            {
-                List<Complaint> complaints = await ComplaintServices.GetStaffComplaint(staffID);
-                complaintList.AddRange(complaints);
-            }catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
-            }
-
-        }
-
+     
         async void getStatistic()
         {
             if (!isRefresh)

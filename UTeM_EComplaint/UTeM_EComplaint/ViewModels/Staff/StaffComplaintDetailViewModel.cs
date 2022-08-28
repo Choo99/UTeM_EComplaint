@@ -28,10 +28,12 @@ namespace UTeM_EComplaint.ViewModels
         bool isNotRating;
         bool isEdit;
         bool isOnlyCompleted;
+        bool isSoftware;
+        bool isHardware;
         Complaint complaint;
         ImageSource image;
 
-        string pathToAddRating = $"{nameof(StaffAddRatingPage)}?complaintID=";
+        string pathToAddRating = $"{nameof(StaffAddRatingPage)}";
         string pathToEditComplaint = $"{nameof(StaffEditComplaintPage)}?complaintID=";
 
         string duration;
@@ -48,17 +50,19 @@ namespace UTeM_EComplaint.ViewModels
         public bool IsNotRating { get => isNotRating; set => SetProperty(ref isNotRating, value);   }
         public bool IsRating { get => isRating; set { SetProperty(ref isRating, value); IsNotRating = !value; } }
         public bool IsOnlyCompleted { get => isOnlyCompleted; set { SetProperty(ref isOnlyCompleted, value); } }
+        public bool IsSoftware { get => isSoftware; set { SetProperty(ref isSoftware, value); } }
+        public bool IsHardware { get => isHardware; set { SetProperty(ref isHardware, value); } }
         public string Duration { get => duration; set { SetProperty(ref duration, value); } }
 
         public AsyncCommand DoneCommand { get; }
-        public AsyncCommand RateCommand { get; }
+        public AsyncCommand<object> RateCommand { get; }
         public AsyncCommand EditCommand { get; }
         public StaffComplaintDetailViewModel()
         {
             Title = "Complaint Detail";
 
             DoneCommand = new AsyncCommand(Done);
-            RateCommand = new AsyncCommand(Rate);
+            RateCommand = new AsyncCommand<object>(Rate);
             EditCommand = new AsyncCommand(Edit);
 
             Map = new Map
@@ -72,11 +76,12 @@ namespace UTeM_EComplaint.ViewModels
             await Shell.Current.GoToAsync(pathToEditComplaint + complaintID);
         }
 
-        private async Task Rate()
+        private async Task Rate(object obj)
         {
             try
             {
-                await Shell.Current.GoToAsync(pathToAddRating + complaintID);
+                var complaintDetail = obj as ComplaintDetail;
+                await Shell.Current.GoToAsync($"{pathToAddRating}?complaintID={complaintDetail.Complaint.ComplaintID}&technicianID={complaintDetail.Technician.TechnicianID}");
             }
             catch (Exception ex)
             {
@@ -105,7 +110,7 @@ namespace UTeM_EComplaint.ViewModels
             try
             {
                 IsBusy = true;
-                Complaint = await ComplaintServices.GetComplaintDetail(complaintID);
+                Complaint = await ComplaintServices.GetComplaintAndComplaintDetail(complaintID);
                 if(Complaint.Staff.StaffID == Preferences.Get("userID", 0))
                 {
                     IsOwner = true;
@@ -132,15 +137,16 @@ namespace UTeM_EComplaint.ViewModels
                     IsAssigned = true;
                     IsCompleted = true;
                     IsOnlyCompleted = true;
-                    if(Complaint.Rating != null)
-                    {
-                        IsRating = true;
-                    }
-                    else if(IsOwner && Complaint.Rating == null)
-                    {
-                        IsRating = false;
-                    }
                     Duration = DurationHandler.calculateDuration(Complaint.TotalDays);
+                }
+
+                if(Complaint.ComplaintType.ComplaintTypeCode == "S")
+                {
+                    IsSoftware = true;
+                }
+                else
+                {
+                    IsHardware = true;
                 }
 
                 if(Complaint.ImageBase64 != null)

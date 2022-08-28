@@ -13,12 +13,12 @@ namespace UTeM_EComplaint.Cells
         public DataTemplate Completed { get; set; }
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            var complaint = item as Complaint;
-            if(complaint.ComplaintStatus == "Assigned")
+            var complaintDetail = item as ComplaintDetail;
+            if(complaintDetail.ComplaintDetailStatus == "Assigned")
             {
                 return Assigned;
             }
-            else if(complaint.ComplaintStatus == "In Progress")
+            else if(complaintDetail.ComplaintDetailStatus == "In Progress")
             {
                 return InProgress;
             }

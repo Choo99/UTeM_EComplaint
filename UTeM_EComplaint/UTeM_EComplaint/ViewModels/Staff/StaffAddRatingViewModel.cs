@@ -12,11 +12,12 @@ namespace UTeM_EComplaint.ViewModels
 {
     internal class StaffAddRatingViewModel : ViewModelBase, IQueryAttributable
     {
-        Complaint complaint;
-        string complaintID;
+        ComplaintDetail complaintDetail;
+
         int ratingValue;
+
         public int RatingValue { get => ratingValue; set => SetProperty(ref ratingValue,value); }
-        public Complaint Complaint { get => complaint; set => SetProperty(ref complaint, value); }
+        public ComplaintDetail ComplaintDetail { get => complaintDetail; set => SetProperty(ref complaintDetail, value); }
 
         public AsyncCommand SubmitCommand { get; }
         public StaffAddRatingViewModel()
@@ -27,25 +28,46 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task Submit()
         {
-            int result = await RatingServices.AddRatingAndSendMessage(complaintID,ratingValue);
-            if(result != 0)
+            try
             {
-                await Application.Current.MainPage.DisplayAlert("Rate", "You have successfully rated this technician",null,"OK");
+                await RatingServices.AddRating(new Rating
+                {
+                    Complaint = ComplaintDetail.Complaint,
+                    Technician = ComplaintDetail.Technician,
+                    RatingValue = RatingValue,
+                });
+                await Application.Current.MainPage.DisplayAlert("Rate", "You have successfully rated this technician", null, "OK");
                 await Shell.Current.Navigation.PopAsync();
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), null, "OK");
             }
         }
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
-            complaintID = HttpUtility.UrlDecode(query["complaintID"]);
-            getComplaint();
+            string complaintID = HttpUtility.UrlDecode(query["complaintID"]);
+            int technicianID = Int32.Parse(HttpUtility.UrlDecode(query["technicianID"]));
+            getComplaint(complaintID,technicianID);
         }
 
-        async void getComplaint()
+        async void getComplaint(string complaintID, int technicianID)
         {
             try
             {
-                Complaint = await ComplaintServices.GetComplaintDetail(complaintID);
+                ComplaintDetail = await ComplaintDetailServices.GetComplaintDetail(new ComplaintDetail
+                {
+                    Complaint = new Complaint
+                    {
+                        ComplaintID = complaintID,
+                    },
+                    Technician = new Technician
+                    {
+                        TechnicianID = technicianID
+                    },
+                });
+                Console.WriteLine("");
             }
             catch(Exception ex)
             {

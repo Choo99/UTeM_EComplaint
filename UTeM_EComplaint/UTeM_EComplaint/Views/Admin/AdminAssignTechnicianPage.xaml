@@ -6,7 +6,10 @@
              BackgroundColor="{StaticResource BackgroundColor}"
              xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms" 
              Title="{Binding Title}"
-             xmlns:model="clr-namespace:UTeM_EComplaint.Model">
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Name="AdminAssignTechnician"
+             xmlns:model="clr-namespace:UTeM_EComplaint.Model"
+             xmlns:sfPopup="clr-namespace:Syncfusion.XForms.PopupLayout;assembly=Syncfusion.SfPopupLayout.XForms">
     <ContentPage.BindingContext>
         <vm:AdminAssignTechnicianViewModel/>
     </ContentPage.BindingContext>
@@ -18,14 +21,15 @@
         <StackLayout>
             <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                          Command="{Binding RefreshCommand}">
-                <CollectionView BackgroundColor="Transparent" 
-                            ItemsSource="{Binding TechnicianList}"
-                            SelectionMode="Single"
+                <CollectionView BackgroundColor="Transparent"
+                                x:Name="complaintDetailCollection"
+                            ItemsSource="{Binding ComplaintDetailList,Mode=TwoWay}"
+                            SelectionMode="Multiple"
                             RemainingItemsThreshold="1"
                             RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                             SelectionChangedCommand="{Binding ItemSelectedCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedTechnician}"
-                            SelectedItem="{Binding SelectedTechnician, Mode=TwoWay}">
+                            SelectionChangedCommandParameter="{Binding SelectedItems,Source={x:Reference complaintDetailCollection}}"
+                            >
                     <CollectionView.EmptyView>
                         <StackLayout>
                             <Label Text="No Technician Available" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
@@ -37,7 +41,7 @@
                         </StackLayout>
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:Technician">
+                        <DataTemplate>
                             <Grid Style="{StaticResource ListViewCell}">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
@@ -49,24 +53,24 @@
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <Frame Style="{StaticResource Card}">
+                                <Frame x:Name="frame" Style="{StaticResource Card}" >
                                     <Grid Margin="0,0,0,10" ColumnDefinitions="100,Auto" RowDefinitions="0.1*,Auto,Auto,Auto,Auto">
                                         <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Source="user.png" Margin="20,0"/>
-                                        <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource CardTitle}" Text="{Binding TechnicianName}"/>
-                                        <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource CardLabel}" Text="{Binding TechnicianID}"/>
+                                        <Label Grid.Row="0" Grid.Column="1"  Style="{StaticResource CardTitle}" Text="{Binding Technician.TechnicianName}"/>
+                                        <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource CardLabel}" Text="{Binding Technician.TechnicianID}"/>
                                         <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
-                                            <rating:SfRating Value="{Binding OverallRating}" Style="{StaticResource TechnicianRating}">
+                                            <rating:SfRating Value="{Binding Technician.OverallRating}" Style="{StaticResource TechnicianRating}">
                                                 <rating:SfRating.RatingSettings>
                                                     <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
                                                 </rating:SfRating.RatingSettings>
                                             </rating:SfRating>
                                             <Label Text="(" HorizontalOptions="Start" TextColor="Black" Margin="0,0,-5,0"/>
-                                            <Label Text="{Binding CompletedTask}" TextColor="Black" HorizontalOptions="Start"/>
+                                            <Label Text="{Binding Technician.CompletedTask}" TextColor="Black" HorizontalOptions="Start"/>
                                             <Label Text="reviews)" TextColor="Black" HorizontalOptions="Start"/>
                                         </StackLayout>
                                         <StackLayout Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
                                             <Label Text="Completed Task : " FontSize="Small" Style="{StaticResource CardLabel}"/>
-                                            <Label Text="{Binding CompletedTask}" TextColor="Black"/>
+                                            <Label Text="{Binding Technician.CompletedTask}" TextColor="Black"/>
                                         </StackLayout>
                                     </Grid>
                                 </Frame>
@@ -75,6 +79,54 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
+            <sfPopup:SfPopupLayout IsOpen="{Binding IsConfirmed}">
+                <sfPopup:SfPopupLayout.PopupView >
+                    <sfPopup:PopupView AnimationMode="Zoom" ShowFooter="False" AutoSizeMode="Height" ShowCloseButton="False">
+                        <sfPopup:PopupView.HeaderTemplate>
+                            <DataTemplate>
+                                <StackLayout>
+                                    <Label Text="Please select one of the technician as a supervisor" HorizontalOptions="CenterAndExpand" FontSize="Medium" TextColor="Black"/>
+                                </StackLayout>
+                            </DataTemplate>
+                        </sfPopup:PopupView.HeaderTemplate>
+                        <sfPopup:PopupView.ContentTemplate>
+                            <DataTemplate>
+                                <FlexLayout Direction="Column"
+                                                    BindableLayout.ItemsSource="{Binding SelectedComplaintDetails}">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame Margin="0,10" Style="{StaticResource Card}" HasShadow="False" BorderColor="Black">
+                                                <Frame.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding BindingContext.SelectSupervisorCommand,Source={x:Reference AdminAssignTechnician}}" CommandParameter="{Binding .}"/>
+                                                </Frame.GestureRecognizers>
+                                                <Grid Margin="0,0,0,10" ColumnDefinitions="80,*" RowDefinitions="0.1*,Auto,Auto,Auto,Auto,Auto">
+                                                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="6" WidthRequest="30" Source="user.png" Margin="10,0"/>
+                                                    <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource CardTitle}" Text="{Binding Technician.TechnicianName}"/>
+                                                    <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource CardLabel}" Text="{Binding Technician.TechnicianID}"/>
+                                                    <rating:SfRating Grid.Row="3" Grid.Column="1" Value="{Binding Technician.OverallRating}" Style="{StaticResource TechnicianRating}">
+                                                        <rating:SfRating.RatingSettings>
+                                                            <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
+                                                        </rating:SfRating.RatingSettings>
+                                                    </rating:SfRating>
+                                                    <StackLayout Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                                                        <Label Text="(" HorizontalOptions="Start" TextColor="Black" Margin="0,0,-5,0"/>
+                                                        <Label Text="{Binding Technician.CompletedTask}" TextColor="Black" HorizontalOptions="Start"/>
+                                                        <Label Text="reviews)" TextColor="Black" HorizontalOptions="Start"/>
+                                                    </StackLayout>
+                                                    <StackLayout Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
+                                                        <Label Text="Completed Task : " TextColor="Black"/>
+                                                        <Label Text="{Binding Technician.CompletedTask}" TextColor="Black"/>
+                                                    </StackLayout>
+                                                </Grid>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </FlexLayout>
+                            </DataTemplate>
+                        </sfPopup:PopupView.ContentTemplate>
+                    </sfPopup:PopupView>
+                </sfPopup:SfPopupLayout.PopupView>
+            </sfPopup:SfPopupLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

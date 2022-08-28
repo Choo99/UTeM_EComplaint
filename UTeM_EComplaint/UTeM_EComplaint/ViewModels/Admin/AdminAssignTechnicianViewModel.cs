@@ -17,70 +17,109 @@ namespace UTeM_EComplaint.ViewModels
     {
         readonly int LOAD_SIZE = 5;
 
-        Technician selectedTechnician;
-        List<Technician> technicians;
-        public ObservableRangeCollection<Technician> TechnicianList { get; }
+        int previousCheckedComplaintDetailIndex = -1;
+        bool isConfirmed;
 
-        public Technician SelectedTechnician
-        {
-            get => selectedTechnician;
-            set
-            {
-                SetProperty(ref selectedTechnician, value);
-                OnPropertyChanged();
-            }
-        }
+        List<object> selectedTechnicians;
+        List<ComplaintDetail> complaintDetails;
 
+        ComplaintDetail selectedSupervisor;
+
+        public ObservableRangeCollection<ComplaintDetail> ComplaintDetailList { get; }
+        public ObservableRangeCollection<ComplaintDetail> SelectedComplaintDetails { get; }
+
+        public ComplaintDetail SelectedSupervisor { get => selectedSupervisor; set => SetProperty(ref selectedSupervisor, value); }
+        public bool IsConfirmed { get => isConfirmed; set => SetProperty(ref isConfirmed, value); }
         public AsyncCommand RefreshCommand { get; }
-        public AsyncCommand<object> ItemSelectedCommand { get; }
+        public AsyncCommand<IList<object>> ItemSelectedCommand { get; }
+        public AsyncCommand<object> CheckedCommand { get; }
         public AsyncCommand LoadMoreCommand { get; }
         public AsyncCommand SubmitCommand { get; }
         public AsyncCommand ClearCommand { get; }
+        public AsyncCommand<object> SelectSupervisorCommand { get; }
 
         public AdminAssignTechnicianViewModel()
         {
-            TechnicianList = new ObservableRangeCollection<Technician>();
-            technicians = new List<Technician>();
+            ComplaintDetailList = new ObservableRangeCollection<ComplaintDetail>();
+            SelectedComplaintDetails = new ObservableRangeCollection<ComplaintDetail>();
+            complaintDetails = new List<ComplaintDetail>();
+            selectedTechnicians = new List<object>();
 
-            ItemSelectedCommand = new AsyncCommand<object>(ItemSelected);
+            ItemSelectedCommand = new AsyncCommand<IList<object>>(ItemSelected);
+            CheckedCommand = new AsyncCommand<object>(Checked);
             RefreshCommand = new AsyncCommand(Refresh);
             LoadMoreCommand = new AsyncCommand(LoadMore);
             SubmitCommand = new AsyncCommand(Submit);
             ClearCommand = new AsyncCommand(Clear);
+            SelectSupervisorCommand = new AsyncCommand<object>(SelectSupervisor);
             getData();
+        }
+
+        private async Task SelectSupervisor(object obj)
+        {
+            ComplaintDetail complaintDetail = obj as ComplaintDetail;
+            var ans = await Application.Current.MainPage.DisplayAlert("Supervisor", $"Are you sure you want to choose {complaintDetail.Technician.TechnicianName} as supervisor?","YES","NO");
+
+            if (ans)
+            {
+                SelectedComplaintDetails[SelectedComplaintDetails.IndexOf(complaintDetail)].Supervisor = true;
+                string parameters = "";
+                for (int i = 0; i < SelectedComplaintDetails.Count; i++)
+                {
+                    ComplaintDetail complaintDetailItem = SelectedComplaintDetails[i] as ComplaintDetail;
+                    parameters += $"technicianID{i + 1}={complaintDetailItem.Technician.TechnicianID}&supervisor{i + 1}={complaintDetailItem.Supervisor}&";
+                }
+                IsConfirmed = false;
+                await Shell.Current.GoToAsync("..?" + parameters);
+            }
         }
 
         private async Task Clear()
         {
             await Task.Delay(100);
-            SelectedTechnician = null;
+        }
+
+        private async Task Checked(object obj)
+        {
+            /*ComplaintDetail currentComplaintDetail = obj as ComplaintDetail;
+
+            int currentCheckedComplaintDetailIndex = ComplaintDetailList.IndexOf(currentComplaintDetail);
+
+            if (previousCheckedComplaintDetailIndex != -1 && currentComplaintDetail.Supervisor)
+            {
+                ComplaintDetailList[previousCheckedComplaintDetailIndex].Supervisor = false;
+            }
+
+            previousCheckedComplaintDetailIndex = currentCheckedComplaintDetailIndex;
+            await Task.Delay(100);*/
+            //ComplaintDetailList[ComplaintDetailList.IndexOf(obj as ComplaintDetail)].Supervisor = false ;
         }
 
         private async Task Submit()
         {
-            if(SelectedTechnician == null)
+            if (SelectedComplaintDetails.Count == 0)
             {
                 await Application.Current.MainPage.DisplayAlert("Select", "Please select at least one technician", "OK");
                 return;
             }
-            await Shell.Current.GoToAsync("..?technicianID=" + SelectedTechnician.TechnicianID);
+            IsConfirmed = true;
         }
 
         private async Task LoadMore()
         {
             await Task.Delay(100);
-            if (TechnicianList.Count == technicians.Count)
+            if (ComplaintDetailList.Count == complaintDetails.Count)
                 return;
 
-            int lastItemIndexed = TechnicianList.Count;
+            int lastItemIndexed = ComplaintDetailList.Count;
             int nextItemIndexed = lastItemIndexed + LOAD_SIZE;
 
-            if (nextItemIndexed > technicians.Count)
-                nextItemIndexed = technicians.Count;
+            if (nextItemIndexed > complaintDetails.Count)
+                nextItemIndexed = complaintDetails.Count;
 
             for (int i = lastItemIndexed; i < nextItemIndexed; i++)
             {
-                TechnicianList.Add(technicians[i]);
+                ComplaintDetailList.Add(complaintDetails[i]);
             }
         }
 
@@ -90,10 +129,18 @@ namespace UTeM_EComplaint.ViewModels
             {
                 int size = LOAD_SIZE;
                 IsBusy = true;
-                technicians = await TechnicianServices.GetAllTechnicianWithStatistic();
-                if (technicians.Count < LOAD_SIZE)
-                    size = technicians.Count;
-                TechnicianList.ReplaceRange(technicians.GetRange(0, size));
+                List<Technician> technicians = await TechnicianServices.GetAllTechnicianWithStatistic();
+                foreach (Technician technician in technicians)
+                {
+                    ComplaintDetail complaintDetail = new ComplaintDetail
+                    {
+                        Technician = technician,
+                    };
+                    complaintDetails.Add(complaintDetail);
+                }
+                if (complaintDetails.Count < LOAD_SIZE)
+                    size = complaintDetails.Count;
+                ComplaintDetailList.ReplaceRange(complaintDetails.GetRange(0, size));
             }
             catch (Exception ex)
             {
@@ -105,12 +152,22 @@ namespace UTeM_EComplaint.ViewModels
             }
 
         }
-        private async Task ItemSelected(object arg)
+        private async Task ItemSelected(IList<object> arg)
         {
-            var technician = arg as Technician;
-            if (technician == null)
-                return;
-
+            try
+            {
+                //if(SelectedComplaintDetails != 0 && arg.Count != SelectedComplaintDetails)
+                List<ComplaintDetail> complaintDetailList = new List<ComplaintDetail>();
+                foreach (var complaintDetail in arg)
+                {
+                    var complaintComplaintDetail = complaintDetail as ComplaintDetail;
+                    complaintDetailList.Add(complaintComplaintDetail);
+                }
+                SelectedComplaintDetails.ReplaceRange(complaintDetailList);
+            }catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
         }
         async Task Refresh()
         {

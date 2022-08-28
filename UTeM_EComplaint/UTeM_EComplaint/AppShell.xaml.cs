@@ -55,6 +55,10 @@ namespace UTeM_EComplaint
             Routing.RegisterRoute(nameof(MasterDamageTypePage), typeof(MasterDamageTypePage));
             Routing.RegisterRoute(nameof(MasterLocationPage), typeof(MasterLocationPage));
             Routing.RegisterRoute(nameof(MasterAddLocationPage), typeof(MasterAddLocationPage));
+            Routing.RegisterRoute(nameof(MasterSoftwareSystemPage), typeof(MasterSoftwareSystemPage));
+            Routing.RegisterRoute(nameof(MasterModulePage), typeof(MasterModulePage));
+            Routing.RegisterRoute(nameof(MasterSubmodulePage), typeof(MasterSubmodulePage));
+            Routing.RegisterRoute(nameof(MasterSubmenuPage), typeof(MasterSubmenuPage));
 
 
             Routing.RegisterRoute($"home/{nameof(StaffComplaintPendingPage)}", typeof(StaffComplaintPendingPage));

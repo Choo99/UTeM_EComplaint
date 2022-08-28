@@ -2,13 +2,18 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:cell="clr-namespace:UTeM_EComplaint.Cells"
              xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms"
-             x:Class="UTeM_EComplaint.App">
+             x:Class="UTeM_EComplaint.App"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
     <Application.Resources>
-
+        
+        <ResourceDictionary>
+            <xct:InvertedBoolConverter x:Key="boolConverter"/>
+        </ResourceDictionary>
         <Color x:Key="AssignedColor">#F56648</Color>
         <Color x:Key="PendingColor">#F5BD48</Color>
         <Color x:Key="InProgressColor">#7F7C00</Color>
         <Color x:Key="CompletedColor">#196E0B</Color>
+        <Color x:Key="RatedColor">#faa61a</Color>
 
         <Color x:Key="SaveButtonColor">LightGreen</Color>
 
@@ -24,18 +29,78 @@
 
         <Color x:Key="RatingColor">#faa61a</Color>
 
+        <DataTemplate x:Key="TechnicianAssignedSoftware">
+            <cell:TechnicianAssignedSoftwareCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="TechnicianAssigned">
+            <cell:TechnicianAssignedCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="TechnicianInProgress">
+            <cell:TechnicianInProgressCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="TechnicianInProgressSoftware">
+            <cell:TechnicianAssignedSoftwareCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="TechnicianCompletedSoftware">
+            <cell:TechnicianCompletedSoftwareCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="TechnicianCompleted">
+            <cell:TechnicianCompletedCell/>
+        </DataTemplate>
+
         <DataTemplate x:Key="StaffPending">
             <cell:StaffPendingCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="StaffPendingSoftware">
+            <cell:StaffPendingSoftwareCell/>
         </DataTemplate>
         <DataTemplate x:Key="StaffAssigned">
             <cell:StaffAssignedPage/>
         </DataTemplate>
+        <DataTemplate x:Key="StaffAssignedSoftware">
+            <cell:StaffAssignedSoftwareCell/>
+        </DataTemplate>
         <DataTemplate x:Key="StaffInProgress">
             <cell:StaffInProgressCell/>
+        </DataTemplate>
+        <DataTemplate x:Key="StaffInProgressSoftware">
+            <cell:StaffInProgressSoftwareCell/>
         </DataTemplate>
         <DataTemplate x:Key="StaffCompleted">
             <cell:StaffCompletedCell/>
         </DataTemplate>
+        <DataTemplate x:Key="StaffCompletedSoftware">
+            <cell:StaffCompletedSoftwareCell/>
+        </DataTemplate>
+
+        <cell:StaffPendingDataTemplateSelector x:Key="StaffPendingDataTemplateSelector"
+                                                     StaffPendingSoftware ="{StaticResource StaffPendingSoftware}"
+                                                     StaffPendingHardware="{StaticResource StaffPending}"/>
+
+        <cell:StaffAssignedDataTemplateSelector x:Key="StaffAssignedDataTemplateSelector"
+                                                     StaffAssignedHardware ="{StaticResource StaffAssigned}"
+                                                     StaffAssignedSoftware="{StaticResource StaffAssignedSoftware}"/>
+
+        <cell:StaffInProgressDataTemplateSelector x:Key="StaffInProgressDataTemplateSelector"
+                                                     StaffInProgressHardware ="{StaticResource StaffInProgress}"
+                                                     StaffInProgressSoftware="{StaticResource StaffInProgressSoftware}"/>
+
+        <cell:StaffCompletedDataTemplateSelector x:Key="StaffCompletedDataTemplateSelector"
+                                                     StaffCompletedHardware ="{StaticResource StaffCompleted}"
+                                                     StaffCompletedSoftware="{StaticResource StaffCompletedSoftware}"/>
+
+        <cell:TechnicianCompletedDataTemplateSelector x:Key="TechnicianCompletedDataTemplateSelector"
+                                                     TechnicianCompletedSoftware ="{StaticResource TechnicianCompletedSoftware}"
+                                                     TechnicianCompletedHardware="{StaticResource TechnicianCompleted}"/>
+
+        <cell:TechnicianAssignedDataTemplateSelector x:Key="TechnicianAssignedDataTemplateSelector"
+                                                     TechnicianAssignedSoftware ="{StaticResource TechnicianAssignedSoftware}"
+                                                     TechnicianAssignedHardware="{StaticResource TechnicianAssigned}"/>
+
+        <cell:TechnicianInProgressDataTemplateSelector x:Key="TechnicianInProgressDataTemplateSelector"
+                                                     TechnicianInProgresSoftware ="{StaticResource TechnicianInProgressSoftware}"
+                                                     TechnicianInProgressHardware="{StaticResource TechnicianInProgress}"/>
+
 
         <cell:StaffComplaintDataTemplateSelector x:Key="StaffJobDataTemplateSelector"
                                                  Pending="{StaticResource StaffPending}"
@@ -133,6 +198,9 @@
         <x:String x:Key="AssignedString">Assigned</x:String>
         <x:String x:Key="InProgressString">In Progress</x:String>
         <x:String x:Key="CompletedString">Completed</x:String>
+        <x:String x:Key="RatedString">Rated</x:String>
+
+        <x:String x:Key="NullString">-</x:String>
 
         <Style x:Key="ComplaintStatus" TargetType="Label" BasedOn="{StaticResource CardLabel}">
             <Style.Triggers>
@@ -147,6 +215,9 @@
                 </Trigger>
                 <Trigger TargetType="Label" Property="Text" Value="{StaticResource CompletedString}">
                     <Setter Property="TextColor" Value="{StaticResource CompletedColor}"/>
+                </Trigger>
+                <Trigger TargetType="Label" Property="Text" Value="{StaticResource RatedString}">
+                    <Setter Property="TextColor" Value="{StaticResource RatedColor}"/>
                 </Trigger>
             </Style.Triggers>
             <Setter Property="FontSize" Value="Large"/>

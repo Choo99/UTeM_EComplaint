@@ -25,17 +25,15 @@ namespace UTeM_EComplaint.Droid
         async void SendRegistrationToServer(string token)
         {
             int userID = Preferences.Get("userID", 0);
-            User user = new User
-            {
-                UserID = userID,
-                NotificationToken = token,
-            };
 
-            int result = await UserServices.UpdateNotificationToken(user);
-            if(result == 0)
+            await NotificationServices.CheckNotificationAvailabilityAddNewNotificationToken(new NotificationManagement
             {
-                Log.Debug(TAG, "Refresh Token fail");
-            }
+                User = new User
+                {
+                    UserID = userID,
+                },
+                NotificationToken = token
+            });
         }
     }
 }
