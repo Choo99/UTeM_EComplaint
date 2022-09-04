@@ -34,6 +34,16 @@ namespace UTeM_EComplaint.ViewModels
             }
         }
 
+        int resultCount;
+        public int ResultCount
+        {
+            get => resultCount;
+            set
+            {
+                SetProperty(ref resultCount, value);
+            }
+        }
+
         public ObservableRangeCollection<ComplaintDetail> ComplaintDetailList { get; set; }
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand LoadMoreCommand { get; }
@@ -103,7 +113,7 @@ namespace UTeM_EComplaint.ViewModels
                     },
                 };
                 complaintDetails = await ComplaintDetailServices.GetComplaintDetailByStatus(complaintDetail);
-
+                ResultCount = complaintDetails.Count;
                 if (complaintDetails.Count < LOAD_SIZE)
                     size = complaintDetails.Count;
 

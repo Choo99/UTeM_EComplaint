@@ -52,7 +52,7 @@
                                     </Grid>
 
                                     <!--Software-->
-                                    <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsSoftware}">
+                                    <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" IsVisible="{Binding IsSoftware}">
                                         <!--System-->
                                         <Label Grid.Row="0" Grid.Column="0" Text="System" TextColor="#0FC5BA" FontSize="Medium"/>
                                         <Picker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select System --" 
@@ -75,9 +75,19 @@
                                         <Picker Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Title="-- Select Submenu --" SelectedItem="{Binding SelectedSubmenu}"
                                                 ItemsSource="{Binding SubmenuList}" ItemDisplayBinding="{Binding DisplaySubmenu}"
                                                 TextColor="Black" />
+
+                                        <!--Image-->
+                                        <Label Grid.Row="8" Grid.Column="0" Text="Reference Picture" TextColor="#0FC5BA" FontSize="Medium"/>
+                                        <Button Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Text="Take a picture" TextColor="White" VerticalOptions="Start" 
+                                    HorizontalOptions="FillAndExpand" Style="{StaticResource Button}" IsVisible="{Binding IsPicture,Converter={StaticResource boolConverter}}" Command="{Binding TakePictureCommand}"/>
+                                        <Grid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsPicture}">
+                                            <Image IsVisible="{Binding IsPicture}" Source="{Binding SoftwareImage}"/>
+                                            <ImageButton HeightRequest="25" Source="xmark.png" VerticalOptions="Start" Command="{Binding ClearPictureCommand}"
+                                             HorizontalOptions="End" BackgroundColor="Transparent" Margin="0,-4,5,0"/>
+                                        </Grid>
                                     </Grid>
                                     <!--Damage-->
-                                    <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsComplaintTypeSelected}">
+                                    <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsComplaintTypeSelected}" RowDefinitions="Auto,Auto,Auto,Auto">
                                         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Problem Description" TextColor="#0FC5BA" FontSize="Medium" />
                                         <Editor Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Placeholder="Description" Text="{Binding Complaint.Damage}" AutoSize="TextChanges"/>
 

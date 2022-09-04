@@ -71,7 +71,7 @@
                                                 <Label Grid.Row="2" Grid.Column="0" Text="Category" TextColor="#0FC5BA" FontSize="Medium" />
                                                 <Label Grid.Row="2" Grid.Column="1" Text="{Binding Complaint.Category.CategoryName}" Style="{StaticResource CardLabel}"/>
                                             </Grid>
-                                            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsSoftware}">
+                                            <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsSoftware}">
                                                 <!--System-->
                                                 <Label Grid.Row="0" Grid.Column="0" Text="System" TextColor="#0FC5BA" FontSize="Medium" />
                                                 <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.SoftwareSystem.DisplaySoftwareSystem}" Style="{StaticResource CardLabel}"/>
@@ -82,11 +82,17 @@
 
                                                 <!--Submodule-->
                                                 <Label Grid.Row="2" Grid.Column="0" Text="Submodule" TextColor="#0FC5BA" FontSize="Medium" />
-                                                <Label Grid.Row="2" Grid.Column="1" Text="{Binding Complaint.Submodule.DisplaySubmodule}" Style="{StaticResource CardLabel}"/>
+                                                <StackLayout Grid.Row="2" Grid.Column="1">
+                                                    <Label Text="{Binding Complaint.Submodule.DisplaySubmodule}" Style="{StaticResource CardLabel}"/>
+                                                </StackLayout>
 
                                                 <!--Submenu-->
                                                 <Label Grid.Row="3" Grid.Column="0" Text="Submenu" TextColor="#0FC5BA" FontSize="Medium"/>
                                                 <Label Grid.Row="3" Grid.Column="1" Text="{Binding Complaint.Submenu.DisplaySubmenu}" Style="{StaticResource CardLabel}"/>
+
+                                                <!--reference-->
+                                                <Label Grid.Row="4" Grid.Column="0" Text="Reference picture" TextColor="#0FC5BA" FontSize="Medium"/>
+                                                <Image Grid.Row="5" Grid.Column="0" Source="{Binding Image}" HorizontalOptions="CenterAndExpand" Grid.ColumnSpan="2"/>
                                             </Grid>
 
                                             <!--Description-->

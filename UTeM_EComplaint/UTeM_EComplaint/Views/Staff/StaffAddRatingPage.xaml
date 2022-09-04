@@ -13,31 +13,39 @@
         <vm:StaffAddRatingViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
-            <Frame>
-                <StackLayout>
-                    <!--Information Technician information-->
-                    <Label Text="Share your experience of the service" HorizontalTextAlignment="Center" HorizontalOptions="Center" Margin="0,20,0,30" TextColor="Black" FontSize="Large" />
+        <ScrollView>
+            <StackLayout>
+                <Frame>
+                    <StackLayout>
+                        <!--Information Technician information-->
+                        <Label Text="Share your experience of the service" HorizontalTextAlignment="Center" HorizontalOptions="Center" Margin="0,20,0,30" TextColor="Black" FontSize="Large" />
 
-                    <Label Text="Technician ID" TextColor="Black" FontSize="Medium"/>
-                    <Frame>
-                        <Label Text="{Binding ComplaintDetail.Technician.TechnicianID}" FontSize="Small" TextColor="Black"/>
-                    </Frame>
+                        <Label Text="Technician ID" TextColor="Black" FontSize="Medium"/>
+                        <Frame>
+                            <Label Text="{Binding ComplaintDetail.Technician.TechnicianID}" FontSize="Small" TextColor="Black"/>
+                        </Frame>
 
-                    <Label Text="Name" TextColor="#Black" FontSize="Medium"/>
-                    <Frame>
-                        <Label Text="{Binding ComplaintDetail.Technician.TechnicianName}" FontSize="Small" TextColor="Black"/>
-                    </Frame>
-                    <Label Text="Your rating will help us to improve our performance" TextColor="Black" HorizontalTextAlignment="Center" FontSize="Large"/>
-                    <BoxView Margin="0,30"  Color="Gray" WidthRequest="200" HeightRequest="1"/>
-                    <rating:SfRating Value="{Binding RatingValue, Mode=TwoWay}" Precision="Standard" ItemSpacing="10" ItemSize="50" HorizontalOptions="Center">
-                        <rating:SfRating.RatingSettings>
-                            <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}"/>
-                        </rating:SfRating.RatingSettings>
-                    </rating:SfRating>
-                    <Label Text="Thank you" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
-                </StackLayout>
-            </Frame>
-        </StackLayout>
+                        <Label Text="Name" TextColor="Black" FontSize="Medium"/>
+                        <Frame>
+                            <Label Text="{Binding ComplaintDetail.Technician.TechnicianName}" FontSize="Small" TextColor="Black"/>
+                        </Frame>
+                        <Label Text="Your rating will help us to improve our performance" TextColor="Black" HorizontalTextAlignment="Center" FontSize="Large"/>
+                        <BoxView Margin="0,30"  Color="Gray" WidthRequest="200" HeightRequest="1"/>
+                        <rating:SfRating Value="{Binding RatingValue, Mode=TwoWay}" Precision="Standard" ItemSpacing="10" ItemSize="50" HorizontalOptions="Center">
+                            <rating:SfRating.RatingSettings>
+                                <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}"/>
+                            </rating:SfRating.RatingSettings>
+                        </rating:SfRating>
+                        <StackLayout>
+                            <Label Text="Comment" TextColor="Black" VerticalOptions="Center" FontSize="Medium"/>
+                            <Frame>
+                                <Entry Text="{Binding Comment}" TextColor="Black" Placeholder="Comment"/>
+                            </Frame>
+                        </StackLayout>
+                        <Label Text="Thank you" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

@@ -14,6 +14,16 @@
                                    SearchCommand="{Binding SearchCommand}" BackgroundColor="#efefef" 
                                    Text="{Binding SearchText, Mode=TwoWay}"/>
             </StackLayout>
+            <StackLayout>
+                <Label HorizontalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding ResultCount}"/>
+                            <Span Text=" result(s) found"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
             <CollectionView x:Name="listTask" BackgroundColor="Transparent" 
                                      SelectedItem="{Binding SelectedComplaint, Mode=TwoWay}"
                                      SelectionMode="Single"

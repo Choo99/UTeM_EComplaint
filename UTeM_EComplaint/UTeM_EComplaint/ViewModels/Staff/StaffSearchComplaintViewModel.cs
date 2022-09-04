@@ -24,6 +24,9 @@ namespace UTeM_EComplaint.ViewModels
         string defaultSearchText;
         string placeHolderText;
 
+        int resultCount;
+        public int ResultCount { get => resultCount; set => SetProperty(ref resultCount, value); }
+
         public String PlaceHolderText { get => placeHolderText; set => SetProperty(ref placeHolderText, value); }
         public String SearchText { get => searchText; set => SetProperty(ref searchText, value); }
         public String ResultText { get => resultText; set => SetProperty(ref resultText, value); }
@@ -91,7 +94,8 @@ namespace UTeM_EComplaint.ViewModels
                 int size = LOAD_SIZE;
                 IsBusy = true;
                 await Task.Delay(1000);
-                complaints = await ComplaintServices.SearchAllComplaints(SearchText);
+                complaints = await ComplaintServices.SearchComplaints(Preferences.Get("userID",0),SearchText);
+                ResultCount = complaints.Count;
 
                 if (complaints.Count == 0)
                 {

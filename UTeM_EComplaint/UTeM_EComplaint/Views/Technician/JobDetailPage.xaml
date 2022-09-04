@@ -72,12 +72,8 @@
                                                 <Label Grid.Row="2" Grid.Column="0" Text="Category" TextColor="#0FC5BA" FontSize="Medium" />
                                                 <Label Grid.Row="2" Grid.Column="1" Text="{Binding ComplaintDetail.Complaint.Category.CategoryName}" Style="{StaticResource CardLabel}"/>
                                                 
-                                                <!--Location-->
-                                                <Label Grid.Row="2" Grid.Column="0" Text="Location" TextColor="#0FC5BA" FontSize="Medium"/>
-                                                <Label Grid.Row="2" Grid.Column="1" Text="{Binding ComplaintDetail.Complaint.Location}" Style="{StaticResource CardLabel}"/>
-                                                
                                             </Grid>
-                                            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsSoftware}">
+                                            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" IsVisible="{Binding IsSoftware}">
                                                 <!--System-->
                                                 <Label Grid.Row="0" Grid.Column="0" Text="System" TextColor="#0FC5BA" FontSize="Medium" />
                                                 <Label Grid.Row="0" Grid.Column="1" Text="{Binding ComplaintDetail.Complaint.SoftwareSystem.DisplaySoftwareSystem}" Style="{StaticResource CardLabel}"/>
@@ -88,11 +84,17 @@
 
                                                 <!--Submodule-->
                                                 <Label Grid.Row="2" Grid.Column="0" Text="Submodule" TextColor="#0FC5BA" FontSize="Medium" />
-                                                <Label Grid.Row="2" Grid.Column="1" Text="{Binding ComplaintDetail.Complaint.Submodule.DisplaySubmodule}" Style="{StaticResource CardLabel}"/>
-
+                                                <StackLayout Grid.Row="2" Grid.Column="1">
+                                                    <Label Text="{Binding ComplaintDetail.Complaint.Submodule.DisplaySubmodule}" Style="{StaticResource CardLabel}"/>
+                                                </StackLayout>
+                                                
                                                 <!--Submenu-->
                                                 <Label Grid.Row="3" Grid.Column="0" Text="Submenu" TextColor="#0FC5BA" FontSize="Medium"/>
                                                 <Label Grid.Row="3" Grid.Column="1" Text="{Binding ComplaintDetail.Complaint.Submenu.DisplaySubmenu}" Style="{StaticResource CardLabel}"/>
+
+                                                <!--reference-->
+                                                <Label Grid.Row="4" Grid.Column="0" Text="Reference picture" TextColor="#0FC5BA" FontSize="Medium"/>
+                                                <Image Grid.Row="5" Grid.Column="0" Source="{Binding Image}" HorizontalOptions="CenterAndExpand" Grid.ColumnSpan="2"/>
                                             </Grid>
                                             
                                             <!--Description-->
@@ -213,7 +215,7 @@
                                             <Editor Grid.Row="3" Grid.Column="0" Text="{Binding ComplaintDetail.Action.ActionDescription}" Grid.ColumnSpan="2" Placeholder="Enter your action taken here" Background="white" FontSize="Medium" TextColor="Black"/>
 
                                             <!--Spare Replacement-->
-                                            <Label Grid.Row="4" Grid.Column="0" Text="Spare Replacement" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Label Grid.Row="4" Grid.Column="0" Text="Spare Part/Replacement" Grid.ColumnSpan="2" TextColor="#0FC5BA" FontSize="Medium"/>
                                             <!--Replacement when pending-->
                                             <Entry Grid.Row="5" Grid.Column="0" Text="{Binding ComplaintDetail.Action.SpareReplace}" Grid.ColumnSpan="2" Placeholder="Replacement" FontSize="Medium" TextColor="Black"></Entry>
 
@@ -275,6 +277,10 @@
                                         <Label Text="Rating" Style="{StaticResource DetailTitle}"/>
                                         <Line X1="0" Y1="0" X2="360" Y2="0" Margin="0,0,0,20" HorizontalOptions="CenterAndExpand" Stroke="black" />
                                         <Label Text="There is no rating yet"  IsVisible="{Binding ComplaintDetail.IsRated,Converter={StaticResource boolConverter}}" Style="{StaticResource DetailNoItem}"></Label>
+                                        <Grid>
+                                            <Label TextColor="#0FC5BA" FontSize="Medium" Text="Comment"/>
+                                            <Label Grid.Column="1" Style="{StaticResource CardLabel}" Text="{Binding ComplaintDetail.Rating.Comment}"/>
+                                        </Grid>
                                         <rating:SfRating IsEnabled="False" Value="{Binding ComplaintDetail.Rating.RatingValue}" ItemSpacing="15" >
                                             <rating:SfRating.RatingSettings>
                                                 <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />

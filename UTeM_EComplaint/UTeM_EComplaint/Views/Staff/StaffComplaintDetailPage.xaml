@@ -78,7 +78,7 @@
                                                 <Label Grid.Row="2" Grid.Column="0" Text="Category" TextColor="#0FC5BA" FontSize="Medium" />
                                                 <Label Grid.Row="2" Grid.Column="1" Text="{Binding Complaint.Category.CategoryName}" Style="{StaticResource CardLabel}"/>
                                             </Grid>
-                                            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsSoftware}">
+                                            <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsSoftware}">
                                                 <!--System-->
                                                 <Label Grid.Row="0" Grid.Column="0" Text="System" TextColor="#0FC5BA" FontSize="Medium" />
                                                 <Label Grid.Row="0" Grid.Column="1" Text="{Binding Complaint.SoftwareSystem.DisplaySoftwareSystem}" Style="{StaticResource CardLabel}"/>
@@ -89,16 +89,28 @@
 
                                                 <!--Submodule-->
                                                 <Label Grid.Row="2" Grid.Column="0" Text="Submodule" TextColor="#0FC5BA" FontSize="Medium" />
-                                                <Label Grid.Row="2" Grid.Column="1" Text="{Binding Complaint.Submodule.DisplaySubmodule}" Style="{StaticResource CardLabel}"/>
-
+                                                <StackLayout Grid.Row="2" Grid.Column="1">
+                                                    <Label  Text="{Binding Complaint.Submodule.DisplaySubmodule}" Style="{StaticResource CardLabel}"/>
+                                                </StackLayout>
+                                                
                                                 <!--Submenu-->
                                                 <Label Grid.Row="3" Grid.Column="0" Text="Submenu" TextColor="#0FC5BA" FontSize="Medium"/>
-                                                <Label Grid.Row="3" Grid.Column="1" Text="{Binding Complaint.Submenu.DisplaySubmenu}" Style="{StaticResource CardLabel}"/>
+                                                <StackLayout Grid.Row="3" Grid.Column="1">
+                                                    <Label Text="{Binding Complaint.Submenu.DisplaySubmenu}" Style="{StaticResource CardLabel}"/>
+                                                </StackLayout>
+
+                                                <!--reference-->
+                                                <Label Grid.Row="4" Grid.Column="0" Text="Reference picture" TextColor="#0FC5BA" FontSize="Medium"/>
+                                                <Image Grid.Row="5" Grid.Column="0" Source="{Binding Image}" HorizontalOptions="CenterAndExpand" Grid.ColumnSpan="2"/>
                                             </Grid>
 
                                             <!--Description-->
                                             <Label Grid.Row="4" Grid.Column="0" Text="Description" TextColor="#0FC5BA" FontSize="Medium"/>
                                             <Label Grid.Row="4" Grid.Column="1" Text="{Binding Complaint.Damage}" Style="{StaticResource CardLabel}" />
+
+                                            <!--Contact phone number-->
+                                            <Label Grid.Row="5" Grid.Column="0" Text="Phone number" TextColor="#0FC5BA" FontSize="Medium"/>
+                                            <Label Grid.Row="5" Grid.Column="1" Text="{Binding Complaint.ContactPhoneNumber}" Style="{StaticResource CardLabel}" />
                                         </Grid>
                                     </StackLayout>
                                 </Frame>
@@ -202,7 +214,11 @@
                                                                         <!--Rating-->
                                                                         <Label Text="Your Rating" IsVisible="{Binding IsCompleted}" Style="{StaticResource DetailTitle}"/>
                                                                         <Line Style="{StaticResource HorizontalLine}"/>
-                                                                        <Label HorizontalOptions="Center" FontSize="Small" IsVisible="{Binding IsRated,Converter={StaticResource boolConverter}}" Text="There is no rating yet" TextColor="Black"></Label>
+                                                                        <Label HorizontalOptions="Center" FontSize="Small" IsVisible="{Binding IsRated,Converter={StaticResource boolConverter}}" Text="There is no rating yet" TextColor="Black"/>
+                                                                        <Grid IsVisible="{Binding IsRated}" ColumnDefinitions="Auto,Auto">
+                                                                            <Label Grid.Column="0" Text="Comment" TextColor="#0FC5BA" FontSize="Medium"/>
+                                                                            <Label Grid.Column="1" Text="{Binding Rating.Comment}" Style="{StaticResource CardLabel}"/>
+                                                                        </Grid>
                                                                         <rating:SfRating IsEnabled="False" Value="{Binding Rating.RatingValue}" ItemSpacing="5" IsVisible="{Binding IsRated}">
                                                                             <rating:SfRating.RatingSettings>
                                                                                 <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />

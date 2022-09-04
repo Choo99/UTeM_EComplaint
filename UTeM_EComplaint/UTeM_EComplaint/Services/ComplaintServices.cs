@@ -336,6 +336,51 @@ namespace UTeM_EComplaint.Services
             }
         }
 
+        public static async Task<int> StaffEditSoftwareComplaint(Complaint complaint)
+        {
+            try
+            {
+                string url = string.Format("{0}/staffEditSoftwareComplaint", Global.apiUrl);
+                var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(5000);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                form.Add(new StringContent(complaint.ComplaintID.ToString()), "complaintID");
+                form.Add(new StringContent(complaint.Staff.StaffID.ToString()), "staffID");
+                form.Add(new StringContent(complaint.SoftwareSystem.SystemCode), "systemCode");
+                form.Add(new StringContent(complaint.Module.ModuleCode), "moduleCode");
+                form.Add(new StringContent(complaint.Submodule.SubmoduleCode), "submoduleCode");
+                if(complaint.Submenu.SubmenuCode != null)
+                {
+                    form.Add(new StringContent(complaint.Submenu.SubmenuCode), "submenuCode");
+                }
+                form.Add(new StringContent(complaint.Damage), "damage");
+                form.Add(new StringContent(complaint.ContactPhoneNumber), "contactPhoneNumber");
+                form.Add(new StringContent(complaint.ImageBase64.ToString()), "imageBase64");
+
+                HttpResponseMessage response = await client.PostAsync(url, form);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    int result = JsonConvert.DeserializeObject<int>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public static async Task<List<Complaint>> SearchComplaints(int userID, string searchText)
         {
             try
@@ -468,6 +513,38 @@ namespace UTeM_EComplaint.Services
             try
             {
                 string url = string.Format("{0}/getComplaintsByDate?startDate={1}&endDate={2}", Global.apiUrl,startDate,endDate);
+                var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(5000);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    List<Complaint> result = JsonConvert.DeserializeObject<List<Complaint>>(resultString);
+                    client.Dispose();
+                    return result;
+                }
+                else
+                {
+                    string resultString = await response.Content.ReadAsStringAsync();
+                    object result = JsonConvert.DeserializeObject<object>(resultString);
+                    client.Dispose();
+                    throw new Exception(result.ToString());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<List<Complaint>> GetSoftwareComplaintsByDate(string startDate, string endDate)
+        {
+            try
+            {
+                string url = string.Format("{0}/getSoftwareComplaintsByDate?startDate={1}&endDate={2}", Global.apiUrl, startDate, endDate);
                 var client = new HttpClient();
                 client.Timeout = TimeSpan.FromSeconds(5000);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

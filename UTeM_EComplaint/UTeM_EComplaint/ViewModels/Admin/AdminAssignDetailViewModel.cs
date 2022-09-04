@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using System.Web;
 using UTeM_EComplaint.Model;
 using UTeM_EComplaint.Services;
+using UTeM_EComplaint.Tools;
 using UTeM_EComplaint.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Map = Xamarin.Forms.Maps.Map;
 
 namespace UTeM_EComplaint.ViewModels
 {
@@ -23,6 +25,9 @@ namespace UTeM_EComplaint.ViewModels
         bool isSoftware;
         bool isHardware;
         List<ComplaintDetail> complaintDetailList;
+        ImageSource image;
+        public Map Map { get; private set; }
+        public ImageSource Image { get => image; set => SetProperty(ref image, value); }
 
         public bool IsAssigned { get => isAssigned; set { SetProperty(ref isAssigned, value); IsNotAssigned = !value; } }
         public bool IsNotAssigned { get => isNotAssigned; set { SetProperty(ref isNotAssigned, value); } }
@@ -44,7 +49,6 @@ namespace UTeM_EComplaint.ViewModels
         public AsyncCommand<object> DeleteTechnicianCommand { get; }
         public AdminAssignDetailViewmModel()
         {
-            Title = "Complaint Detail";
 
             SelectedComplaintDetails = new ObservableRangeCollection<ComplaintDetail>();
 
@@ -52,6 +56,11 @@ namespace UTeM_EComplaint.ViewModels
             AssignCommand = new AsyncCommand(Assign);
             AddTechnicianCommand = new AsyncCommand(AddTechnician);
             DeleteTechnicianCommand = new AsyncCommand<object>(DeleteTechnician);
+
+            Map = new Map
+            {
+                IsEnabled = false
+            };
         }
 
         private async Task DeleteTechnician(object obj)
@@ -81,6 +90,8 @@ namespace UTeM_EComplaint.ViewModels
         {
             try
             {
+                if ( !await validation())
+                    return;
                 var answer = await Application.Current.MainPage.DisplayAlert("Assign", "Are you confirm your selection?", "YES", "No");
                 if (answer)
                 {
@@ -109,6 +120,20 @@ namespace UTeM_EComplaint.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private async Task<bool> validation()
+        {
+            foreach(var complaintDetail in complaintDetailList)
+            {
+                if(complaintDetail.JobDescription == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Please fill the in job description for every technician", null, "OK");
+                    return false;
+                }
+                   
+            }
+            return true;
         }
 
         private async Task Done()
@@ -199,6 +224,10 @@ namespace UTeM_EComplaint.ViewModels
                 {
                     IsHardware = true;
                 }
+                if (Complaint.ImageBase64 != null)
+                    Image = ImageHandler.LoadBase64(Complaint.ImageBase64);
+                if (Complaint.Longitude != 0 && Complaint.Latitude != 0)
+                    Map.MoveToRegion(MapHandler.moveToLocation(Complaint.Latitude, Complaint.Longitude));
             }
             catch (Exception ex)
             {

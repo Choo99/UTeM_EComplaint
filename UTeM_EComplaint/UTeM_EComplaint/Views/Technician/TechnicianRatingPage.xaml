@@ -56,11 +56,6 @@
                                             </StackLayout>
                                             <StackLayout>
                                                 <StackLayout Orientation="Horizontal">
-                                                    <Label Text="{Binding Complaint.Damage}" HorizontalOptions="StartAndExpand" Style="{StaticResource CardLabel}"></Label>
-                                                    <Label Text="{Binding Complaint.ComplaintID}" HorizontalOptions="EndAndExpand" TextColor="Black" FontAttributes="Italic"/>
-                                                </StackLayout>
-                                                <Label Text="{Binding Complaint.Category.CategoryName}" Style="{StaticResource CardLabel}"></Label>
-                                                <StackLayout Orientation="Horizontal">
                                                     <Label Text="{Binding Complaint.DamageType.DamageTypeName}" Style="{StaticResource CardLabel}" HorizontalOptions="Start"></Label>
                                                     <Label Text="Rated At" Style="{StaticResource CardLabel}" HorizontalOptions="EndAndExpand"/>
                                                     <Label Text="{Binding Rating.CreatedAt}" Style="{StaticResource CardLabel}" HorizontalOptions="End"/>
@@ -71,8 +66,7 @@
                                                     <Label Text="{Binding Action.StartDate}" HorizontalOptions="Start"  Style="{StaticResource CardLabel}"></Label>
                                                     <Label Text="-" Style="{StaticResource CardLabel}"/>
                                                     <Label Text="{Binding Action.EndDate}" HorizontalOptions="Start"  Style="{StaticResource CardLabel}"></Label>
-                                                    <Label Text="{Binding Action.TotalDays}" Style="{StaticResource CardLabel}" HorizontalOptions="EndAndExpand"/>
-                                                    <Label Text="days" Style="{StaticResource CardLabel}" HorizontalOptions="End"/>
+                                                    <Label Text="{Binding Action.Duration}" Style="{StaticResource CardLabel}" HorizontalOptions="EndAndExpand"/>
                                                 </StackLayout>
                                             </StackLayout>
                                             <StackLayout>

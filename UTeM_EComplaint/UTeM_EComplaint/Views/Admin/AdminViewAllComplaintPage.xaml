@@ -13,6 +13,16 @@
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" >
                 <SearchBar Placeholder="Search in Complaint ID and Date(yyyy-MM-dd)" SearchCommand="{Binding SearchCommand}"  Text="{Binding SearchText}"
                            FontSize="Small" BackgroundColor="White" VerticalOptions="CenterAndExpand"/>
+                <StackLayout>
+                    <Label HorizontalOptions="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding ResultCount}"/>
+                                <Span Text=" result(s) found"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
                 <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
                       Command="{Binding RefreshCommand}" >
                     <CollectionView ItemsSource="{Binding ComplaintList}" 

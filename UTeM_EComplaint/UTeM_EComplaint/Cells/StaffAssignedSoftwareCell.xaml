@@ -23,11 +23,6 @@
                         <Label Text="{Binding Submodule.DisplaySubmodule}" Style="{StaticResource CardLabel}"></Label>
                         <Label Text="{Binding Submenu.DisplaySubmenu}" Style="{StaticResource CardLabel}"></Label>
                     </StackLayout>
-                    <Line X1="0" Y1="0" X2="360" Margin="0,20" Y2="0" HorizontalOptions="CenterAndExpand" Stroke="#9B9A99" />
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="Technician ID " Style="{StaticResource CardLabel}"/>
-                        <Label Text="{Binding Technician.TechnicianID}" Style="{StaticResource CardLabel}"/>
-                    </StackLayout>
                     <Line X1="0" Y1="0" X2="360" Margin="0,20,0,0" Y2="0" HorizontalOptions="CenterAndExpand" Stroke="#9B9A99" />
                     <Label Text="{Binding ComplaintDate}" HorizontalOptions="EndAndExpand" Margin="0,0,0,30" FontAttributes="Italic" Style="{StaticResource CardLabel}"></Label>
                 </StackLayout>

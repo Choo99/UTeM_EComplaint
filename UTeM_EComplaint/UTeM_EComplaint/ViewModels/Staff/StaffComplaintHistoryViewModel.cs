@@ -38,6 +38,16 @@ namespace UTeM_EComplaint.ViewModels
             }
         }
 
+        int resultCount;
+        public int ResultCount
+        {
+            get => resultCount;
+            set
+            {
+                SetProperty(ref resultCount, value);
+            }
+        }
+
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand LoadMoreCommand { get; }
         public AsyncCommand<object> RateCommand { get; }
@@ -90,6 +100,7 @@ namespace UTeM_EComplaint.ViewModels
                 int size = LOAD_SIZE;
                 IsBusy = true;
                 complaints = await ComplaintServices.GetComplaintsByStatus(staffID, "Completed");
+                ResultCount = complaints.Count;
                 if (complaints.Count < LOAD_SIZE)
                 {
                     size = complaints.Count;

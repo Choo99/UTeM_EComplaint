@@ -30,7 +30,16 @@ namespace UTeM_EComplaint.ViewModels
         public AsyncCommand<object> ItemSelectedCommand { get; }
         public AsyncCommand LoadMoreCommand { get; }
 
-        
+        int resultCount;
+        public int ResultCount
+        {
+            get => resultCount;
+            set
+            {
+                SetProperty(ref resultCount, value);
+            }
+        }
+
         public JobHistoryViewModel()
         {
             Title = "Job History";
@@ -95,7 +104,7 @@ namespace UTeM_EComplaint.ViewModels
                     },
                     ComplaintDetailStatus = "Completed"
                 });
-
+                ResultCount = complaintDetails.Count;
                 DurationHandler.durationList(ref complaintDetails);
 
                 if (complaintDetails.Count < LOAD_SIZE)

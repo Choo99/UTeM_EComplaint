@@ -15,7 +15,8 @@ namespace UTeM_EComplaint.ViewModels
         ComplaintDetail complaintDetail;
 
         int ratingValue;
-
+        string comment;
+        public string Comment { get => comment; set => SetProperty(ref comment, value); }
         public int RatingValue { get => ratingValue; set => SetProperty(ref ratingValue,value); }
         public ComplaintDetail ComplaintDetail { get => complaintDetail; set => SetProperty(ref complaintDetail, value); }
 
@@ -30,11 +31,16 @@ namespace UTeM_EComplaint.ViewModels
         {
             try
             {
+                if(!await validate())
+                {
+                    return;
+                }
                 await RatingServices.AddRating(new Rating
                 {
                     Complaint = ComplaintDetail.Complaint,
                     Technician = ComplaintDetail.Technician,
                     RatingValue = RatingValue,
+                    Comment = Comment,
                 });
                 await Application.Current.MainPage.DisplayAlert("Rate", "You have successfully rated this technician", null, "OK");
                 await Shell.Current.Navigation.PopAsync();
@@ -43,6 +49,16 @@ namespace UTeM_EComplaint.ViewModels
             {
                 await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), null, "OK");
             }
+        }
+
+        private async Task<bool> validate()
+        {
+            if(Comment == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Please fill in the comment field", null, "OK");
+                return false;
+            }
+            return true;
         }
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)

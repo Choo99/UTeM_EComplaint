@@ -82,22 +82,6 @@ namespace UTeM_EComplaint.ViewModels
             Statistics = new ObservableRangeCollection<Statistic>();
             staffID = Preferences.Get("userID", 0);
             getStatistic();
-            test();
-        }
-
-        private async void test()
-        {
-            try
-            {
-                test2();
-            }
-            catch (Exception ex)
-            {
-                var st = new System.Diagnostics.StackTrace(ex, true);
-                var frame = st.GetFrame(st.FrameCount - 1);
-                var linenumber = frame.GetFileLineNumber();
-                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
-            }
         }
 
         private void test2()

@@ -27,7 +27,15 @@ namespace UTeM_EComplaint.ViewModels
         public AsyncCommand LoadMoreCommand { get; }
         public AsyncCommand<object> ItemSelectedCommand { get; }
 
-
+        int resultCount;
+        public int ResultCount
+        {
+            get => resultCount;
+            set
+            {
+                SetProperty(ref resultCount, value);
+            }
+        }
 
         string pathToJobDetail = $"{nameof(JobDetailPage)}?complaintID=";
         public JobProgressViewModel()
@@ -95,7 +103,7 @@ namespace UTeM_EComplaint.ViewModels
                     }
                 };
                 List<ComplaintDetail> complaintDetailList = await ComplaintDetailServices.GetComplaintDetailByStatus(tempComplaintDetail);
-
+                ResultCount = complaintDetailList.Count;
                 if (complaintDetailList.Count < LOAD_SIZE)
                     size = complaintDetailList.Count;
 

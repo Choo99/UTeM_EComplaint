@@ -12,6 +12,16 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout>
+            <StackLayout>
+                <Label HorizontalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding ResultCount}"/>
+                            <Span Text=" result(s) found"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
             <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                          Command="{Binding RefreshCommand}">
                 <CollectionView BackgroundColor="Transparent" 

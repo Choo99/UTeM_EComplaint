@@ -29,6 +29,7 @@ namespace UTeM_EComplaint.ViewModels
         string latitude;
         bool isLoading;
         bool isLocation;
+        bool isPicture;
         bool isNotLocation;
         bool isSoftware;
         bool isHardware;
@@ -63,6 +64,7 @@ namespace UTeM_EComplaint.ViewModels
         Complaint complaint;
 
         ImageSource image;
+        ImageSource softwareImage;
         Map map;
 
         public Map Map { get => map; set => SetProperty(ref map, value); }
@@ -73,6 +75,7 @@ namespace UTeM_EComplaint.ViewModels
         public bool IsSoftware { get => isSoftware; set => SetProperty(ref isSoftware, value); }
         public bool IsHardware { get => isHardware; set => SetProperty(ref isHardware, value); }
         public bool IsComplaintTypeSelected { get => isComplaintTypeSelected; set => SetProperty(ref isComplaintTypeSelected, value); }
+        public bool IsPicture { get => isPicture; set => SetProperty(ref isPicture, value); }
 
         public Complaint Complaint { get => complaint; set => SetProperty(ref complaint, value); }
 
@@ -125,10 +128,13 @@ namespace UTeM_EComplaint.ViewModels
         public string DateTimeString { get => dateTime; set => SetProperty(ref dateTime, value); }
         public string Location { get => location; set => SetProperty(ref location, value); }
         public ImageSource Image { get => image; set => SetProperty(ref image, value); }
+        public ImageSource SoftwareImage { get => softwareImage; set => SetProperty(ref softwareImage, value); }
 
         public AsyncCommand AddLocationCommand { get; }
         public AsyncCommand EditLocationCommand { get; }
         public AsyncCommand ClearLocationCommand { get; }
+        public AsyncCommand TakePictureCommand { get; }
+        public AsyncCommand ClearPictureCommand { get; }
         public AsyncCommand SaveCommand { get; }
 
         public StaffAddComplaintViewModel()
@@ -154,6 +160,8 @@ namespace UTeM_EComplaint.ViewModels
             SaveCommand = new AsyncCommand(Save);
             AddLocationCommand = new AsyncCommand(AddLocation);
             EditLocationCommand = new AsyncCommand(EditLocation);
+            TakePictureCommand = new AsyncCommand(TakePicture);
+            ClearPictureCommand = new AsyncCommand(ClearPicture);
             ClearLocationCommand = new AsyncCommand(ClearLocation);
 
             map = new Map()
@@ -162,6 +170,42 @@ namespace UTeM_EComplaint.ViewModels
             };
 
             getData();
+        }
+
+        private async Task ClearPicture()
+        {
+            await Task.Delay(100);
+            var ans = await Application.Current.MainPage.DisplayAlert("Picture", "Do you want to delete the picture?", "YES", "NO");
+            if (ans)
+                IsPicture = false;
+        }
+
+        private async Task TakePicture()
+        {
+            try
+            {
+                var result = await MediaPicker.CapturePhotoAsync();
+
+                if (result != null)
+                {
+                    IsPicture = true;
+
+                    var stream = await result.OpenReadAsync();
+
+                    var bytes = new byte[stream.Length];
+                    await stream.ReadAsync(bytes, 0, (int)stream.Length);
+                    imageString = Convert.ToBase64String(bytes);
+
+                    stream.Seek(0, SeekOrigin.Begin);
+
+                    SoftwareImage = ImageSource.FromStream(() => stream);
+                }
+                await Task.Delay(100);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+            }
         }
 
         public async void ApplyQueryAttributes(IDictionary<string, string> query)
@@ -239,6 +283,7 @@ namespace UTeM_EComplaint.ViewModels
                         complaint.Module = selectedModule;
                         complaint.Submodule = selectedSubmodule;
                         complaint.Submenu = selectedSubmenu;
+                        complaint.ImageBase64 = imageString;
                     }
 
                     complaint.Staff = new Staff
@@ -260,6 +305,8 @@ namespace UTeM_EComplaint.ViewModels
                     IsHardware = false;
                     IsSoftware = false;
                     IsComplaintTypeSelected = false;
+                    SoftwareImage = null;
+                    IsPicture = false;
                     await Application.Current.MainPage.DisplayAlert("Success", "Successfully added your complaint! Your complaint ID is " + result, null, "OK");
                     await Shell.Current.GoToAsync($"//StaffTab/{nameof(StaffComplaintDetailPage)}?complaintID=" + result);
 
@@ -281,27 +328,42 @@ namespace UTeM_EComplaint.ViewModels
             try
             {
                 bool isValid = false;
-                if (IsHardware && (selectedCategory == null || selectedDamageType == null || selectedDivision == null || Complaint.Damage == null
-                || Complaint.ContactPhoneNumber == null || Location == null))
+                if (SelectedComplaintType == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Fill", "Please choose a complaint type", "OK");
+                }
+                else if(Complaint.Damage == null || Complaint.ContactPhoneNumber == null)
+                {
+                    if (Complaint.Damage == null)
+                        await Application.Current.MainPage.DisplayAlert("Fill", "Please fill in the description", "OK");
+                    else if(Complaint.ContactPhoneNumber == null)
+                        await Application.Current.MainPage.DisplayAlert("Fill", "Please fill in the contact phone number", "OK");
+                }
+                else if (isHardware && (selectedCategory == null || selectedDamageType == null || selectedDivision == null || Location == null))
                 {
                     if (selectedDivision == null)
-                        await Application.Current.MainPage.DisplayAlert("Fill", "Please choose a division type", "OK");
+                        await Application.Current.MainPage.DisplayAlert("Fill", "Please choose a division", "OK");
                     else if (selectedDamageType == null)
                         await Application.Current.MainPage.DisplayAlert("Fill", "Please choose a damage type", "OK");
                     else if (selectedCategory == null)
                         await Application.Current.MainPage.DisplayAlert("Fill", "Please choose a category", "OK");
-                    else if (Complaint.Damage == null)
-                        await Application.Current.MainPage.DisplayAlert("Fill", "Please fill in the description", "OK");
                     else if (Location == null)
                         await Application.Current.MainPage.DisplayAlert("Fill", "Please fill in the location", "OK");
-                    else if (Complaint.ContactPhoneNumber == null)
-                        await Application.Current.MainPage.DisplayAlert("Fill", "Please fill in the contact number", "OK");
+                }
+                else if (isSoftware && (selectedSoftwareSystem == null || selectedModule == null || selectedSubmodule == null))
+                {
+                    if (selectedSoftwareSystem == null)
+                        await Application.Current.MainPage.DisplayAlert("Fill", "Please choose a system", "OK");
+                    else if (selectedModule == null)
+                        await Application.Current.MainPage.DisplayAlert("Fill", "Please choose a module", "OK");
+                    else if(selectedSubmodule == null)
+                        await Application.Current.MainPage.DisplayAlert("Fill", "Please choose a submodule", "OK");
                 }
                 else
                     isValid = true;
                 return isValid;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

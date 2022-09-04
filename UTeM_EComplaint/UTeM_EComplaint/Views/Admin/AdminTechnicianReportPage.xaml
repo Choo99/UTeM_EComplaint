@@ -52,14 +52,15 @@
                                                             <rating:SfRatingSettings Style="{StaticResource RatingBaseSetting}" />
                                                         </rating:SfRating.RatingSettings>
                                                     </rating:SfRating>
-                                                    <Label Text="(" HorizontalOptions="Start" TextColor="Black" Margin="0,0,-5,0"/>
-                                                    <Label Text="{Binding CompletedTask}" TextColor="Black" HorizontalOptions="Start"/>
-                                                    <Label Text="reviews)" TextColor="Black" HorizontalOptions="Start"/>
                                                 </StackLayout>
-                                                <StackLayout Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
-                                                    <Label Text="Completed Task : " FontSize="Small" Style="{StaticResource CardLabel}"/>
-                                                    <Label Text="{Binding CompletedTask}" TextColor="Black"/>
-                                                </StackLayout>
+                                                <Label Grid.Row="3" Grid.Column="1">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="Average point: " TextColor="Black"/>
+                                                            <Span Text="{Binding OverallRating}" TextColor="Black"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
                                             </Grid>
                                         </Frame>
                                     </Grid>

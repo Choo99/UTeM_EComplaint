@@ -39,7 +39,7 @@
             <cell:TechnicianInProgressCell/>
         </DataTemplate>
         <DataTemplate x:Key="TechnicianInProgressSoftware">
-            <cell:TechnicianAssignedSoftwareCell/>
+            <cell:TechnicianInProgressCell/>
         </DataTemplate>
         <DataTemplate x:Key="TechnicianCompletedSoftware">
             <cell:TechnicianCompletedSoftwareCell/>
@@ -106,7 +106,11 @@
                                                  Pending="{StaticResource StaffPending}"
                                                  Assigned="{StaticResource StaffAssigned}"
                                                  InProgress="{StaticResource StaffInProgress}"
-                                                 Completed="{StaticResource StaffCompleted}"/>
+                                                 Completed="{StaticResource StaffCompleted}"
+                                                 PendingSoftware="{StaticResource StaffPendingSoftware}"
+                                                 AssignedSoftware="{StaticResource StaffAssignedSoftware}"
+                                                 InProgressSoftware="{StaticResource StaffInProgressSoftware}"
+                                                 CompletedSoftware="{StaticResource StaffCompletedSoftware}"/>
 
         <DataTemplate x:Key="Assigned">
             <cell:TechnicianAssignedCell/>

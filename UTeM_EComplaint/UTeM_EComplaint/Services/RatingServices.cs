@@ -87,6 +87,7 @@ namespace UTeM_EComplaint.Services
                 form.Add(new StringContent(rating.Complaint.ComplaintID), "complaintID");
                 form.Add(new StringContent(rating.Technician.TechnicianID.ToString()), "technicianID");
                 form.Add(new StringContent(rating.RatingValue.ToString()), "ratingValue");
+                form.Add(new StringContent(rating.Comment), "comment");
 
                 HttpResponseMessage response = await client.PostAsync(url,form);
 

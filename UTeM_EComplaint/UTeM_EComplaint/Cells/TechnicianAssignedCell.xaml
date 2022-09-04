@@ -25,7 +25,10 @@
                     <Label Text="{Binding Complaint.DamageType.DamageTypeName}" Style="{StaticResource CardLabel}"></Label>
                 </StackLayout>
                 <Line X1="0" Y1="0" X2="360" Margin="0,20,0,0" Y2="0" HorizontalOptions="CenterAndExpand" Stroke="#9B9A99" />
-                <Label Text="{Binding Complaint.ComplaintDate}" HorizontalOptions="EndAndExpand" Margin="0,0,0,30" FontAttributes="Italic" Style="{StaticResource CardLabel}"></Label>
+                <StackLayout Orientation="Horizontal">
+                    <Image Source="leader.png" HeightRequest="30" IsVisible="{Binding Supervisor}"/>
+                    <Label Text="{Binding Complaint.ComplaintDate}" HorizontalOptions="EndAndExpand" Margin="0,0,0,30" FontAttributes="Italic" Style="{StaticResource CardLabel}"></Label>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
     </Frame>

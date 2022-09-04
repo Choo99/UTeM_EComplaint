@@ -311,23 +311,30 @@ namespace UTeM_EComplaint.ViewModels
 
         private async Task TakePicture()
         {
-            var result = await MediaPicker.CapturePhotoAsync();
-            
-            if (result != null)
+            try
             {
-                IsPicture = true;
+                var result = await MediaPicker.CapturePhotoAsync();
 
-                var stream = await result.OpenReadAsync();
-               
-                var bytes = new byte[stream.Length];
-                await stream.ReadAsync(bytes, 0, (int)stream.Length);
-                imageBase64 = Convert.ToBase64String(bytes);
+                if (result != null)
+                {
+                    IsPicture = true;
 
-                stream.Seek(0, SeekOrigin.Begin);
+                    var stream = await result.OpenReadAsync();
 
-                Image = ImageSource.FromStream(() => stream);
+                    var bytes = new byte[stream.Length];
+                    await stream.ReadAsync(bytes, 0, (int)stream.Length);
+                    imageBase64 = Convert.ToBase64String(bytes);
+
+                    stream.Seek(0, SeekOrigin.Begin);
+
+                    Image = ImageSource.FromStream(() => stream);
+                }
+                await Task.Delay(100);
+            }catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
             }
-            await Task.Delay(100);
+
         }
 
         private async Task ClearPicture()

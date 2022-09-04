@@ -30,6 +30,9 @@ namespace UTeM_EComplaint.ViewModels
 
         List<Complaint> complaints;
 
+        int resultCount;
+        public int ResultCount { get => resultCount; set => SetProperty(ref resultCount, value); }
+
         Complaint selectedComplaint;
         public Complaint SelectedComplaint
         {
@@ -70,6 +73,7 @@ namespace UTeM_EComplaint.ViewModels
                 IsLoading = true;
                 await Task.Delay(1000);
                 complaints = await ComplaintServices.SearchAllComplaints(SearchText);
+                ResultCount = complaints.Count;
 
                 if (complaints.Count == 0)
                 {
@@ -137,6 +141,7 @@ namespace UTeM_EComplaint.ViewModels
                 if (!isRefresh)
                     IsLoading = true;
                 complaints = await ComplaintServices.GetAllComplaints();
+                ResultCount = complaints.Count;
 
                 ComplaintList.ReplaceRange(complaints.GetRange(0, LOAD_SIZE));
             }

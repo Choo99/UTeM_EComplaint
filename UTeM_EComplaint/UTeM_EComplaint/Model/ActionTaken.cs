@@ -19,9 +19,8 @@ namespace UTeM_EComplaint.Model
             get => totaldays;
             set
             {
-                totaldays = value;
-
-                var days = Math.Truncate(value);
+                var tempdays = value;
+                var days = Math.Truncate(tempdays);
                 var hoursInDay = value - days;
 
                 var hours = Math.Truncate(hoursInDay * 24);
@@ -33,6 +32,8 @@ namespace UTeM_EComplaint.Model
                     Duration = String.Format("{0} hours", hours);
                 else
                     Duration = String.Format("{0} minutes", minutes);
+
+                totaldays = value;
             }
         }
         public string Duration { get; set; }

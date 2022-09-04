@@ -33,6 +33,9 @@
                     <Label Text="{Binding Complaint.ComplaintDate}" HorizontalOptions="EndAndExpand" FontAttributes="Italic" Style="{StaticResource CardLabel}"></Label>
                 </StackLayout>
             </StackLayout>
+            <StackLayout>
+                <Image Source="leader.png" HeightRequest="30" IsVisible="{Binding Supervisor}"/>
+            </StackLayout>
         </StackLayout>
     </Frame>
 </Grid>
